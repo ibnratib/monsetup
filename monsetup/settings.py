@@ -95,10 +95,20 @@ WSGI_APPLICATION = 'monsetup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# Sur Azure Web App, /home est persistant entre les déploiements.
+# En local, on utilise db.sqlite3 à la racine du projet.
+if os.environ.get('WEBSITE_HOSTNAME'):
+    # Azure Web App détecté — stocker la DB dans /home/data/
+    _db_dir = Path('/home/data')
+    _db_dir.mkdir(parents=True, exist_ok=True)
+    _db_path = _db_dir / 'db.sqlite3'
+else:
+    _db_path = BASE_DIR / 'db.sqlite3'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': _db_path,
     }
 }
 
