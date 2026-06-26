@@ -1,0 +1,86 @@
+{% extends "adminpanel/base.html" %}
+
+{% block title %}Prévisualisation AI{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">Résultat de la génération AI</h1>
+    <p class="text-gray-500 mb-6">Vérifiez le catalogue généré avant de l'enregistrer en base de données.</p>
+
+    <!-- Summary -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <span class="text-xs text-gray-500 uppercase">Catégorie racine</span>
+                <p class="text-lg font-semibold text-gray-900">{{ result.parent_category }}</p>
+            </div>
+            <div>
+                <span class="text-xs text-gray-500 uppercase">Sous-catégorie</span>
+                <p class="text-lg font-semibold text-gray-900">{{ result.subcategory }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attributes table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <div class="px-6 py-4 bg-gray-50 border-b">
+            <h2 class="text-lg font-semibold text-gray-900">{{ result.attributes|length }} attributs générés</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="border-b bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">#</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Label</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Type</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-gray-500">Requis</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Choix</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Dépendance</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    {% for attr in result.attributes %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 text-gray-400">{{ forloop.counter }}</td>
+                        <td class="px-4 py-2 font-medium text-gray-900">
+                            {{ attr.label_fr }}
+                            {% if attr.unit %}<span class="text-xs text-gray-400">({{ attr.unit }})</span>{% endif %}
+                        </td>
+                        <td class="px-4 py-2">
+                            <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                                {{ attr.attribute_type }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            {% if attr.required %}<span class="text-green-600">✓</span>{% else %}<span class="text-gray-300">—</span>{% endif %}
+                        </td>
+                        <td class="px-4 py-2 text-xs text-gray-600">
+                            {% if attr.choices %}
+                                {{ attr.choices|join:", "|truncatechars:60 }}
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="px-4 py-2 text-xs text-gray-500">
+                            {% if attr.depends_on %}
+                                {{ attr.depends_on.attribute_name }} = {{ attr.depends_on.choice_value }}
+                            {% else %}—{% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-4">
+        <form method="post" action="{% url 'adminpanel:ai-generate-confirm' %}">
+            {% csrf_token %}
+            <button type="submit" class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-xl transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Confirmer et sauvegarder
+            </button>
+        </form>
+        <a href="{% url 'adminpanel:ai-generate' %}" class="px-4 py-3 text-sm text-gray-600 hover:text-gray-800">Annuler et réessayer</a>
+    </div>
+</div>
+{% endblock %}

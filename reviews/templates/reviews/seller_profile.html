@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+{% load setup_filters %}
+
+{% block title %}{{ seller.get_full_name }} — Profil vendeur — Setup.ma{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+
+    <!-- Profil vendeur header -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex flex-col sm:flex-row gap-5">
+            <!-- Avatar / Logo -->
+            <div class="flex-shrink-0">
+                {% if is_boutique and boutique and boutique.logo %}
+                <img src="{{ boutique.logo.url }}" alt="{{ boutique.nom_boutique }}"
+                     class="w-20 h-20 rounded-full object-cover border border-gray-200">
+                {% else %}
+                <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold">
+                    {{ seller.first_name|first|default:seller.email|first|upper }}
+                </div>
+                {% endif %}
+            </div>
+            <!-- Infos -->
+            <div class="flex-1">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    {% if is_boutique and boutique %}
+                        {{ boutique.nom_boutique }}
+                    {% else %}
+                        {{ seller.get_full_name|default:seller.email }}
+                    {% endif %}
+                </h1>
+
+                <!-- Rating -->
+                {% if average_rating %}
+                <div class="mt-1 flex items-center gap-2">
+                    <div class="flex text-amber-400">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= average_rating %}
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {% else %}
+                            <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">{{ average_rating }}/5</span>
+                    <span class="text-sm text-gray-500">({{ reviews_count }} avis)</span>
+                </div>
+                {% else %}
+                <p class="mt-1 text-sm text-gray-500">Aucun avis pour le moment</p>
+                {% endif %}
+
+                <!-- Top tags -->
+                {% if top_tags %}
+                <div class="mt-2 flex flex-wrap gap-2">
+                    {% for tag in top_tags %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">🏷️ {{ tag.label }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Location & badge -->
+                <div class="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                    {% if is_boutique and boutique and boutique.ville %}
+                    <span>📍 {{ boutique.ville.name }}</span>
+                    {% endif %}
+                    {% if is_boutique and boutique and boutique.statut_verification == 'VERIFIE' %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">✓ Vérifié</span>
+                    {% endif %}
+                </div>
+
+                {% if is_boutique and boutique and boutique.description %}
+                <p class="mt-3 text-sm text-gray-600">{{ boutique.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Annonces du vendeur -->
+    {% if products %}
+    <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Annonces</h2>
+            <a href="{% url 'product-list' %}?seller_type=&search=&ordering=-created_at" class="text-sm text-blue-600 hover:text-blue-700 hover:underline">Voir toutes →</a>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for product in products %}
+            <a href="{% url 'product-detail' pk=product.pk %}" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="aspect-[4/3] bg-gray-100 overflow-hidden">
+                    {% if product.images.all %}
+                    <img class="w-full h-full object-cover" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }}">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center">
+                        <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <h3 class="text-sm font-medium text-gray-900 line-clamp-2">{{ product.title }}</h3>
+                    <p class="mt-1 text-lg font-bold text-gray-900">{{ product.price|format_price }}</p>
+                    <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                        <span>{{ product.ville.name }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Formulaire laisser un avis -->
+    {% if user.is_authenticated and user != seller %}
+    <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            {% if existing_review %}Modifier votre avis{% else %}Laisser un avis{% endif %}
+        </h2>
+        <div id="review-message" class="mb-4 hidden"></div>
+        <form id="review-form">
+            {% csrf_token %}
+            <!-- Étoiles -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Note</label>
+                <div class="flex gap-1" id="star-rating">
+                    {% for i in "12345" %}
+                    <button type="button" data-value="{{ forloop.counter }}"
+                            class="star-btn text-2xl transition-colors {% if existing_review and forloop.counter <= existing_review.rating %}text-amber-400{% else %}text-gray-300{% endif %} hover:text-amber-400">★</button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="rating" id="rating-value" value="{% if existing_review %}{{ existing_review.rating }}{% endif %}">
+            </div>
+
+            <!-- Tags -->
+            {% if review_tags %}
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tags (optionnel)</label>
+                <div class="flex flex-wrap gap-2">
+                    {% for tag in review_tags %}
+                    <label class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer transition-colors
+                        {% if existing_review and tag in existing_review.tags.all %}bg-blue-100 text-blue-700{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %}"
+                        id="tag-label-{{ tag.id }}">
+                        <input type="checkbox" name="tags" value="{{ tag.id }}" class="hidden tag-checkbox"
+                            {% if existing_review and tag in existing_review.tags.all %}checked{% endif %}>
+                        {{ tag.label }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Commentaire -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Commentaire (optionnel)</label>
+                <textarea name="comment" maxlength="500" rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{% if existing_review %}{{ existing_review.comment }}{% endif %}</textarea>
+            </div>
+
+            <button type="submit"
+                    class="inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                {% if existing_review %}Modifier mon avis{% else %}Envoyer mon avis{% endif %}
+            </button>
+        </form>
+    </div>
+    {% elif not user.is_authenticated %}
+    <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+        <p class="text-sm text-gray-500">
+            <a href="{% url 'login' %}?next={{ request.path }}" class="text-blue-600 hover:text-blue-700 hover:underline">Connectez-vous</a>
+            pour laisser un avis.
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Liste des avis -->
+    <div class="mt-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Avis</h2>
+            {% if reviews_count > 5 %}
+            <a href="{% url 'seller-reviews-page' pk=seller.pk %}" class="text-sm text-blue-600 hover:text-blue-700 hover:underline">Voir tous les avis →</a>
+            {% endif %}
+        </div>
+
+        {% if reviews %}
+        <div class="space-y-4">
+            {% for review in reviews %}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <!-- Stars -->
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-amber-400">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    {% else %}
+                                    <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">{{ review.reviewer.get_full_name|default:review.reviewer.email }}</span>
+                            <span class="text-xs text-gray-500">· {{ review.created_at|time_since_fr }} </span>
+                        </div>
+                    </div>
+                    {% if user.is_authenticated and user != review.reviewer %}
+                    <button onclick="reportReview({{ review.pk }})" class="text-xs text-gray-400 hover:text-red-500 transition-colors">Signaler</button>
+                    {% endif %}
+                </div>
+
+                {% if review.comment %}
+                <p class="mt-2 text-sm text-gray-700">{{ review.comment }}</p>
+                {% endif %}
+
+                {% if review.tags.all %}
+                <div class="mt-2 flex flex-wrap gap-1">
+                    {% for tag in review.tags.all %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">🏷️ {{ tag.label }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Reply -->
+                {% if review.reply %}
+                <div class="mt-3 ml-4 pl-4 border-l-2 border-gray-200">
+                    <p class="text-xs text-gray-500 mb-1">Réponse du vendeur</p>
+                    <p class="text-sm text-gray-700">{{ review.reply.text }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+            <p class="text-sm text-gray-500">Aucun avis pour le moment.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- Report Review Modal -->
+{% if user.is_authenticated %}
+<div id="review-report-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-medium text-gray-900">Signaler cet avis</h3>
+            <button onclick="document.getElementById('review-report-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <form id="review-report-form">
+            <input type="hidden" id="report-review-id" value="">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Raison</label>
+                <select name="reason" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">— Sélectionner —</option>
+                    <option value="FAUX_AVIS">Faux avis</option>
+                    <option value="DIFFAMATION">Diffamation</option>
+                    <option value="CONTENU_INAPPROPRIE">Contenu inapproprié</option>
+                    <option value="SPAM">Spam</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Commentaire (optionnel)</label>
+                <textarea name="comment" maxlength="500" rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <div id="review-report-message" class="mb-4 hidden"></div>
+            <div class="flex gap-3">
+                <button type="button" onclick="document.getElementById('review-report-modal').classList.add('hidden')"
+                        class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg transition-colors">
+                    Annuler
+                </button>
+                <button type="submit"
+                        class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
+                    Envoyer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Star rating
+    const stars = document.querySelectorAll('.star-btn');
+    const ratingInput = document.getElementById('rating-value');
+    if (stars.length) {
+        stars.forEach(function(star) {
+            star.addEventListener('click', function() {
+                const value = parseInt(this.dataset.value);
+                ratingInput.value = value;
+                stars.forEach(function(s) {
+                    if (parseInt(s.dataset.value) <= value) {
+                        s.classList.remove('text-gray-300');
+                        s.classList.add('text-amber-400');
+                    } else {
+                        s.classList.remove('text-amber-400');
+                        s.classList.add('text-gray-300');
+                    }
+                });
+            });
+        });
+    }
+
+    // Tag toggle
+    document.querySelectorAll('.tag-checkbox').forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            var label = document.getElementById('tag-label-' + this.value);
+            if (this.checked) {
+                label.classList.remove('bg-gray-100', 'text-gray-600');
+                label.classList.add('bg-blue-100', 'text-blue-700');
+            } else {
+                label.classList.remove('bg-blue-100', 'text-blue-700');
+                label.classList.add('bg-gray-100', 'text-gray-600');
+            }
+        });
+    });
+
+    // Review form submit
+    var reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var rating = document.getElementById('rating-value').value;
+            if (!rating) {
+                showMessage('review-message', 'Veuillez sélectionner une note.', false);
+                return;
+            }
+            var tags = [];
+            document.querySelectorAll('.tag-checkbox:checked').forEach(function(cb) {
+                tags.push(parseInt(cb.value));
+            });
+            var comment = this.querySelector('textarea[name="comment"]').value;
+
+            fetch('/api/v1/sellers/{{ seller.pk }}/reviews/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({rating: parseInt(rating), comment: comment, tags: tags}),
+            })
+            .then(function(r) { return r.json().then(function(d) { return {ok: r.ok, status: r.status, data: d}; }); })
+            .then(function(result) {
+                if (result.ok) {
+                    showMessage('review-message', 'Votre avis a été enregistré.', true);
+                    setTimeout(function() { location.reload(); }, 1500);
+                } else {
+                    var errors = result.data.errors || result.data;
+                    var msg = typeof errors === 'string' ? errors : JSON.stringify(errors);
+                    showMessage('review-message', msg, false);
+                }
+            });
+        });
+    }
+
+    // Review report form
+    var reportForm = document.getElementById('review-report-form');
+    if (reportForm) {
+        reportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var reviewId = document.getElementById('report-review-id').value;
+            var formData = new FormData(this);
+            fetch('/api/v1/reviews/' + reviewId + '/report/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({
+                    reason: formData.get('reason'),
+                    comment: formData.get('comment') || '',
+                }),
+            })
+            .then(function(r) { return r.json().then(function(d) { return {ok: r.ok, data: d}; }); })
+            .then(function(result) {
+                if (result.ok) {
+                    showMessage('review-report-message', 'Votre signalement a été envoyé.', true);
+                    setTimeout(function() { document.getElementById('review-report-modal').classList.add('hidden'); location.reload(); }, 1500);
+                } else {
+                    var errors = result.data.errors || result.data;
+                    var msg = typeof errors === 'string' ? errors : JSON.stringify(errors);
+                    showMessage('review-report-message', msg, false);
+                }
+            });
+        });
+    }
+});
+
+function reportReview(reviewId) {
+    document.getElementById('report-review-id').value = reviewId;
+    document.getElementById('review-report-modal').classList.remove('hidden');
+}
+
+function showMessage(elementId, text, success) {
+    var el = document.getElementById(elementId);
+    el.classList.remove('hidden');
+    if (success) {
+        el.className = 'mb-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm';
+    } else {
+        el.className = 'mb-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm';
+    }
+    el.textContent = text;
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

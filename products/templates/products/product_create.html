@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Déposer une annonce — Setup.ma{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold lg:text-3xl mb-6">Déposer une annonce</h1>
+
+    <form method="post" enctype="multipart/form-data" id="product-form">
+        {% csrf_token %}
+
+        {% if errors %}
+        <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-sm text-red-800">
+            <ul class="list-disc list-inside">
+                {% for field, messages in errors.items %}
+                    {% for msg in messages %}
+                    <li>{% if field != 'non_field_errors' %}<strong>{{ field }}</strong> : {% endif %}{{ msg }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Section: Catégorie -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Catégorie</h2>
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Catégorie *</label>
+                <select name="category" id="category" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">— Choisir une catégorie —</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.pk }}">{{ cat.parent.name }} › {{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Section: Infos de base -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 space-y-4">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Informations</h2>
+
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
+                <input type="text" name="title" id="title" maxlength="150" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Prix (DH) *</label>
+                <input type="number" name="price" id="price" min="1" step="0.01" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="ville" class="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
+                <select name="ville" id="ville" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">— Sélectionner —</option>
+                    {% for city in cities %}
+                    <option value="{{ city.id }}" {% if form_data.ville == city.id|stringformat:"d" %}selected{% endif %}>
+                        {{ city.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="adresse" class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                <input type="text" name="adresse" id="adresse"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="description_complementaire" class="block text-sm font-medium text-gray-700 mb-1">Description complémentaire</label>
+                <textarea name="description_complementaire" id="description_complementaire" rows="3"
+                          maxlength="300"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+        </div>
+
+        <!-- Section: Attributs techniques (dynamique) -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Caractéristiques</h2>
+            <div id="eav-fields" class="space-y-4">
+                <p class="text-sm text-gray-400 italic">Sélectionnez une catégorie pour afficher les champs spécifiques.</p>
+            </div>
+        </div>
+
+        <!-- Section: Photos -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Photos</h2>
+            <div>
+                <label for="images" class="block text-sm font-medium text-gray-700 mb-1">Images (max 8)</label>
+                <input type="file" name="images" id="images" multiple accept="image/*"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            </div>
+        </div>
+
+        <button type="submit"
+                class="w-full inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-base font-medium rounded-xl transition-colors">
+            Publier l'annonce
+        </button>
+    </form>
+</div>
+
+<script>
+document.getElementById('category').addEventListener('change', async function() {
+    const catId = this.value;
+    const container = document.getElementById('eav-fields');
+    container.innerHTML = '';
+    if (!catId) {
+        container.innerHTML = '<p class="text-sm text-gray-400 italic">Sélectionnez une catégorie pour afficher les champs spécifiques.</p>';
+        return;
+    }
+    try {
+        const resp = await fetch(`/api/v1/catalog/categories/${catId}/attributes-by-id/`);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        const attrs = data.data || data;
+        if (!Array.isArray(attrs)) return;
+
+        // Track which attrs depend on which choice
+        const dependentAttrs = []; // [{element, dependsOnChoiceId}]
+
+        attrs.forEach(attr => {
+            const div = document.createElement('div');
+            div.dataset.attrId = attr.id;
+            if (attr.depends_on_choice) {
+                div.dataset.dependsOnChoice = attr.depends_on_choice;
+                div.style.display = 'none';
+            }
+            const label = document.createElement('label');
+            label.className = 'block text-sm font-medium text-gray-700 mb-1';
+            label.textContent = attr.label_fr + (attr.required ? ' *' : '');
+            div.appendChild(label);
+
+            let input;
+            const name = `attr_${attr.id}`;
+            const inputClass = 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
+
+            if (attr.attribute_type === 'BOOLEAN') {
+                input = document.createElement('select');
+                input.innerHTML = '<option value="">—</option><option value="true">Oui</option><option value="false">Non</option>';
+                input.className = inputClass + ' bg-white';
+            } else if (attr.attribute_type === 'CHOICE' && attr.choices) {
+                input = document.createElement('select');
+                input.innerHTML = '<option value="">— Choisir —</option>';
+                attr.choices.forEach(c => {
+                    input.innerHTML += `<option value="${c.id}">${c.value}</option>`;
+                });
+                input.className = inputClass + ' bg-white';
+                // Listen for changes to show/hide dependent attributes
+                input.addEventListener('change', function() {
+                    updateDependentVisibility();
+                });
+            } else if (attr.attribute_type === 'MULTI_CHOICE' && attr.choices) {
+                input = document.createElement('select');
+                input.multiple = true;
+                attr.choices.forEach(c => {
+                    input.innerHTML += `<option value="${c.id}">${c.value}</option>`;
+                });
+                input.className = inputClass + ' bg-white';
+            } else if (attr.attribute_type === 'INT') {
+                input = document.createElement('input');
+                input.type = 'number';
+                input.step = '1';
+                if (attr.min_value !== null) input.min = attr.min_value;
+                if (attr.max_value !== null) input.max = attr.max_value;
+                input.className = inputClass;
+            } else if (attr.attribute_type === 'DECIMAL') {
+                input = document.createElement('input');
+                input.type = 'number';
+                input.step = '0.01';
+                if (attr.min_value !== null) input.min = attr.min_value;
+                if (attr.max_value !== null) input.max = attr.max_value;
+                input.className = inputClass;
+            } else {
+                input = document.createElement('input');
+                input.type = 'text';
+                input.maxLength = 255;
+                input.className = inputClass;
+            }
+
+            input.name = name;
+            if (attr.required && !attr.depends_on_choice) input.required = true;
+            if (attr.unit) {
+                const hint = document.createElement('span');
+                hint.className = 'text-xs text-gray-400 ml-1';
+                hint.textContent = attr.unit;
+                label.appendChild(hint);
+            }
+
+            div.appendChild(input);
+            container.appendChild(div);
+
+            if (attr.depends_on_choice) {
+                dependentAttrs.push({element: div, choiceId: attr.depends_on_choice, required: attr.required});
+            }
+        });
+
+        function updateDependentVisibility() {
+            // Collect all currently selected choice IDs
+            const selectedChoiceIds = new Set();
+            container.querySelectorAll('select').forEach(sel => {
+                if (sel.value && !sel.multiple) {
+                    selectedChoiceIds.add(parseInt(sel.value));
+                }
+            });
+            // Show/hide dependent attributes
+            dependentAttrs.forEach(dep => {
+                const visible = selectedChoiceIds.has(dep.choiceId);
+                dep.element.style.display = visible ? '' : 'none';
+                const input = dep.element.querySelector('input, select');
+                if (input) {
+                    if (visible && dep.required) {
+                        input.required = true;
+                    } else {
+                        input.required = false;
+                        if (!visible) input.value = '';
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.error(e);
+    }
+});
+</script>
+{% endblock %}

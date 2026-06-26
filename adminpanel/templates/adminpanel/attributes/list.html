@@ -1,0 +1,88 @@
+{% extends "adminpanel/base.html" %}
+
+{% block title %}Attributs — {{ category.name }}{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <a href="{% url 'adminpanel:category-list' %}" class="text-sm text-blue-600 hover:text-blue-800">&larr; Catégories</a>
+        <h1 class="text-2xl font-bold text-gray-900 mt-1">Attributs de « {{ category.name }} »</h1>
+        {% if category.parent %}<p class="text-sm text-gray-500">Parent : {{ category.parent.name }}</p>{% endif %}
+    </div>
+    <a href="{% url 'adminpanel:attribute-create' cat_pk=category.pk %}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Nouvel attribut
+    </a>
+</div>
+
+{% if attributes %}
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b">
+            <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ordre</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Label</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Requis</th>
+                <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Filtrable</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dépend de</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Choix</th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y" id="attr-list">
+            {% for attr in attributes %}
+            <tr class="hover:bg-gray-50" data-id="{{ attr.pk }}">
+                <td class="px-4 py-3 text-gray-500">{{ attr.order }}</td>
+                <td class="px-4 py-3 font-medium text-gray-900">
+                    {{ attr.label_fr }}
+                    {% if attr.unit %}<span class="text-xs text-gray-400">({{ attr.unit }})</span>{% endif %}
+                </td>
+                <td class="px-4 py-3">
+                    <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full
+                        {% if attr.attribute_type == 'CHOICE' %}bg-purple-100 text-purple-700
+                        {% elif attr.attribute_type == 'MULTI_CHOICE' %}bg-indigo-100 text-indigo-700
+                        {% elif attr.attribute_type == 'INT' %}bg-green-100 text-green-700
+                        {% elif attr.attribute_type == 'DECIMAL' %}bg-teal-100 text-teal-700
+                        {% elif attr.attribute_type == 'BOOLEAN' %}bg-yellow-100 text-yellow-700
+                        {% else %}bg-gray-100 text-gray-700{% endif %}">
+                        {{ attr.get_attribute_type_display }}
+                    </span>
+                </td>
+                <td class="px-4 py-3 text-center">
+                    {% if attr.required %}<span class="text-green-600">✓</span>{% else %}<span class="text-gray-300">—</span>{% endif %}
+                </td>
+                <td class="px-4 py-3 text-center">
+                    {% if attr.filterable %}<span class="text-green-600">✓</span>{% else %}<span class="text-gray-300">—</span>{% endif %}
+                </td>
+                <td class="px-4 py-3 text-xs text-gray-500">
+                    {% if attr.depends_on_choice %}{{ attr.depends_on_choice.attribute.label_fr }} = {{ attr.depends_on_choice.value }}{% else %}—{% endif %}
+                </td>
+                <td class="px-4 py-3">
+                    {% if attr.choices.count > 0 %}
+                    <a href="{% url 'adminpanel:choice-list' attr_pk=attr.pk %}" class="text-xs text-blue-600 hover:text-blue-800">{{ attr.choices.count }} choix</a>
+                    {% elif attr.attribute_type == 'CHOICE' or attr.attribute_type == 'MULTI_CHOICE' %}
+                    <a href="{% url 'adminpanel:choice-create' attr_pk=attr.pk %}" class="text-xs text-orange-600 hover:text-orange-800">+ Ajouter</a>
+                    {% else %}
+                    <span class="text-xs text-gray-300">—</span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3 text-right space-x-2">
+                    <a href="{% url 'adminpanel:attribute-edit' pk=attr.pk %}" class="text-blue-600 hover:text-blue-800 text-xs">Modifier</a>
+                    <form method="post" action="{% url 'adminpanel:attribute-delete' pk=attr.pk %}" class="inline" onsubmit="return confirm('Supprimer « {{ attr.label_fr }} » ?');">
+                        {% csrf_token %}
+                        <button class="text-red-600 hover:text-red-800 text-xs">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+    <p class="text-gray-500 mb-4">Aucun attribut défini pour cette catégorie.</p>
+    <a href="{% url 'adminpanel:attribute-create' cat_pk=category.pk %}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg">Ajouter un attribut</a>
+</div>
+{% endif %}
+{% endblock %}

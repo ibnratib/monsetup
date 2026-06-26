@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Setup.ma{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="h-full flex flex-col bg-gray-50 text-gray-900">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="{% url 'home' %}" class="text-xl font-bold text-blue-600 flex items-center gap-1">
+                <span>⚡</span> Setup.ma
+            </a>
+
+            <!-- Desktop nav -->
+            <div class="hidden lg:flex items-center gap-4">
+                <a href="{% url 'product-list' %}" class="text-sm text-gray-600 hover:text-blue-700 hover:underline">Annonces</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard-home' %}" class="text-sm text-gray-600 hover:text-blue-700 hover:underline">Dashboard</a>
+                    <a href="{% url 'product-create' %}" class="inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">+ Déposer</a>
+                    <span class="text-sm text-gray-500">{{ user.get_short_name }}</span>
+                    <a href="{% url 'logout' %}" class="text-sm text-gray-600 hover:text-blue-700 hover:underline">Déconnexion</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-sm text-gray-600 hover:text-blue-700 hover:underline">Connexion</a>
+                    <a href="{% url 'register-choice' %}" class="inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">S'inscrire</a>
+                {% endif %}
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-gray-600 hover:text-blue-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Mobile menu drawer -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50">
+        <div class="absolute inset-0 bg-black/50" id="mobile-menu-overlay"></div>
+        <div class="absolute left-0 top-0 w-64 h-full bg-white shadow-xl p-6">
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-xl font-bold text-blue-600">⚡ Setup.ma</span>
+                <button id="mobile-menu-close" class="p-1 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <nav class="flex flex-col gap-4">
+                <a href="{% url 'home' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Accueil</a>
+                <a href="{% url 'product-list' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Annonces</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'product-create' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Déposer une annonce</a>
+                    <a href="{% url 'dashboard-home' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Dashboard</a>
+                    <a href="{% url 'dashboard-favorites-ssr' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Mes favoris</a>
+                    <a href="{% url 'dashboard-notifications-ssr' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Notifications</a>
+                    <hr class="border-gray-200">
+                    <span class="text-xs text-gray-400">Connecté : {{ user.get_short_name }}</span>
+                    <a href="{% url 'logout' %}" class="text-sm font-medium text-red-600 hover:text-red-700">Déconnexion</a>
+                {% else %}
+                    <hr class="border-gray-200">
+                    <a href="{% url 'login' %}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Connexion</a>
+                    <a href="{% url 'register-choice' %}" class="inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">S'inscrire</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+
+    <!-- Messages flash -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        {% for message in messages %}
+        <div class="p-4 rounded-lg mb-2 text-sm
+            {% if message.tags == 'success' %}bg-green-50 border border-green-200 text-green-800
+            {% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-800
+            {% elif message.tags == 'warning' %}bg-amber-50 border border-amber-200 text-amber-800
+            {% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3">Setup.ma</h3>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="{% url 'home' %}" class="hover:text-blue-600">Accueil</a></li>
+                        <li><a href="{% url 'product-list' %}" class="hover:text-blue-600">Annonces</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3">Compte</h3>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard-home' %}" class="hover:text-blue-600">Dashboard</a></li>
+                        <li><a href="{% url 'product-create' %}" class="hover:text-blue-600">Déposer</a></li>
+                        {% else %}
+                        <li><a href="{% url 'login' %}" class="hover:text-blue-600">Connexion</a></li>
+                        <li><a href="{% url 'register-choice' %}" class="hover:text-blue-600">Inscription</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 pt-6 text-center text-sm text-gray-500">
+                &copy; 2026 Setup.ma — Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile menu JS -->
+    <script>
+    (function() {
+        var btn = document.getElementById('mobile-menu-btn');
+        var menu = document.getElementById('mobile-menu');
+        var close = document.getElementById('mobile-menu-close');
+        var overlay = document.getElementById('mobile-menu-overlay');
+        function open() { menu.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function shut() { menu.classList.add('hidden'); document.body.style.overflow = ''; }
+        if (btn) btn.addEventListener('click', open);
+        if (close) close.addEventListener('click', shut);
+        if (overlay) overlay.addEventListener('click', shut);
+    })();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- Floating AI Chat Widget -->
+    <div id="ai-chat-widget" class="fixed bottom-6 right-6 z-50">
+        <!-- Chat window -->
+        <div id="ai-chat-window" class="hidden mb-4 w-[360px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col" style="height: 500px; max-height: calc(100vh - 8rem);">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-4 py-3 bg-blue-600 rounded-t-2xl">
+                <div class="flex items-center gap-2">
+                    <span class="text-white text-lg">🤖</span>
+                    <span class="text-white text-sm font-semibold">Assistant Setup.ma</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <button onclick="aiChatWidget.reset()" title="Nouvelle conversation" class="p-1.5 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    </button>
+                    <button onclick="aiChatWidget.close()" class="p-1.5 text-white/70 hover:text-white rounded-lg hover:bg-white/10 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Messages -->
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-hide">
+                <div class="flex gap-2">
+                    <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div>
+                    <div class="bg-gray-100 rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]">
+                        <p class="text-sm text-gray-800">Salut ! Décrivez ce que vous cherchez, je vous aide à trouver le bon produit.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Results -->
+            <div id="ai-chat-results" class="hidden border-t overflow-y-auto max-h-[200px] p-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-gray-700"><span id="ai-results-count">0</span> résultats</span>
+                    <a id="ai-results-link" href="#" class="text-xs text-blue-600 hover:underline">Voir tout</a>
+                </div>
+                <div id="ai-results-grid" class="space-y-2"></div>
+            </div>
+            <!-- Input -->
+            <div class="border-t p-3">
+                <form id="ai-chat-form" class="flex gap-2">
+                    <input type="text" id="ai-chat-input" placeholder="Décrivez votre besoin..." class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" autocomplete="off">
+                    <button type="submit" id="ai-chat-send" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <!-- Floating button -->
+        <button id="ai-chat-toggle" onclick="aiChatWidget.toggle()" class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95">
+            <span id="ai-chat-icon-open" class="text-2xl">🤖</span>
+            <svg id="ai-chat-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+
+    <script>
+    var aiChatWidget = (function() {
+        var win = document.getElementById('ai-chat-window');
+        var toggle = document.getElementById('ai-chat-toggle');
+        var iconOpen = document.getElementById('ai-chat-icon-open');
+        var iconClose = document.getElementById('ai-chat-icon-close');
+        var messagesEl = document.getElementById('ai-chat-messages');
+        var form = document.getElementById('ai-chat-form');
+        var input = document.getElementById('ai-chat-input');
+        var sendBtn = document.getElementById('ai-chat-send');
+        var resultsEl = document.getElementById('ai-chat-results');
+        var resultsGrid = document.getElementById('ai-results-grid');
+        var resultsCount = document.getElementById('ai-results-count');
+        var isOpen = false;
+        var API_URL = '/api/v1/ai-search/chat/';
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function addMessage(content, isUser) {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'flex gap-2' + (isUser ? ' justify-end' : '');
+            if (isUser) {
+                wrapper.innerHTML = '<div class="bg-blue-600 text-white rounded-2xl rounded-tr-md px-3 py-2 max-w-[85%]"><p class="text-sm">' + escapeHtml(content) + '</p></div>';
+            } else {
+                wrapper.innerHTML = '<div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div><div class="bg-gray-100 rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]"><p class="text-sm text-gray-800">' + escapeHtml(content) + '</p></div>';
+            }
+            messagesEl.appendChild(wrapper);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function addTyping() {
+            var el = document.createElement('div');
+            el.id = 'ai-typing';
+            el.className = 'flex gap-2';
+            el.innerHTML = '<div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div><div class="bg-gray-100 rounded-2xl rounded-tl-md px-3 py-2"><div class="flex gap-1"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay:0ms"></span><span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay:150ms"></span><span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay:300ms"></span></div></div>';
+            messagesEl.appendChild(el);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function removeTyping() {
+            var el = document.getElementById('ai-typing');
+            if (el) el.remove();
+        }
+
+        function showResults(products, total) {
+            resultsCount.textContent = total;
+            resultsGrid.innerHTML = '';
+
+            // Update "Voir tout" link with search on product list
+            var resultsLink = document.getElementById('ai-results-link');
+            if (resultsLink) {
+                resultsLink.href = '/annonces/';
+                resultsLink.target = '_blank';
+            }
+
+            if (products.length === 0) {
+                resultsGrid.innerHTML = '<p class="text-xs text-gray-500">Aucun produit trouvé.</p>';
+            } else {
+                products.slice(0, 5).forEach(function(p) {
+                    var card = document.createElement('a');
+                    card.href = '/annonces/' + p.id + '/';
+                    card.className = 'flex gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors';
+                    card.innerHTML = '<img src="' + (p.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Crect fill=%22%23f3f4f6%22 width=%2240%22 height=%2240%22/%3E%3C/svg%3E') + '" class="w-10 h-10 rounded object-cover flex-shrink-0"><div class="min-w-0"><p class="text-xs font-medium text-gray-900 truncate">' + escapeHtml(p.title) + '</p><p class="text-xs font-bold text-blue-600">' + Number(p.price).toLocaleString('fr-MA') + ' DH</p></div>';
+                    resultsGrid.appendChild(card);
+                });
+            }
+            resultsEl.classList.remove('hidden');
+        }
+
+        function open() {
+            win.classList.remove('hidden');
+            iconOpen.classList.add('hidden');
+            iconClose.classList.remove('hidden');
+            isOpen = true;
+            input.focus();
+        }
+
+        function close() {
+            win.classList.add('hidden');
+            iconOpen.classList.remove('hidden');
+            iconClose.classList.add('hidden');
+            isOpen = false;
+        }
+
+        function toggleFn() {
+            if (isOpen) close(); else open();
+        }
+
+        function reset() {
+            fetch(API_URL, { method: 'DELETE', headers: { 'X-CSRFToken': getCookie('csrftoken') } });
+            messagesEl.innerHTML = '<div class="flex gap-2"><div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div><div class="bg-gray-100 rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]"><p class="text-sm text-gray-800">Salut ! Décrivez ce que vous cherchez, je vous aide à trouver le bon produit.</p></div></div>';
+            resultsEl.classList.add('hidden');
+            resultsGrid.innerHTML = '';
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var msg = input.value.trim();
+            if (!msg) return;
+            addMessage(msg, true);
+            input.value = '';
+            sendBtn.disabled = true;
+            addTyping();
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({ message: msg }),
+            })
+            .then(function(res) { if (!res.ok) throw new Error('err'); return res.json(); })
+            .then(function(data) {
+                removeTyping();
+                if (data.type === 'search') {
+                    var cleanMsg = data.message.replace(/```json[\s\S]*?```/g, '').replace(/\{[^}]*"action"\s*:\s*"search"[\s\S]*?\}/g, '').trim();
+                    addMessage(cleanMsg || 'Voici ce que j\'ai trouvé :', false);
+                    showResults(data.products, data.total_results);
+                } else {
+                    // Hide results panel when AI asks a new question after a search
+                    resultsEl.classList.add('hidden');
+                    addMessage(data.message, false);
+                }
+            })
+            .catch(function() {
+                removeTyping();
+                addMessage('Désolé, une erreur est survenue. Réessayez.', false);
+            })
+            .finally(function() { sendBtn.disabled = false; input.focus(); });
+        });
+
+        return { toggle: toggleFn, open: open, close: close, reset: reset };
+    })();
+    </script>
+</body>
+</html>

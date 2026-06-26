@@ -1,0 +1,108 @@
+{% extends "adminpanel/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <a href="{% url 'adminpanel:attribute-list' cat_pk=category.pk %}" class="text-sm text-blue-600 hover:text-blue-800">&larr; Retour aux attributs</a>
+    <h1 class="text-2xl font-bold text-gray-900 mt-2 mb-6">{{ title }}</h1>
+
+    <form method="post" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Identifiant technique *</label>
+                <input type="text" name="name" id="name" required
+                       value="{{ attribute.name|default:'' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="ram_size">
+            </div>
+            <div>
+                <label for="label_fr" class="block text-sm font-medium text-gray-700 mb-1">Label affiché *</label>
+                <input type="text" name="label_fr" id="label_fr" required
+                       value="{{ attribute.label_fr|default:'' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Taille de la RAM">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="attribute_type" class="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+                <select name="attribute_type" id="attribute_type" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="TEXT_SHORT" {% if attribute.attribute_type == 'TEXT_SHORT' %}selected{% endif %}>Texte court</option>
+                    <option value="INT" {% if attribute.attribute_type == 'INT' %}selected{% endif %}>Entier</option>
+                    <option value="DECIMAL" {% if attribute.attribute_type == 'DECIMAL' %}selected{% endif %}>Décimal</option>
+                    <option value="CHOICE" {% if attribute.attribute_type == 'CHOICE' %}selected{% endif %}>Choix unique</option>
+                    <option value="MULTI_CHOICE" {% if attribute.attribute_type == 'MULTI_CHOICE' %}selected{% endif %}>Choix multiple</option>
+                    <option value="BOOLEAN" {% if attribute.attribute_type == 'BOOLEAN' %}selected{% endif %}>Booléen</option>
+                </select>
+            </div>
+            <div>
+                <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">Unité</label>
+                <input type="text" name="unit" id="unit"
+                       value="{{ attribute.unit|default:'' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Go, cm, kg...">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <label for="order" class="block text-sm font-medium text-gray-700 mb-1">Ordre</label>
+                <input type="number" name="order" id="order" min="0"
+                       value="{{ attribute.order|default:'0' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="min_value" class="block text-sm font-medium text-gray-700 mb-1">Min</label>
+                <input type="number" name="min_value" id="min_value" step="0.01"
+                       value="{{ attribute.min_value|default:'' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="max_value" class="block text-sm font-medium text-gray-700 mb-1">Max</label>
+                <input type="number" name="max_value" id="max_value" step="0.01"
+                       value="{{ attribute.max_value|default:'' }}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="required" {% if attribute.required %}checked{% endif %}
+                       class="w-4 h-4 text-blue-600 rounded border-gray-300">
+                <span class="text-sm text-gray-700">Obligatoire</span>
+            </label>
+            <label class="flex items-center gap-2">
+                <input type="checkbox" name="filterable" {% if attribute.filterable %}checked{% endif %}
+                       class="w-4 h-4 text-blue-600 rounded border-gray-300">
+                <span class="text-sm text-gray-700">Filtrable</span>
+            </label>
+        </div>
+
+        <div>
+            <label for="depends_on_choice" class="block text-sm font-medium text-gray-700 mb-1">Dépend du choix</label>
+            <select name="depends_on_choice" id="depends_on_choice"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">— Aucune dépendance (toujours visible) —</option>
+                {% for choice in available_choices %}
+                <option value="{{ choice.pk }}" {% if attribute.depends_on_choice_id == choice.pk %}selected{% endif %}>
+                    {{ choice.attribute.label_fr }} → {{ choice.value }}
+                </option>
+                {% endfor %}
+            </select>
+            <p class="text-xs text-gray-400 mt-1">Si renseigné, l'attribut ne s'affiche que quand ce choix est sélectionné.</p>
+        </div>
+
+        <div class="flex items-center gap-3 pt-4">
+            <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                {% if attribute %}Enregistrer{% else %}Créer{% endif %}
+            </button>
+            <a href="{% url 'adminpanel:attribute-list' cat_pk=category.pk %}" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
