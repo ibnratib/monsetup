@@ -7,17 +7,17 @@
 <div class="flex flex-col lg:flex-row gap-6">
     <!-- Sidebar -->
     <aside class="w-full lg:w-56 flex-shrink-0">
-        <nav class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm font-medium text-white bg-blue-600">
+        <nav class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm font-medium text-white bg-indigo-600">
                 Vue d'ensemble
             </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100">
+            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
                 Mes annonces
             </a>
-            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100">
+            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
                 Mes favoris
             </a>
-            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                 <span>Notifications</span>
                 {% if unread_count %}
                     <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-600 rounded-full">{{ unread_count }}</span>
@@ -28,72 +28,72 @@
 
     <!-- Main content -->
     <div class="flex-1 min-w-0">
-        <h1 class="text-2xl font-bold text-gray-900 lg:text-3xl">Tableau de bord</h1>
+        <h1 class="text-2xl font-bold text-slate-900 lg:text-3xl">Tableau de bord</h1>
 
         <!-- Stats cards -->
         <div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                <p class="text-sm text-gray-500">Total vues</p>
-                <p class="mt-1 text-2xl font-bold text-gray-900">{{ stats.total_views }}</p>
+            <div class="bg-white rounded-xl shadow-sm p-5">
+                <p class="text-sm text-slate-500">Total vues</p>
+                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.total_views }}</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                <p class="text-sm text-gray-500">Clics WhatsApp</p>
-                <p class="mt-1 text-2xl font-bold text-gray-900">{{ stats.total_whatsapp_clicks }}</p>
+            <div class="bg-white rounded-xl shadow-sm p-5">
+                <p class="text-sm text-slate-500">Clics WhatsApp</p>
+                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.total_whatsapp_clicks }}</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                <p class="text-sm text-gray-500">Annonces actives</p>
-                <p class="mt-1 text-2xl font-bold text-gray-900">{{ stats.products_disponible }}</p>
+            <div class="bg-white rounded-xl shadow-sm p-5">
+                <p class="text-sm text-slate-500">Annonces actives</p>
+                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.products_disponible }}</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-                <p class="text-sm text-gray-500">Total annonces</p>
-                <p class="mt-1 text-2xl font-bold text-gray-900">{{ stats.total_products }}</p>
+            <div class="bg-white rounded-xl shadow-sm p-5">
+                <p class="text-sm text-slate-500">Total annonces</p>
+                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.total_products }}</p>
             </div>
         </div>
 
         <!-- Recent products -->
         <div class="mt-8">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold text-gray-900">Dernières annonces</h2>
-                <a href="{% url 'dashboard-my-products-ssr' %}" class="text-sm text-blue-600 hover:text-blue-700 hover:underline">Voir tout →</a>
+                <h2 class="text-xl font-semibold text-slate-900">Dernières annonces</h2>
+                <a href="{% url 'dashboard-my-products-ssr' %}" class="text-sm text-indigo-600 hover:text-indigo-500 hover:underline">Voir tout →</a>
             </div>
             {% if recent_products %}
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead class="bg-gray-50 text-left">
+                            <thead class="bg-slate-50 text-left">
                                 <tr>
-                                    <th class="px-4 py-3 font-medium text-gray-500">Annonce</th>
-                                    <th class="px-4 py-3 font-medium text-gray-500">Prix</th>
-                                    <th class="px-4 py-3 font-medium text-gray-500">Statut</th>
-                                    <th class="px-4 py-3 font-medium text-gray-500">Vues</th>
-                                    <th class="px-4 py-3 font-medium text-gray-500">Clics WA</th>
+                                    <th class="px-4 py-3 font-medium text-slate-500">Annonce</th>
+                                    <th class="px-4 py-3 font-medium text-slate-500">Prix</th>
+                                    <th class="px-4 py-3 font-medium text-slate-500">Statut</th>
+                                    <th class="px-4 py-3 font-medium text-slate-500">Vues</th>
+                                    <th class="px-4 py-3 font-medium text-slate-500">Clics WA</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-slate-100">
                                 {% for product in recent_products %}
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-slate-50">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             {% if product.images.all.0 %}
-                                                <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-lg object-cover">
+                                                <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-xl object-cover">
                                             {% else %}
-                                                <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">—</div>
+                                                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs">—</div>
                                             {% endif %}
-                                            <a href="{% url 'product-detail' product.pk %}" class="text-gray-900 hover:text-blue-600 font-medium line-clamp-1">{{ product.title }}</a>
+                                            <a href="{% url 'product-detail' product.pk %}" class="text-slate-900 hover:text-indigo-600 font-medium line-clamp-1">{{ product.title }}</a>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">{{ product.price|format_price }}</td>
+                                    <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">{{ product.price|format_price }}</td>
                                     <td class="px-4 py-3">
                                         {% if product.status == 'DISPONIBLE' %}
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disponible</span>
                                         {% elif product.status == 'VENDU' %}
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Vendu</span>
                                         {% else %}
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Archivé</span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Archivé</span>
                                         {% endif %}
                                     </td>
-                                    <td class="px-4 py-3 text-gray-500">{{ product.views_count }}</td>
-                                    <td class="px-4 py-3 text-gray-500">{{ product.whatsapp_clicks_count }}</td>
+                                    <td class="px-4 py-3 text-slate-500">{{ product.views_count }}</td>
+                                    <td class="px-4 py-3 text-slate-500">{{ product.whatsapp_clicks_count }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -101,8 +101,8 @@
                     </div>
                 </div>
             {% else %}
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center text-gray-500">
-                    Aucune annonce pour le moment. <a href="{% url 'product-create' %}" class="text-blue-600 hover:underline">Déposer une annonce</a>
+                <div class="bg-white rounded-xl shadow-sm p-8 text-center text-slate-500">
+                    Aucune annonce pour le moment. <a href="{% url 'product-create' %}" class="text-indigo-600 hover:underline">Déposer une annonce</a>
                 </div>
             {% endif %}
         </div>
@@ -110,23 +110,23 @@
         <!-- Unread notifications -->
         <div class="mt-8">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold text-gray-900">Notifications non lues</h2>
-                <a href="{% url 'dashboard-notifications-ssr' %}" class="text-sm text-blue-600 hover:text-blue-700 hover:underline">Voir tout →</a>
+                <h2 class="text-xl font-semibold text-slate-900">Notifications non lues</h2>
+                <a href="{% url 'dashboard-notifications-ssr' %}" class="text-sm text-indigo-600 hover:text-indigo-500 hover:underline">Voir tout →</a>
             </div>
             {% if unread_notifications %}
                 <div class="space-y-3">
                     {% for notif in unread_notifications %}
-                    <div class="bg-white rounded-xl shadow-sm border border-blue-200 p-4 flex items-start gap-3">
-                        <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-blue-600"></div>
+                    <div class="bg-white rounded-xl shadow-sm border border-indigo-200 p-4 flex items-start gap-3">
+                        <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-indigo-600"></div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm text-gray-900">{{ notif.message }}</p>
-                            <p class="mt-1 text-xs text-gray-500">{{ notif.created_at|time_since_fr }} — {{ notif.get_type_display }}</p>
+                            <p class="text-sm text-slate-900">{{ notif.message }}</p>
+                            <p class="mt-1 text-xs text-slate-500">{{ notif.created_at|time_since_fr }} — {{ notif.get_type_display }}</p>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center text-gray-500 text-sm">
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center text-slate-500 text-sm">
                     Aucune notification non lue.
                 </div>
             {% endif %}

@@ -7,17 +7,17 @@
 <div class="flex flex-col lg:flex-row gap-6">
     <!-- Sidebar -->
     <aside class="w-full lg:w-56 flex-shrink-0">
-        <nav class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
+        <nav class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50">
                 Vue d'ensemble
             </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm font-medium text-white bg-blue-600 border-t border-gray-100">
+            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm font-medium text-white bg-indigo-600 border-t border-slate-100">
                 Mes annonces
             </a>
-            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100">
+            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
                 Mes favoris
             </a>
-            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                 <span>Notifications</span>
                 {% if unread_count %}
                     <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-600 rounded-full">{{ unread_count }}</span>
@@ -29,8 +29,8 @@
     <!-- Main content -->
     <div class="flex-1 min-w-0">
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 lg:text-3xl">Mes annonces</h1>
-            <a href="{% url 'product-create' %}" class="inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+            <h1 class="text-2xl font-bold text-slate-900 lg:text-3xl">Mes annonces</h1>
+            <a href="{% url 'product-create' %}" class="inline-flex items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors">
                 + Déposer
             </a>
         </div>
@@ -38,78 +38,78 @@
         <!-- Status tabs -->
         <div class="flex gap-2 mb-6 overflow-x-auto">
             <a href="{% url 'dashboard-my-products-ssr' %}"
-               class="px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors {% if not current_status %}bg-blue-600 text-white{% else %}bg-white border border-gray-300 text-gray-700 hover:bg-gray-50{% endif %}">
+               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if not current_status %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
                 Toutes
             </a>
             <a href="{% url 'dashboard-my-products-ssr' %}?status=DISPONIBLE"
-               class="px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors {% if current_status == 'DISPONIBLE' %}bg-blue-600 text-white{% else %}bg-white border border-gray-300 text-gray-700 hover:bg-gray-50{% endif %}">
+               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if current_status == 'DISPONIBLE' %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
                 Disponibles
             </a>
             <a href="{% url 'dashboard-my-products-ssr' %}?status=VENDU"
-               class="px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors {% if current_status == 'VENDU' %}bg-blue-600 text-white{% else %}bg-white border border-gray-300 text-gray-700 hover:bg-gray-50{% endif %}">
+               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if current_status == 'VENDU' %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
                 Vendues
             </a>
             <a href="{% url 'dashboard-my-products-ssr' %}?status=ARCHIVE"
-               class="px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors {% if current_status == 'ARCHIVE' %}bg-blue-600 text-white{% else %}bg-white border border-gray-300 text-gray-700 hover:bg-gray-50{% endif %}">
+               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if current_status == 'ARCHIVE' %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
                 Archivées
             </a>
         </div>
 
         <!-- Products table -->
         {% if products %}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-left">
+                        <thead class="bg-slate-50 text-left">
                             <tr>
-                                <th class="px-4 py-3 font-medium text-gray-500">Annonce</th>
-                                <th class="px-4 py-3 font-medium text-gray-500">Prix</th>
-                                <th class="px-4 py-3 font-medium text-gray-500">Statut</th>
-                                <th class="px-4 py-3 font-medium text-gray-500">Vues</th>
-                                <th class="px-4 py-3 font-medium text-gray-500">Clics WA</th>
-                                <th class="px-4 py-3 font-medium text-gray-500">Date</th>
-                                <th class="px-4 py-3 font-medium text-gray-500">Actions</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Annonce</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Prix</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Statut</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Vues</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Clics WA</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Date</th>
+                                <th class="px-4 py-3 font-medium text-slate-500">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y divide-slate-100">
                             {% for product in products %}
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:bg-slate-50">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-3">
                                         {% if product.images.all.0 %}
-                                            <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-lg object-cover flex-shrink-0">
+                                            <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
                                         {% else %}
-                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs flex-shrink-0">—</div>
+                                            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs flex-shrink-0">—</div>
                                         {% endif %}
                                         <div class="min-w-0">
-                                            <a href="{% url 'product-detail' product.pk %}" class="text-gray-900 hover:text-blue-600 font-medium line-clamp-1">{{ product.title }}</a>
-                                            <p class="text-xs text-gray-500">{{ product.category.name }} · {{ product.ville.name }}</p>
+                                            <a href="{% url 'product-detail' product.pk %}" class="text-slate-900 hover:text-indigo-600 font-medium line-clamp-1">{{ product.title }}</a>
+                                            <p class="text-xs text-slate-500">{{ product.category.name }} · {{ product.ville.name }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">{{ product.price|format_price }}</td>
+                                <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">{{ product.price|format_price }}</td>
                                 <td class="px-4 py-3">
                                     {% if product.status == 'DISPONIBLE' %}
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disponible</span>
                                     {% elif product.status == 'VENDU' %}
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Vendu</span>
                                     {% else %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Archivé</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Archivé</span>
                                     {% endif %}
                                 </td>
-                                <td class="px-4 py-3 text-gray-500">{{ product.views_count }}</td>
-                                <td class="px-4 py-3 text-gray-500">{{ product.whatsapp_clicks_count }}</td>
-                                <td class="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">{{ product.created_at|time_since_fr }}</td>
+                                <td class="px-4 py-3 text-slate-500">{{ product.views_count }}</td>
+                                <td class="px-4 py-3 text-slate-500">{{ product.whatsapp_clicks_count }}</td>
+                                <td class="px-4 py-3 text-xs text-slate-500 whitespace-nowrap">{{ product.created_at|time_since_fr }}</td>
                                 <td class="px-4 py-3">
                                     <form method="post" class="inline-flex items-center gap-1">
                                         {% csrf_token %}
                                         <input type="hidden" name="product_id" value="{{ product.pk }}">
-                                        <select name="status" class="text-xs border border-gray-300 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <select name="status" class="text-xs border border-slate-200 rounded-xl px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                             <option value="DISPONIBLE" {% if product.status == 'DISPONIBLE' %}selected{% endif %}>Disponible</option>
                                             <option value="VENDU" {% if product.status == 'VENDU' %}selected{% endif %}>Vendu</option>
                                             <option value="ARCHIVE" {% if product.status == 'ARCHIVE' %}selected{% endif %}>Archivé</option>
                                         </select>
-                                        <button type="submit" class="inline-flex items-center px-2 py-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-medium rounded-lg transition-colors">
+                                        <button type="submit" class="inline-flex items-center px-2 py-1 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-xl transition-colors">
                                             OK
                                         </button>
                                     </form>
@@ -126,18 +126,18 @@
             <div class="mt-6 flex justify-center">
                 <nav class="inline-flex gap-1">
                     {% if page_obj.has_previous %}
-                        <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700">← Précédent</a>
+                        <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700">← Précédent</a>
                     {% endif %}
-                    <span class="px-3 py-2 text-sm text-gray-500">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                    <span class="px-3 py-2 text-sm text-slate-500">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
                     {% if page_obj.has_next %}
-                        <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700">Suivant →</a>
+                        <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700">Suivant →</a>
                     {% endif %}
                 </nav>
             </div>
             {% endif %}
         {% else %}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center text-gray-500">
-                Aucune annonce{% if current_status %} avec ce statut{% endif %}. <a href="{% url 'product-create' %}" class="text-blue-600 hover:underline">Déposer une annonce</a>
+            <div class="bg-white rounded-xl shadow-sm p-8 text-center text-slate-500">
+                Aucune annonce{% if current_status %} avec ce statut{% endif %}. <a href="{% url 'product-create' %}" class="text-indigo-600 hover:underline">Déposer une annonce</a>
             </div>
         {% endif %}
     </div>

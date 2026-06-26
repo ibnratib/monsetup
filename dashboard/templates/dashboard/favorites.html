@@ -7,17 +7,17 @@
 <div class="flex flex-col lg:flex-row gap-6">
     <!-- Sidebar -->
     <aside class="w-full lg:w-56 flex-shrink-0">
-        <nav class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
+        <nav class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50">
                 Vue d'ensemble
             </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100">
+            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
                 Mes annonces
             </a>
-            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm font-medium text-white bg-blue-600 border-t border-gray-100">
+            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm font-medium text-white bg-indigo-600 border-t border-slate-100">
                 Mes favoris
             </a>
-            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                 <span>Notifications</span>
                 {% if unread_count %}
                     <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-600 rounded-full">{{ unread_count }}</span>
@@ -28,29 +28,29 @@
 
     <!-- Main content -->
     <div class="flex-1 min-w-0">
-        <h1 class="text-2xl font-bold text-gray-900 lg:text-3xl">Mes favoris</h1>
+        <h1 class="text-2xl font-bold text-slate-900 lg:text-3xl">Mes favoris</h1>
 
         {% if favorites %}
         <div class="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {% for fav in favorites %}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow relative">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow relative">
                 <a href="{% url 'product-detail' fav.product.pk %}" class="block">
                     {% with first_image=fav.product.images.first %}
                     {% if first_image %}
-                    <div class="aspect-[4/3] bg-gray-100 overflow-hidden">
+                    <div class="aspect-[4/3] bg-slate-100 overflow-hidden">
                         <img src="{{ first_image.image.url }}" alt="{{ fav.product.title }}"
                              class="w-full h-full object-cover">
                     </div>
                     {% else %}
-                    <div class="aspect-[4/3] bg-gray-100 flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <div class="aspect-[4/3] bg-slate-100 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     </div>
                     {% endif %}
                     {% endwith %}
                     <div class="p-4">
-                        <h3 class="text-sm font-medium text-gray-900 line-clamp-2">{{ fav.product.title }}</h3>
-                        <p class="mt-1 text-lg font-bold text-gray-900">{{ fav.product.price|format_price }}</p>
-                        <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                        <h3 class="text-sm font-medium text-slate-900 line-clamp-2">{{ fav.product.title }}</h3>
+                        <p class="mt-1 text-lg font-bold text-slate-900">{{ fav.product.price|format_price }}</p>
+                        <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
                             <span>{{ fav.product.ville.name }}</span>
                             <span>&middot;</span>
                             {% if fav.product.status == 'DISPONIBLE' %}
@@ -80,19 +80,19 @@
         <nav class="mt-8 flex justify-center gap-2">
             {% if page_obj.has_previous %}
             <a href="?page={{ page_obj.previous_page_number }}"
-               class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Précédent</a>
+               class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 hover:bg-slate-50">Précédent</a>
             {% endif %}
-            <span class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">{{ page_obj.number }}</span>
+            <span class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm">{{ page_obj.number }}</span>
             {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}"
-               class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Suivant</a>
+               class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 hover:bg-slate-50">Suivant</a>
             {% endif %}
         </nav>
         {% endif %}
 
         {% else %}
-        <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center text-gray-500">
-            Aucun favori pour le moment. <a href="{% url 'product-list' %}" class="text-blue-600 hover:underline">Parcourir les annonces</a>
+        <div class="mt-6 bg-white rounded-xl shadow-sm p-8 text-center text-slate-500">
+            Aucun favori pour le moment. <a href="{% url 'product-list' %}" class="text-indigo-600 hover:underline">Parcourir les annonces</a>
         </div>
         {% endif %}
     </div>

@@ -4,10 +4,11 @@
 
 ## Identité visuelle
 
-- **Style** : Minimaliste / Clean — inspiré Leboncoin & Vinted mais avec une identité tech/gaming propre
-- **Ton** : Professionnel mais accessible, fiable (marketplace de confiance)
-- **Mode** : Light mode uniquement (MVP)
-- **Framework CSS** : Tailwind CSS (CDN en dev, build en prod)
+- **Style** : Tech-forward / Premium — identité forte de marketplace gaming/tech, immédiatement reconnaissable
+- **Ton** : Moderne, fiable, communautaire (marketplace de confiance pour la tech)
+- **Mode** : Light mode avec header/footer dark (slate-900)
+- **Framework CSS** : Tailwind CSS (CDN en dev avec config custom, build en prod)
+- **Font** : Inter (Google Fonts) — `font-sans` configuré via tailwind.config
 
 ## Palette de couleurs
 
@@ -15,81 +16,101 @@
 
 | Rôle | Couleur | Tailwind class | Hex |
 |------|---------|---------------|-----|
-| **Primaire** | Bleu électrique | `blue-600` | #2563eb |
-| **Primaire hover** | Bleu foncé | `blue-700` | #1d4ed8 |
-| **Primaire light** | Bleu clair (fond) | `blue-50` | #eff6ff |
-| **Secondaire** | Gris foncé | `gray-800` | #1f2937 |
-| **Texte principal** | Quasi noir | `gray-900` | #111827 |
-| **Texte secondaire** | Gris moyen | `gray-500` | #6b7280 |
-| **Fond page** | Gris très clair | `gray-50` | #f9fafb |
+| **Primaire** | Indigo | `indigo-600` | #4f46e5 |
+| **Primaire hover** | Indigo clair | `indigo-500` | #6366f1 |
+| **Primaire light** | Indigo fond | `indigo-50` | #eef2ff |
+| **Accent / Prix** | Emerald | `emerald-600` | #059669 |
+| **Accent CTA** | Emerald vif | `emerald-500` | #10b981 |
+| **Accent hover** | Emerald clair | `emerald-400` | #34d399 |
+| **Dark (header/footer)** | Slate foncé | `slate-900` | #0f172a |
+| **Texte principal** | Slate quasi noir | `slate-900` | #0f172a |
+| **Texte secondaire** | Slate moyen | `slate-500` | #64748b |
+| **Fond page** | Slate très clair | `slate-50` | #f8fafc |
 | **Fond carte** | Blanc | `white` | #ffffff |
-| **Bordures** | Gris léger | `gray-200` | #e5e7eb |
-| **Succès** | Vert | `green-600` | #16a34a |
+| **Bordures** | Slate léger | `slate-200` | #e2e8f0 |
+| **Succès** | Emerald | `emerald-600` | #059669 |
 | **Erreur** | Rouge | `red-600` | #dc2626 |
 | **Warning** | Ambre | `amber-500` | #f59e0b |
-| **Boost badge** | Ambre fond | `amber-100` + `amber-700` text | — |
-| **Badge vérifié** | Bleu fond | `blue-100` + `blue-700` text | — |
+| **Boost badge** | Ambre fond | `amber-400/90` + `amber-900` text | — |
+| **Badge vérifié** | Indigo fond | `indigo-100` + `indigo-700` text | — |
 
 ### Utilisation stricte
 
-- **Boutons primaires** : `bg-blue-600 hover:bg-blue-700 text-white`
-- **Boutons secondaires** : `bg-white border border-gray-300 hover:bg-gray-50 text-gray-700`
-- **Boutons danger** : `bg-red-600 hover:bg-red-700 text-white`
-- **Liens** : `text-blue-600 hover:text-blue-700 hover:underline`
-- **Fond page** : `bg-gray-50`
-- **Cartes** : `bg-white rounded-xl shadow-sm border border-gray-200`
+- **Boutons primaires** : `bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl`
+- **Boutons accent (CTA)** : `bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold rounded-xl`
+- **Boutons secondaires** : `bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl`
+- **Boutons danger** : `bg-red-600 hover:bg-red-500 text-white rounded-xl`
+- **Liens** : `text-indigo-600 hover:text-indigo-500`
+- **Fond page** : `bg-slate-50`
+- **Cartes** : `bg-white rounded-2xl shadow-sm` (pas de border explicite)
+- **Prix** : `text-emerald-600 font-bold` (distinction clé vs concurrents)
+
+## Éléments de signature
+
+1. **Header dark** avec gradient-line (indigo → emerald) en haut
+2. **Logo** : "Setup" blanc bold + ".ma" emerald-400 — `text-xl font-extrabold`
+3. **Hero** : fond slate-900 avec radial-gradients indigo/emerald en opacité
+4. **Cards** : `card-hover` class (translateY(-2px) + shadow augmenté au hover)
+5. **Prix en emerald** : les prix ressortent immédiatement visuellement
 
 ## Typographie
 
-- **Font** : System font stack (pas de Google Fonts pour la perf)
+- **Font** : Inter (Google Fonts) via Tailwind config
   ```
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'] }
   ```
-  Tailwind : pas besoin de config, utiliser la font par défaut de Tailwind (`font-sans`)
 
 - **Tailles** :
-  - Titre page : `text-2xl font-bold` (mobile) / `text-3xl font-bold` (desktop)
-  - Titre section : `text-xl font-semibold`
-  - Titre carte : `text-lg font-medium`
+  - Titre page : `text-2xl font-extrabold` (mobile) / `text-3xl font-extrabold` (desktop)
+  - Titre section : `text-xl font-bold`
+  - Titre carte : `text-sm font-medium`
   - Corps : `text-sm` (14px) ou `text-base` (16px)
-  - Labels/meta : `text-xs text-gray-500`
-  - Prix : `text-xl font-bold text-gray-900`
+  - Labels/meta : `text-xs text-slate-500`
+  - Prix : `text-lg font-bold text-emerald-600`
 
 ## Composants récurrents
 
 ### Carte produit (listing)
 
 ```html
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+<a class="bg-white rounded-2xl overflow-hidden card-hover block shadow-sm">
   <!-- Image -->
-  <div class="aspect-[4/3] bg-gray-100 overflow-hidden">
+  <div class="aspect-[4/3] bg-slate-100 overflow-hidden">
     <img class="w-full h-full object-cover" src="..." alt="...">
   </div>
   <!-- Contenu -->
   <div class="p-4">
-    <h3 class="text-sm font-medium text-gray-900 line-clamp-2">Titre</h3>
-    <p class="mt-1 text-lg font-bold text-gray-900">1 500 DH</p>
-    <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+    <h3 class="text-sm font-medium text-slate-900 line-clamp-2">Titre</h3>
+    <p class="mt-1 text-lg font-bold text-emerald-600">1 500 DH</p>
+    <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
       <span>Tanger</span>
       <span>·</span>
       <span>Il y a 2h</span>
     </div>
   </div>
-</div>
+</a>
 ```
 
 ### Bouton primaire
 
 ```html
-<button class="inline-flex items-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
-  Déposer une annonce
+<button class="inline-flex items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors">
+  Appliquer
 </button>
+```
+
+### Bouton accent (CTA header/hero)
+
+```html
+<a class="inline-flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold rounded-lg transition-colors">
+  + Déposer
+</a>
 ```
 
 ### Bouton secondaire
 
 ```html
-<button class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg transition-colors">
+<button class="inline-flex items-center px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors">
   Filtrer
 </button>
 ```
@@ -107,28 +128,28 @@
 
 ```html
 <!-- Disponible -->
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disponible</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Disponible</span>
 <!-- Vendu -->
 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Vendu</span>
 <!-- Boosté -->
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">⚡ Boosté</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/90 text-amber-900">⚡ Boosté</span>
 <!-- Vérifié -->
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">✓ Vérifié</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">✓ Vérifié</span>
 ```
 
 ### Input / Select
 
 ```html
-<input class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-<select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+<input class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
+<select class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
 ```
 
 ### Champ avec label
 
 ```html
 <div>
-  <label class="block text-sm font-medium text-gray-700 mb-1">Nom du champ</label>
-  <input class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+  <label class="block text-sm font-medium text-slate-700 mb-1">Nom du champ</label>
+  <input class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
 </div>
 ```
 
@@ -142,9 +163,9 @@
 
 ```html
 <!-- Succès -->
-<div class="p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm">Message de succès.</div>
+<div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-medium">Message de succès.</div>
 <!-- Erreur -->
-<div class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm">Message d'erreur.</div>
+<div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-medium">Message d'erreur.</div>
 ```
 
 ## Layout
@@ -153,14 +174,15 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  Logo Setup.ma          [Annonces]  [Déposer] [Connexion]   │
+│ ═══ gradient-line (indigo → emerald) ═══                    │
+│  Setup.ma               [Annonces] [+ Déposer] [S'inscrire] │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-- **Desktop** : header fixe en haut, max-w-7xl centré
-- **Mobile** : hamburger menu ou navigation simplifiée
-- Logo : texte `Setup.ma` en `text-xl font-bold text-blue-600` + petit accent (ex: icône ⚡ ou 🖥️)
-- Background : `bg-white shadow-sm`
+- **Desktop** : header fixe dark (bg-slate-900) en haut, max-w-7xl centré
+- **Mobile** : hamburger menu drawer (dark)
+- Logo : `<span class="text-white">Setup</span><span class="text-emerald-400">.ma</span>` — `text-xl font-extrabold`
+- Background : `bg-slate-900` avec `gradient-line` en border-top (indigo → emerald)
 
 ### Page listing
 
@@ -234,9 +256,30 @@ Grille : `grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4`
 
 ## Animations / Transitions
 
-- **Hover cartes** : `hover:shadow-md transition-shadow duration-200`
+- **Hover cartes** : `card-hover` class → `transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.12);`
 - **Boutons** : `transition-colors duration-150`
-- **Menus/modales** : `transition-all duration-200`
+- **Menus/modales** : `transition-all duration-200`, backdrop `backdrop-blur-sm`
+- **Header gradient-line** : `background: linear-gradient(90deg, #6366f1, #10b981);`
+
+## CSS Custom (dans `<style>` du base.html)
+
+```css
+.gradient-line { background: linear-gradient(90deg, #6366f1, #10b981); }
+.card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.12); }
+```
+
+## Tailwind Config (CDN)
+
+```javascript
+tailwind.config = {
+    theme: {
+        extend: {
+            fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'] },
+        }
+    }
+}
+```
 - Pas d'animation lourde — garder la performance.
 
 ## Icônes

@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-bold text-gray-900">Catégories</h1>
-    <a href="{% url 'adminpanel:category-create' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+    <h1 class="text-2xl font-bold text-slate-900">Catégories</h1>
+    <a href="{% url 'adminpanel:category-create' %}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         Nouvelle catégorie
     </a>
@@ -14,16 +14,16 @@
 {% if root_categories %}
 <div class="space-y-4" id="categories-container">
     {% for root in root_categories %}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden">
         <!-- Root category header -->
-        <div class="flex items-center justify-between px-6 py-4 bg-gray-50 border-b">
+        <div class="flex items-center justify-between px-6 py-4 bg-slate-50 border-b">
             <div class="flex items-center gap-3">
                 {% if root.icon %}<span class="text-xl">{{ root.icon }}</span>{% endif %}
-                <h2 class="text-lg font-semibold text-gray-900">{{ root.name }}</h2>
-                <span class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">Ordre: {{ root.order }}</span>
+                <h2 class="text-lg font-semibold text-slate-900">{{ root.name }}</h2>
+                <span class="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">Ordre: {{ root.order }}</span>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{% url 'adminpanel:category-edit' pk=root.pk %}" class="text-sm text-blue-600 hover:text-blue-800">Modifier</a>
+                <a href="{% url 'adminpanel:category-edit' pk=root.pk %}" class="text-sm text-indigo-600 hover:text-indigo-800">Modifier</a>
                 <form method="post" action="{% url 'adminpanel:category-delete' pk=root.pk %}" class="inline" onsubmit="return confirm('Supprimer « {{ root.name }} » et toutes ses sous-catégories ?');">
                     {% csrf_token %}
                     <button class="text-sm text-red-600 hover:text-red-800">Supprimer</button>
@@ -33,16 +33,16 @@
         <!-- Subcategories -->
         <div class="divide-y">
             {% for child in root.children.all %}
-            <div class="flex items-center justify-between px-6 py-3 hover:bg-gray-50">
+            <div class="flex items-center justify-between px-6 py-3 hover:bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <span class="text-gray-400 text-sm">└</span>
-                    <span class="font-medium text-gray-800">{{ child.name }}</span>
-                    <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{{ child.attributes.count }} attr.</span>
-                    <span class="text-xs text-gray-400">Ordre: {{ child.order }}</span>
+                    <span class="text-slate-400 text-sm">└</span>
+                    <span class="font-medium text-slate-800">{{ child.name }}</span>
+                    <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">{{ child.attributes.count }} attr.</span>
+                    <span class="text-xs text-slate-400">Ordre: {{ child.order }}</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="{% url 'adminpanel:attribute-list' cat_pk=child.pk %}" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-lg">Attributs</a>
-                    <a href="{% url 'adminpanel:category-edit' pk=child.pk %}" class="text-sm text-blue-600 hover:text-blue-800">Modifier</a>
+                    <a href="{% url 'adminpanel:attribute-list' cat_pk=child.pk %}" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-xl">Attributs</a>
+                    <a href="{% url 'adminpanel:category-edit' pk=child.pk %}" class="text-sm text-indigo-600 hover:text-indigo-800">Modifier</a>
                     <form method="post" action="{% url 'adminpanel:category-delete' pk=child.pk %}" class="inline" onsubmit="return confirm('Supprimer « {{ child.name }} » ?');">
                         {% csrf_token %}
                         <button class="text-sm text-red-600 hover:text-red-800">Supprimer</button>
@@ -50,16 +50,16 @@
                 </div>
             </div>
             {% empty %}
-            <p class="px-6 py-3 text-sm text-gray-400 italic">Aucune sous-catégorie</p>
+            <p class="px-6 py-3 text-sm text-slate-400 italic">Aucune sous-catégorie</p>
             {% endfor %}
         </div>
     </div>
     {% endfor %}
 </div>
 {% else %}
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-    <p class="text-gray-500 mb-4">Aucune catégorie créée.</p>
-    <a href="{% url 'adminpanel:category-create' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg">Créer la première catégorie</a>
+<div class="bg-white rounded-xl shadow-sm p-12 text-center">
+    <p class="text-slate-500 mb-4">Aucune catégorie créée.</p>
+    <a href="{% url 'adminpanel:category-create' %}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl">Créer la première catégorie</a>
 </div>
 {% endif %}
 {% endblock %}

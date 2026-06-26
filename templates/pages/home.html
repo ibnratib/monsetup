@@ -5,48 +5,51 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 md:p-12 mb-10 text-center">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Le marketplace tech de confiance</h1>
-    <p class="text-gray-500 text-base md:text-lg mb-6">Achetez et vendez du matériel tech en toute sécurité</p>
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
-        <form action="{% url 'product-list' %}" method="get" class="flex-1 w-full">
-            <div class="flex">
-                <input type="text" name="search" placeholder="Rechercher un produit…"
-                    class="flex-1 px-4 py-2.5 border border-gray-300 rounded-l-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <button type="submit"
-                    class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-r-lg transition-colors">
-                    Rechercher
-                </button>
-            </div>
-        </form>
-        {% if not user.is_authenticated %}
-            <a href="{% url 'register-choice' %}"
-                class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap">
-                Déposer une annonce
-            </a>
-        {% else %}
-            <a href="{% url 'product-create' %}"
-                class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap">
-                Déposer une annonce
-            </a>
-        {% endif %}
+<section class="relative bg-slate-900 rounded-2xl p-8 md:p-14 mb-10 overflow-hidden">
+    <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at top right, #6366f1 0%, transparent 50%), radial-gradient(ellipse at bottom left, #10b981 0%, transparent 50%);"></div>
+    <div class="relative z-10 text-center">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-3">Le marketplace tech<br class="hidden sm:block"> de confiance</h1>
+        <p class="text-slate-300 text-base md:text-lg mb-8 max-w-xl mx-auto">Achetez et vendez du matériel tech en toute sécurité à Tanger</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
+            <form action="{% url 'product-list' %}" method="get" class="flex-1 w-full">
+                <div class="flex">
+                    <input type="text" name="search" placeholder="Rechercher un produit…"
+                        class="flex-1 px-4 py-3 bg-white/10 backdrop-blur border border-white/20 rounded-l-xl text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent">
+                    <button type="submit"
+                        class="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold rounded-r-xl transition-colors">
+                        Rechercher
+                    </button>
+                </div>
+            </form>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register-choice' %}"
+                    class="inline-flex items-center px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold rounded-xl transition-colors whitespace-nowrap backdrop-blur">
+                    Déposer une annonce
+                </a>
+            {% else %}
+                <a href="{% url 'product-create' %}"
+                    class="inline-flex items-center px-5 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold rounded-xl transition-colors whitespace-nowrap backdrop-blur">
+                    Déposer une annonce
+                </a>
+            {% endif %}
+        </div>
     </div>
 </section>
 
 <!-- Catégories -->
 {% if root_categories %}
 <section class="mb-10">
-    <h2 class="text-xl font-semibold text-gray-900 mb-4">Catégories</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    <h2 class="text-xl font-bold text-slate-900 mb-5">Catégories</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {% for cat in root_categories %}
         <a href="{% url 'product-list' %}?category={{ cat.slug }}"
-            class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex flex-col items-center gap-2 hover:shadow-md transition-shadow text-center">
+            class="bg-white rounded-2xl p-4 flex flex-col items-center gap-2 card-hover text-center shadow-sm hover:shadow-lg">
             {% if cat.icon %}
             <span class="text-3xl">{{ cat.icon }}</span>
             {% else %}
             <span class="text-3xl">📦</span>
             {% endif %}
-            <span class="text-sm font-medium text-gray-900">{{ cat.name }}</span>
+            <span class="text-sm font-semibold text-slate-800">{{ cat.name }}</span>
         </a>
         {% endfor %}
     </div>
@@ -56,24 +59,24 @@
 <!-- Annonces boostées -->
 {% if boosted_products %}
 <section class="mb-10">
-    <h2 class="text-xl font-semibold text-gray-900 mb-4">⚡ Annonces mises en avant</h2>
+    <h2 class="text-xl font-bold text-slate-900 mb-5">⚡ Annonces mises en avant</h2>
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for product in boosted_products %}
-        <a href="{% url 'product-detail' product.pk %}" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow block">
-            <div class="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+        <a href="{% url 'product-detail' product.pk %}" class="bg-white rounded-2xl overflow-hidden card-hover block shadow-sm">
+            <div class="aspect-[4/3] bg-slate-100 overflow-hidden relative">
                 {% if product.images.all.0 %}
                 <img class="w-full h-full object-cover" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }}">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 {% endif %}
-                <span class="absolute top-2 left-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">⚡ Boosté</span>
+                <span class="absolute top-2 left-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/90 text-amber-900 backdrop-blur-sm">⚡ Boosté</span>
             </div>
             <div class="p-4">
-                <h3 class="text-sm font-medium text-gray-900 line-clamp-2">{{ product.title }}</h3>
-                <p class="mt-1 text-lg font-bold text-gray-900">{{ product.price|format_price }}</p>
-                <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                <h3 class="text-sm font-medium text-slate-900 line-clamp-2">{{ product.title }}</h3>
+                <p class="mt-1 text-lg font-bold text-emerald-600">{{ product.price|format_price }}</p>
+                <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
                     <span>{{ product.ville }}</span>
                     <span>·</span>
                     <span>{{ product.created_at|time_since_fr }}</span>
@@ -88,31 +91,31 @@
 <!-- Dernières annonces -->
 {% if latest_products %}
 <section class="mb-10">
-    <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-gray-900">Dernières annonces</h2>
-        <a href="{% url 'product-list' %}" class="text-blue-600 hover:text-blue-700 hover:underline text-sm font-medium">
-            Voir toutes les annonces →
+    <div class="flex items-center justify-between mb-5">
+        <h2 class="text-xl font-bold text-slate-900">Dernières annonces</h2>
+        <a href="{% url 'product-list' %}" class="text-indigo-600 hover:text-indigo-500 text-sm font-semibold transition-colors">
+            Voir tout →
         </a>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for product in latest_products %}
-        <a href="{% url 'product-detail' product.pk %}" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow block">
-            <div class="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+        <a href="{% url 'product-detail' product.pk %}" class="bg-white rounded-2xl overflow-hidden card-hover block shadow-sm">
+            <div class="aspect-[4/3] bg-slate-100 overflow-hidden relative">
                 {% if product.images.all.0 %}
                 <img class="w-full h-full object-cover" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }}">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
                 {% endif %}
                 {% if product.is_boosted %}
-                <span class="absolute top-2 left-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">⚡ Boosté</span>
+                <span class="absolute top-2 left-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-400/90 text-amber-900 backdrop-blur-sm">⚡ Boosté</span>
                 {% endif %}
             </div>
             <div class="p-4">
-                <h3 class="text-sm font-medium text-gray-900 line-clamp-2">{{ product.title }}</h3>
-                <p class="mt-1 text-lg font-bold text-gray-900">{{ product.price|format_price }}</p>
-                <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                <h3 class="text-sm font-medium text-slate-900 line-clamp-2">{{ product.title }}</h3>
+                <p class="mt-1 text-lg font-bold text-emerald-600">{{ product.price|format_price }}</p>
+                <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
                     <span>{{ product.ville }}</span>
                     <span>·</span>
                     <span>{{ product.created_at|time_since_fr }}</span>
@@ -126,22 +129,28 @@
 
 <!-- Pourquoi Setup.ma -->
 <section class="mb-10">
-    <h2 class="text-xl font-semibold text-gray-900 mb-4 text-center">Pourquoi Setup.ma ?</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
-            <span class="text-3xl mb-3 block">🔒</span>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Catalogue vérifié</h3>
-            <p class="text-sm text-gray-500">Des boutiques vérifiées et des annonces de qualité pour une expérience fiable.</p>
+    <h2 class="text-xl font-bold text-slate-900 mb-5 text-center">Pourquoi Setup.ma ?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-white rounded-2xl shadow-sm p-6 text-center card-hover">
+            <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-900 mb-2">Catalogue vérifié</h3>
+            <p class="text-sm text-slate-500">Boutiques vérifiées et annonces de qualité pour une expérience fiable.</p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
-            <span class="text-3xl mb-3 block">💬</span>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">WhatsApp direct</h3>
-            <p class="text-sm text-gray-500">Contactez les vendeurs directement via WhatsApp, sans intermédiaire.</p>
+        <div class="bg-white rounded-2xl shadow-sm p-6 text-center card-hover">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-900 mb-2">WhatsApp direct</h3>
+            <p class="text-sm text-slate-500">Contactez les vendeurs directement via WhatsApp, sans intermédiaire.</p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
-            <span class="text-3xl mb-3 block">⭐</span>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Avis vérifiés</h3>
-            <p class="text-sm text-gray-500">Consultez les avis des acheteurs pour choisir le bon vendeur.</p>
+        <div class="bg-white rounded-2xl shadow-sm p-6 text-center card-hover">
+            <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-900 mb-2">Avis vérifiés</h3>
+            <p class="text-sm text-slate-500">Consultez les avis des acheteurs pour choisir le bon vendeur.</p>
         </div>
     </div>
 </section>
