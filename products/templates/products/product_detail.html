@@ -1,15 +1,40 @@
 {% extends "base.html" %}
 {% load setup_filters %}
 
-{% block title %}{{ product.title }} — Setup.ma{% endblock %}
+{% block title %}{{ seo_title }}{% endblock %}
+{% block meta_description %}{{ seo_description }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.title }} — {{ product.price|format_price }} | Setup.ma{% endblock %}
+{% block og_description %}{{ seo_description }}{% endblock %}
+{% block og_image %}{% if product.images.all.0 %}{{ request.scheme }}://{{ request.get_host }}{{ product.images.all.0.image.url }}{% endif %}{% endblock %}
+{% block twitter_title %}{{ product.title }} — {{ product.price|format_price }}{% endblock %}
+{% block twitter_description %}{{ seo_description }}{% endblock %}
 
 {% block content %}
 <div class="max-w-5xl mx-auto">
-    <!-- Breadcrumb -->
-    <nav class="text-sm text-slate-500 mb-4">
-        <a href="{% url 'product-list' %}" class="text-indigo-600 hover:text-indigo-500 transition-colors">Annonces</a>
-        <span class="mx-1">/</span>
-        <span class="text-slate-900">{{ product.title }}</span>
+    <!-- Breadcrumb (Schema.org BreadcrumbList) -->
+    <nav class="text-sm text-slate-500 mb-4" aria-label="Fil d'Ariane">
+        <ol class="flex flex-wrap items-center gap-1" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{% url 'home' %}" itemprop="item" class="text-indigo-600 hover:text-indigo-500 transition-colors"><span itemprop="name">Accueil</span></a>
+                <meta itemprop="position" content="1">
+            </li>
+            <span class="mx-1">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{% url 'product-list' %}" itemprop="item" class="text-indigo-600 hover:text-indigo-500 transition-colors"><span itemprop="name">Annonces</span></a>
+                <meta itemprop="position" content="2">
+            </li>
+            <span class="mx-1">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a href="{% url 'product-list' %}?category={{ product.category.slug }}" itemprop="item" class="text-indigo-600 hover:text-indigo-500 transition-colors"><span itemprop="name">{{ product.category.name }}</span></a>
+                <meta itemprop="position" content="3">
+            </li>
+            <span class="mx-1">/</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" class="text-slate-900">{{ product.title }}</span>
+                <meta itemprop="position" content="4">
+            </li>
+        </ol>
     </nav>
 
     <!-- Desktop: 2 colonnes (images 60% | infos 40%) — Mobile: 1 colonne empilée -->
@@ -24,7 +49,7 @@
                         {% for img in product.images.all %}
                         <div class="w-full flex-shrink-0 snap-center carousel-slide">
                             <div class="aspect-[4/3] bg-gray-100 cursor-pointer" onclick="openLightbox({{ forloop.counter0 }})">
-                                <img src="{{ img.image.url }}" alt="{{ product.title }}"
+                                <img src="{{ img.image.url }}" alt="{{ product.title }} — {{ product.category.name }} d'occasion à {{ product.ville.name }}"
                                      class="w-full h-full object-contain">
                             </div>
                         </div>
@@ -205,6 +230,37 @@
     </div>
 </div>
 
+<!-- JSON-LD Structured Data (Schema.org Product) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ product.title|escapejs }}",
+  {% if product.images.all %}"image": [{% for img in product.images.all %}"{{ request.scheme }}://{{ request.get_host }}{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],{% endif %}
+  "description": "{{ product.description_complementaire|default:product.title|truncatechars:180|escapejs }}",
+  "sku": "SETUP-{{ product.pk }}",
+  "category": "{{ product.category.name|escapejs }}",
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}",
+    "priceCurrency": "MAD",
+    "price": "{{ product.price }}",
+    "priceValidUntil": "{{ product.created_at|date:'Y' }}-12-31",
+    "itemCondition": "https://schema.org/UsedCondition",
+    "availability": "{% if product.status == 'DISPONIBLE' %}https://schema.org/InStock{% else %}https://schema.org/SoldOut{% endif %}",
+    "seller": {
+      "@type": "{% if product.seller.user_type == 'boutique' %}LocalBusiness{% else %}Person{% endif %}",
+      "name": "{% if product.seller.user_type == 'boutique' and product.seller.boutique %}{{ product.seller.boutique.nom_boutique|escapejs }}{% else %}{{ product.seller.get_full_name|escapejs }}{% endif %}",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{{ product.ville.name|escapejs }}",
+        "addressCountry": "MA"
+      }
+    }
+  }
+}
+</script>
+
 <!-- Lightbox -->
 {% if product.images.all %}
 <div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onclick="closeLightbox()">
@@ -214,6 +270,36 @@
     <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain" onclick="event.stopPropagation()">
 </div>
 {% endif %}
+
+<!-- JSON-LD Structured Data (Schema.org Product) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ product.title|escapejs }}",
+  {% if product.images.all %}"image": [{% for img in product.images.all %}"{{ request.scheme }}://{{ request.get_host }}{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],{% endif %}
+  "description": "{{ product.description_complementaire|default:product.title|truncatechars:200|escapejs }}",
+  "sku": "SETUP-{{ product.pk }}",
+  "category": "{{ product.category.name|escapejs }}",
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}",
+    "priceCurrency": "MAD",
+    "price": "{{ product.price }}",
+    "itemCondition": "https://schema.org/UsedCondition",
+    "availability": "{% if product.status == 'DISPONIBLE' %}https://schema.org/InStock{% elif product.status == 'VENDU' %}https://schema.org/SoldOut{% else %}https://schema.org/Discontinued{% endif %}",
+    "seller": {
+      "@type": "{% if product.seller.user_type == 'boutique' %}LocalBusiness{% else %}Person{% endif %}",
+      "name": "{% if product.seller.user_type == 'boutique' and product.seller.boutique %}{{ product.seller.boutique.nom_boutique|escapejs }}{% else %}{{ product.seller.get_full_name|escapejs }}{% endif %}",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{{ product.ville.name|escapejs }}",
+        "addressCountry": "MA"
+      }
+    }
+  }
+}
+</script>
 
 <!-- Report Modal -->
 {% if user.is_authenticated and not has_reported and product.seller != user %}

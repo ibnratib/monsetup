@@ -82,7 +82,7 @@
                                             <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs flex-shrink-0">—</div>
                                         {% endif %}
                                         <div class="min-w-0">
-                                            <a href="{% url 'product-detail' product.pk %}" class="text-slate-900 hover:text-indigo-600 font-medium line-clamp-1">{{ product.title }}</a>
+                                            <a href="{{ product.get_absolute_url }}" class="text-slate-900 hover:text-indigo-600 font-medium line-clamp-1">{{ product.title }}</a>
                                             <p class="text-xs text-slate-500">{{ product.category.name }} · {{ product.ville.name }}</p>
                                         </div>
                                     </div>

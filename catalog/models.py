@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 from core.models import TimeStampedModel
@@ -26,6 +27,9 @@ class Category(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('product-list') + f'?category={self.slug}'
 
     def clean(self):
         if self.parent and self.parent.parent is not None:

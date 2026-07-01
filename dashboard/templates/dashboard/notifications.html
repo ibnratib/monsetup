@@ -56,7 +56,7 @@
                             <span class="text-xs text-slate-500">{{ notif.created_at|time_since_fr }}</span>
                             <span class="text-xs text-slate-400">{{ notif.get_type_display }}</span>
                             {% if notif.product %}
-                                <a href="{% url 'product-detail' notif.product.pk %}" class="text-xs text-indigo-600 hover:underline">Voir l'annonce</a>
+                                <a href="{{ notif.product.get_absolute_url }}" class="text-xs text-indigo-600 hover:underline">Voir l'annonce</a>
                             {% endif %}
                         </div>
                     </div>

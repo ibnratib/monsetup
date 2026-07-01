@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Case, F, IntegerField, Q, Value, When
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.text import slugify
 from django.views import View
 from django.views.generic import DetailView, ListView
 from rest_framework import permissions, status
@@ -308,22 +309,36 @@ class ProductListView(ListView):
             'ville', 'category', 'category__parent', 'seller',
         ).prefetch_related('images').filter(status='DISPONIBLE')
 
-        # Category filters
-        category_slug = self.request.GET.get('category', '').strip()
+        # URL-based city filter (SEO route)
+        city_slug = self.kwargs.get('city_slug', '')
+        if city_slug:
+            queryset = queryset.filter(ville__slug=city_slug)
+
+        # URL-based category filter (SEO route)
+        category_slug = self.kwargs.get('category_slug', '')
         if category_slug:
-            queryset = queryset.filter(category__slug=category_slug)
+            queryset = queryset.filter(
+                Q(category__slug=category_slug) | Q(category__parent__slug=category_slug)
+            )
 
-        category_root = self.request.GET.get('category_root', '').strip()
-        if category_root:
-            queryset = queryset.filter(category__parent__slug=category_root)
+        # Query param category filters (fallback for form-based filtering)
+        if not category_slug:
+            cat_param = self.request.GET.get('category', '').strip()
+            if cat_param:
+                queryset = queryset.filter(category__slug=cat_param)
 
-        # City filter
-        ville = self.request.GET.get('ville', '').strip()
-        if ville:
-            try:
-                queryset = queryset.filter(ville_id=int(ville))
-            except (ValueError, TypeError):
-                pass
+            cat_root_param = self.request.GET.get('category_root', '').strip()
+            if cat_root_param:
+                queryset = queryset.filter(category__parent__slug=cat_root_param)
+
+        # Query param city filter (fallback)
+        if not city_slug:
+            ville = self.request.GET.get('ville', '').strip()
+            if ville:
+                try:
+                    queryset = queryset.filter(ville_id=int(ville))
+                except (ValueError, TypeError):
+                    pass
 
         # Price filters
         price_min = self.request.GET.get('price_min', '').strip()
@@ -367,7 +382,6 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Pass filter options to template
         context['categories_root'] = Category.objects.filter(
             parent__isnull=True,
         ).prefetch_related('children').order_by('order', 'name')
@@ -376,14 +390,76 @@ class ProductListView(ListView):
         ).select_related('parent').order_by('parent__name', 'name')
         context['cities'] = City.objects.all()
 
-        # Active filters (for form re-population and filter tags)
+        # ── SEO: Resolve city and category from URL kwargs ──
+        city_slug = self.kwargs.get('city_slug', '')
+        category_slug = self.kwargs.get('category_slug', '')
+        current_city = None
+        current_category = None
+
+        if city_slug:
+            try:
+                current_city = City.objects.get(slug=city_slug)
+            except City.DoesNotExist:
+                pass
+
+        if category_slug:
+            try:
+                current_category = Category.objects.get(slug=category_slug)
+            except Category.DoesNotExist:
+                pass
+
+        # Fallback to query params for category name
+        if not current_category:
+            cat_param = self.request.GET.get('category', '').strip()
+            if cat_param:
+                try:
+                    current_category = Category.objects.get(slug=cat_param)
+                except Category.DoesNotExist:
+                    pass
+            else:
+                cat_root_param = self.request.GET.get('category_root', '').strip()
+                if cat_root_param:
+                    try:
+                        current_category = Category.objects.get(slug=cat_root_param)
+                    except Category.DoesNotExist:
+                        pass
+
+        # Fallback to query params for city name
+        if not current_city:
+            ville_param = self.request.GET.get('ville', '').strip()
+            if ville_param:
+                try:
+                    current_city = City.objects.get(id=int(ville_param))
+                except (City.DoesNotExist, ValueError, TypeError):
+                    pass
+
+        # Build SEO strings
+        cat_label = current_category.name if current_category else "Matériel Tech & Informatique"
+        geo_label = f"à {current_city.name}" if current_city else "au Maroc"
+
+        context['seo_title'] = f"{cat_label} d'occasion {geo_label} | Setup.ma"
+        context['seo_h1'] = f"{cat_label} d'occasion {geo_label}"
+        context['seo_description'] = (
+            f"Achetez et vendez du {cat_label} d'occasion de confiance {geo_label} "
+            f"sur Setup.ma. Particuliers et boutiques vérifiées."
+        )
+        context['current_city'] = current_city
+        context['current_category'] = current_category
+
+        # ── Active filters for form re-population ──
         active_filters = {}
         for key in ('category', 'category_root', 'ville', 'price_min', 'price_max',
                      'search', 'seller_type', 'ordering'):
             val = self.request.GET.get(key, '').strip()
             if val:
                 active_filters[key] = val
-        # EAV filter params — as both active_filters entries and a separate id→value dict
+        # Pre-populate from URL kwargs
+        if city_slug and 'ville' not in active_filters and current_city:
+            active_filters['_city_slug'] = city_slug
+        if category_slug and 'category' not in active_filters:
+            active_filters['category'] = category_slug
+
+        # EAV filter params
         eav_filter_values = {}
         for key, val in self.request.GET.items():
             if key.startswith('attr_') and val:
@@ -403,10 +479,10 @@ class ProductListView(ListView):
         context['filter_query_string'] = params.urlencode()
 
         # Filterable attributes for selected subcategory
-        category_slug = self.request.GET.get('category', '').strip()
-        if category_slug:
+        effective_cat_slug = category_slug or self.request.GET.get('category', '').strip()
+        if effective_cat_slug:
             try:
-                cat = Category.objects.get(slug=category_slug)
+                cat = Category.objects.get(slug=effective_cat_slug)
                 context['filterable_attributes'] = [
                     attr for attr in cat.get_inherited_attributes() if attr.filterable
                 ]
@@ -425,12 +501,27 @@ class ProductDetailView(DetailView):
 
     def get_queryset(self):
         return Product.objects.select_related(
-            'ville', 'category', 'seller',
+            'ville', 'category', 'category__parent', 'seller',
         ).prefetch_related(
             'images', 'attribute_values__attribute',
             'attribute_values__value_choice',
             'attribute_values__value_multi_choice',
         )
+
+    def dispatch(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        url_slug = kwargs.get('slug', '')
+        if pk:
+            try:
+                product = Product.objects.only('id', 'title').get(pk=pk)
+            except Product.DoesNotExist:
+                pass
+            else:
+                expected_slug = slugify(product.title) or 'produit'
+                if url_slug != expected_slug:
+                    from django.http import HttpResponsePermanentRedirect
+                    return HttpResponsePermanentRedirect(product.get_absolute_url())
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -458,6 +549,15 @@ class ProductDetailView(DetailView):
         context['seller_average_rating'] = seller_ctx['average_rating']
         context['seller_reviews_count'] = seller_ctx['reviews_count']
         context['seller_top_tags'] = seller_ctx['top_tags']
+
+        # SEO context
+        cat_name = product.category.name
+        city_name = product.ville.name
+        context['seo_title'] = f"{product.title} — {cat_name} d'occasion à {city_name} | Setup.ma"
+        context['seo_description'] = (
+            f"{product.title} — {cat_name} d'occasion à {city_name}. "
+            f"Prix : {product.price} DH. Contactez le vendeur via WhatsApp sur Setup.ma."
+        )
         return context
 
 
@@ -505,7 +605,7 @@ class ProductCreateView(LoginRequiredMixin, View):
         )
         if serializer.is_valid():
             product = serializer.save()
-            return redirect('product-detail', pk=product.pk)
+            return redirect(product.get_absolute_url())
 
         return render(request, 'products/product_create.html', {
             'categories': categories,

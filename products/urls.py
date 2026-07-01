@@ -26,9 +26,13 @@ favorites_api_urlpatterns = [
     path('<int:pk>/', FavoriteDeleteAPIView.as_view(), name='favorite-delete'),
 ]
 
-# SSR endpoints
+# SSR endpoints — order matters: 'p/' prefix routes MUST come before
+# catch-all <slug:city_slug> routes to avoid 'p' being parsed as a city.
 ssr_urlpatterns = [
     path('', ProductListView.as_view(), name='product-list'),
     path('deposer/', ProductCreateView.as_view(), name='product-create'),
-    path('<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
+    path('p/<int:pk>-<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
+    path('p/<int:pk>/', ProductDetailView.as_view(), name='product-detail-short'),
+    path('<slug:city_slug>/', ProductListView.as_view(), name='product-list-by-city'),
+    path('<slug:city_slug>/<slug:category_slug>/', ProductListView.as_view(), name='product-list-by-city-category'),
 ]

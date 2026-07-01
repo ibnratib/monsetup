@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% load setup_filters %}
 
-{% block title %}{{ boutique.nom_boutique }} — Setup.ma{% endblock %}
+{% block title %}{{ boutique.nom_boutique }} — Boutique Tech à {{ boutique.ville.name }} | Setup.ma{% endblock %}
+{% block meta_description %}{{ boutique.nom_boutique }} — Boutique tech{% if boutique.statut_verification == 'VERIFIE' %} vérifiée{% endif %} à {{ boutique.ville.name }}. {{ boutique.description|default:"Retrouvez toutes les annonces de cette boutique sur Setup.ma."|truncatechars:140 }}{% endblock %}
+{% block og_title %}{{ boutique.nom_boutique }} — Boutique Tech à {{ boutique.ville.name }}{% endblock %}
+{% block og_description %}{{ boutique.description|default:"Boutique tech de confiance sur Setup.ma"|truncatechars:140 }}{% endblock %}
+{% block og_image %}{% if boutique.logo %}{{ request.scheme }}://{{ request.get_host }}{{ boutique.logo.url }}{% endif %}{% endblock %}
+{% block twitter_title %}{{ boutique.nom_boutique }} — Setup.ma{% endblock %}
+{% block twitter_description %}Boutique tech{% if boutique.statut_verification == 'VERIFIE' %} vérifiée{% endif %} à {{ boutique.ville.name }} sur Setup.ma.{% endblock %}
 
 {% block content %}
 <!-- Boutique Header -->
@@ -69,10 +75,10 @@
     {% if page_obj.object_list %}
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for product in page_obj %}
-        <a href="{% url 'product-detail' product.pk %}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow block">
+        <a href="{{ product.get_absolute_url }}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow block">
             <div class="aspect-[4/3] bg-slate-100 overflow-hidden relative">
                 {% if product.images.all.0 %}
-                <img class="w-full h-full object-cover" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }}">
+                <img class="w-full h-full object-cover" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }} — {{ product.category.name }} d'occasion à {{ product.ville.name }}" loading="lazy">
                 {% else %}
                 <div class="w-full h-full flex items-center justify-center">
                     <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -154,4 +160,30 @@
     </div>
 </section>
 {% endif %}
+
+<!-- JSON-LD Structured Data (Schema.org Store) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "{{ boutique.nom_boutique|escapejs }}",
+  "description": "{{ boutique.description|escapejs }}",
+  "url": "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}",
+  {% if boutique.logo %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ boutique.logo.url }}",{% endif %}
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ boutique.adresse|escapejs }}",
+    "addressLocality": "{{ boutique.ville.name|escapejs }}",
+    "addressCountry": "MA"
+  },
+  {% if boutique.user.phone_whatsapp %}"telephone": "{{ boutique.user.phone_whatsapp }}",{% endif %}
+  {% if avg_rating %}"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ avg_rating|floatformat:1 }}",
+    "reviewCount": "{{ review_count }}",
+    "bestRating": "5",
+    "worstRating": "1"
+  }{% endif %}
+}
+</script>
 {% endblock %}

@@ -3,7 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Setup.ma{% endblock %}</title>
+    <title>{% block title %}Achat & Vente Matériel Informatique d'occasion au Maroc — Setup.ma{% endblock %}</title>
+
+    <!-- SEO Meta -->
+    <meta name="description" content="{% block meta_description %}Achetez et vendez du matériel informatique et High-Tech d'occasion de confiance au Maroc sur Setup.ma — PC, Consoles, Smartphones, Composants.{% endblock %}">
+    <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+
+    <!-- OpenGraph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:site_name" content="Setup.ma">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Setup.ma — Marketplace Tech de confiance au Maroc{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Achetez et vendez du matériel tech d'occasion de confiance au Maroc sur Setup.ma.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/static/images/og-default.jpg{% endblock %}">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:locale" content="fr_MA">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Setup.ma — Marketplace Tech au Maroc{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Matériel informatique d'occasion de confiance au Maroc.{% endblock %}">
+
+    <!-- Geo Meta -->
+    <meta name="geo.region" content="MA">
+    <meta name="geo.placename" content="Maroc">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -302,7 +326,7 @@
             } else {
                 products.slice(0, 5).forEach(function(p) {
                     var card = document.createElement('a');
-                    card.href = '/annonces/' + p.id + '/';
+                    card.href = '/annonces/p/' + p.id + '/';
                     card.className = 'flex gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors';
                     card.innerHTML = '<img src="' + (p.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Crect fill=%22%23f3f4f6%22 width=%2240%22 height=%2240%22/%3E%3C/svg%3E') + '" class="w-10 h-10 rounded object-cover flex-shrink-0"><div class="min-w-0"><p class="text-xs font-medium text-slate-900 truncate">' + escapeHtml(p.title) + '</p><p class="text-xs font-bold text-emerald-600">' + Number(p.price).toLocaleString('fr-MA') + ' DH</p></div>';
                     resultsGrid.appendChild(card);

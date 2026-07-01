@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 
 from catalog.models import AttributeChoice, AttributeDefinition, Category
 from core.models import City, TimeStampedModel
@@ -65,6 +67,10 @@ class Product(TimeStampedModel):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        slug = slugify(self.title) or 'produit'
+        return reverse('product-detail', kwargs={'pk': self.pk, 'slug': slug})
 
     def clean(self):
         from django.core.exceptions import ValidationError
