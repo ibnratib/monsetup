@@ -36,6 +36,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['monsetup-hyevhud2hhcya0gh.spaincentral-01.azurewebsites.net', 'localhost', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://monsetup-hyevhud2hhcya0gh.spaincentral-01.azurewebsites.net']
+
 
 # Application definition
 
