@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="fr" class="scroll-smooth h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
     <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
     <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
 
-    <!-- OpenGraph (Facebook, WhatsApp, LinkedIn) -->
+    <!-- OpenGraph -->
     <meta property="og:site_name" content="Setup.ma">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}Setup.ma — Marketplace Tech de confiance au Maroc{% endblock %}">
@@ -30,97 +30,174 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
     tailwind.config = {
+        darkMode: "class",
         theme: {
             extend: {
-                fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'] },
                 colors: {
-                    brand: {
-                        50: '#ecfdf5',
-                        100: '#d1fae5',
-                        200: '#a7f3d0',
-                        300: '#6ee7b7',
-                        400: '#34d399',
-                        500: '#10b981',
-                        600: '#059669',
-                        700: '#047857',
-                    }
+                    "primary": "#3525cd",
+                    "primary-container": "#4f46e5",
+                    "on-primary": "#ffffff",
+                    "on-primary-container": "#dad7ff",
+                    "primary-fixed": "#e2dfff",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "inverse-primary": "#c3c0ff",
+                    "secondary": "#006c4a",
+                    "secondary-container": "#82f5c1",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#00714e",
+                    "secondary-fixed": "#85f8c4",
+                    "tertiary": "#005338",
+                    "tertiary-container": "#006e4b",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#67f4b7",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface": "#faf8ff",
+                    "surface-dim": "#d2d9f4",
+                    "surface-bright": "#faf8ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f2f3ff",
+                    "surface-container": "#eaedff",
+                    "surface-container-high": "#e2e7ff",
+                    "surface-container-highest": "#dae2fd",
+                    "on-surface": "#131b2e",
+                    "on-surface-variant": "#464555",
+                    "inverse-surface": "#283044",
+                    "inverse-on-surface": "#eef0ff",
+                    "outline": "#777587",
+                    "outline-variant": "#c7c4d8",
+                    "surface-tint": "#4d44e3",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "background": "#faf8ff",
+                    "on-background": "#131b2e",
+                    "surface-variant": "#dae2fd"
+                },
+                borderRadius: {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1rem",
+                    "full": "9999px"
+                },
+                spacing: {
+                    "base": "4px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "stack-lg": "32px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "container-max": "1280px"
+                },
+                fontFamily: {
+                    sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    "headline-md": ['Inter'],
+                    "display-lg": ['Inter'],
+                    "label-md": ['Inter'],
+                    "body-lg": ['Inter'],
+                    "body-md": ['Inter'],
+                    "price-lg": ['Inter']
+                },
+                fontSize: {
+                    "price-lg": ["20px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-md": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
                 }
             }
         }
     }
     </script>
     <style>
+        body { font-family: 'Inter', sans-serif; background-color: #faf8ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .gradient-line { background: linear-gradient(90deg, #6366f1, #10b981); }
-        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.12); }
+        .hero-gradient { background: radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.1) 0%, transparent 50%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12); }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="h-full flex flex-col bg-slate-50 text-slate-900 font-sans">
+<body class="h-full flex flex-col text-on-surface font-sans">
 
     <!-- Header -->
-    <header class="bg-slate-900 sticky top-0 z-40">
-        <div class="h-0.5 gradient-line"></div>
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="{% url 'home' %}" class="text-xl font-extrabold flex items-center gap-0.5">
-                <span class="text-white">Setup</span><span class="text-emerald-400">.ma</span>
-            </a>
-
-            <!-- Desktop nav -->
-            <div class="hidden lg:flex items-center gap-5">
-                <a href="{% url 'product-list' %}" class="text-sm text-slate-300 hover:text-white transition-colors">Annonces</a>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard-home' %}" class="text-sm text-slate-300 hover:text-white transition-colors">Dashboard</a>
-                    <a href="{% url 'product-create' %}" class="inline-flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold rounded-lg transition-colors">+ Déposer</a>
-                    <span class="text-sm text-slate-400">{{ user.get_short_name }}</span>
-                    <a href="{% url 'logout' %}" class="text-sm text-slate-400 hover:text-red-400 transition-colors">Déconnexion</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="text-sm text-slate-300 hover:text-white transition-colors">Connexion</a>
-                    <a href="{% url 'register-choice' %}" class="inline-flex items-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold rounded-lg transition-colors">S'inscrire</a>
-                {% endif %}
+    <header class="bg-inverse-surface sticky top-0 z-50 shadow-md">
+        <div class="flex justify-between items-center w-full px-gutter max-w-[1280px] mx-auto h-20">
+            <div class="flex items-center gap-8">
+                <a href="{% url 'home' %}" class="text-xl font-black text-white">Setup<span class="text-secondary-fixed">.</span><span class="text-secondary-fixed">ma</span></a>
+                <nav class="hidden lg:flex items-center gap-6">
+                    <a href="{% url 'product-list' %}" class="text-white/80 text-label-md hover:text-white hover:scale-105 transition-all">Annonces</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard-home' %}" class="text-white/80 text-label-md hover:text-white hover:scale-105 transition-all">Dashboard</a>
+                    {% endif %}
+                </nav>
             </div>
-
-            <!-- Mobile menu button -->
-            <button id="mobile-menu-btn" class="lg:hidden p-2 text-slate-300 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
-        </nav>
+            <div class="flex items-center gap-4">
+                <div class="hidden lg:flex items-center gap-4 mr-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-white/60 text-label-md">{{ user.get_short_name }}</span>
+                        <a href="{% url 'logout' %}" class="text-white/60 text-label-md hover:text-red-400 transition-colors">Déconnexion</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-white/80 text-label-md hover:text-white transition-colors">Connexion</a>
+                        <a href="{% url 'register-choice' %}" class="text-white/80 text-label-md hover:text-white transition-colors">S'inscrire</a>
+                    {% endif %}
+                </div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'product-create' %}" class="bg-secondary text-white text-label-md px-6 py-3 rounded-xl flex items-center gap-2 hover:scale-105 transition-all duration-150 active:scale-95">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    Déposer
+                </a>
+                {% else %}
+                <a href="{% url 'register-choice' %}" class="bg-secondary text-white text-label-md px-6 py-3 rounded-xl flex items-center gap-2 hover:scale-105 transition-all duration-150 active:scale-95">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    Déposer
+                </a>
+                {% endif %}
+                <button id="mobile-menu-btn" class="lg:hidden p-2 text-white/80 hover:text-white">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+        <div class="h-[2px] w-full bg-gradient-to-r from-primary-container to-secondary"></div>
     </header>
 
     <!-- Mobile menu drawer -->
-    <div id="mobile-menu" class="hidden fixed inset-0 z-50">
+    <div id="mobile-menu" class="hidden fixed inset-0 z-[60]">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="mobile-menu-overlay"></div>
-        <div class="absolute left-0 top-0 w-72 h-full bg-slate-900 shadow-xl p-6">
+        <div class="absolute left-0 top-0 w-72 h-full bg-inverse-surface shadow-xl p-6">
             <div class="flex items-center justify-between mb-8">
-                <span class="text-xl font-extrabold"><span class="text-white">Setup</span><span class="text-emerald-400">.ma</span></span>
-                <button id="mobile-menu-close" class="p-1 text-slate-400 hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+                <span class="text-xl font-black text-white">Setup<span class="text-secondary-fixed">.ma</span></span>
+                <button id="mobile-menu-close" class="p-1 text-white/50 hover:text-white">
+                    <span class="material-symbols-outlined">close</span>
                 </button>
             </div>
             <nav class="flex flex-col gap-4">
-                <a href="{% url 'home' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Accueil</a>
-                <a href="{% url 'product-list' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Annonces</a>
+                <a href="{% url 'home' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Accueil</a>
+                <a href="{% url 'product-list' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Annonces</a>
                 {% if user.is_authenticated %}
-                    <a href="{% url 'product-create' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Déposer une annonce</a>
-                    <a href="{% url 'dashboard-home' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Dashboard</a>
-                    <a href="{% url 'dashboard-favorites-ssr' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Mes favoris</a>
-                    <a href="{% url 'dashboard-notifications-ssr' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Notifications</a>
-                    <hr class="border-slate-700">
-                    <span class="text-xs text-slate-500">Connecté : {{ user.get_short_name }}</span>
-                    <a href="{% url 'logout' %}" class="text-sm font-medium text-red-400 hover:text-red-300 transition-colors">Déconnexion</a>
+                    <a href="{% url 'product-create' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Déposer une annonce</a>
+                    <a href="{% url 'dashboard-home' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Dashboard</a>
+                    <a href="{% url 'dashboard-favorites-ssr' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Mes favoris</a>
+                    <a href="{% url 'dashboard-notifications-ssr' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Notifications</a>
+                    <hr class="border-white/10">
+                    <span class="text-xs text-white/40">Connecté : {{ user.get_short_name }}</span>
+                    <a href="{% url 'logout' %}" class="text-label-md text-red-400 hover:text-red-300 transition-colors">Déconnexion</a>
                 {% else %}
-                    <hr class="border-slate-700">
-                    <a href="{% url 'login' %}" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Connexion</a>
-                    <a href="{% url 'register-choice' %}" class="inline-flex items-center justify-center px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 text-sm font-semibold rounded-lg transition-colors">S'inscrire</a>
+                    <hr class="border-white/10">
+                    <a href="{% url 'login' %}" class="text-label-md text-white/80 hover:text-secondary-fixed transition-colors">Connexion</a>
+                    <a href="{% url 'register-choice' %}" class="inline-flex items-center justify-center px-4 py-2.5 bg-secondary text-white text-label-md rounded-xl transition-all hover:scale-105">S'inscrire</a>
                 {% endif %}
             </nav>
         </div>
@@ -128,13 +205,13 @@
 
     <!-- Messages flash -->
     {% if messages %}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+    <div class="max-w-[1280px] mx-auto px-gutter mt-4">
         {% for message in messages %}
         <div class="p-4 rounded-xl mb-2 text-sm font-medium
-            {% if message.tags == 'success' %}bg-emerald-50 border border-emerald-200 text-emerald-800
-            {% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-800
+            {% if message.tags == 'success' %}bg-secondary-container/30 border border-secondary/20 text-secondary
+            {% elif message.tags == 'error' %}bg-error-container border border-error/20 text-on-error-container
             {% elif message.tags == 'warning' %}bg-amber-50 border border-amber-200 text-amber-800
-            {% else %}bg-indigo-50 border border-indigo-200 text-indigo-800{% endif %}">
+            {% else %}bg-primary-fixed border border-primary/20 text-primary{% endif %}">
             {{ message }}
         </div>
         {% endfor %}
@@ -142,38 +219,45 @@
     {% endif %}
 
     <!-- Main -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="flex-1 w-full">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 border-t border-slate-800 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                <div>
-                    <h3 class="text-sm font-semibold text-white mb-3">Setup.ma</h3>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li><a href="{% url 'home' %}" class="hover:text-emerald-400 transition-colors">Accueil</a></li>
-                        <li><a href="{% url 'product-list' %}" class="hover:text-emerald-400 transition-colors">Annonces</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-sm font-semibold text-white mb-3">Compte</h3>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'dashboard-home' %}" class="hover:text-emerald-400 transition-colors">Dashboard</a></li>
-                        <li><a href="{% url 'product-create' %}" class="hover:text-emerald-400 transition-colors">Déposer</a></li>
-                        {% else %}
-                        <li><a href="{% url 'login' %}" class="hover:text-emerald-400 transition-colors">Connexion</a></li>
-                        <li><a href="{% url 'register-choice' %}" class="hover:text-emerald-400 transition-colors">Inscription</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
+    <footer class="bg-inverse-surface border-t border-white/10 mt-auto">
+        <div class="w-full py-12 px-gutter max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+            <div class="flex flex-col gap-4">
+                <span class="text-xl font-black text-white">Setup<span class="text-secondary-fixed">.ma</span></span>
+                <p class="text-white/70 text-sm">Premium Tech Marketplace pour les passionnés d'informatique au Maroc. Achetez, vendez, upgradez.</p>
             </div>
-            <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <span class="text-xl font-extrabold"><span class="text-white">Setup</span><span class="text-emerald-400">.ma</span></span>
-                <span class="text-sm text-slate-500">&copy; 2026 Setup.ma — Tous droits réservés.</span>
+            <div>
+                <h5 class="text-white text-label-md mb-6 uppercase tracking-wider">Marketplace</h5>
+                <ul class="flex flex-col gap-4">
+                    <li><a href="{% url 'product-list' %}" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">Annonces</a></li>
+                </ul>
             </div>
+            <div>
+                <h5 class="text-white text-label-md mb-6 uppercase tracking-wider">Communauté</h5>
+                <ul class="flex flex-col gap-4">
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard-home' %}" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">Dashboard</a></li>
+                    <li><a href="{% url 'product-create' %}" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">Déposer</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">Connexion</a></li>
+                    <li><a href="{% url 'register-choice' %}" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">Inscription</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white text-label-md mb-6 uppercase tracking-wider">Légal</h5>
+                <ul class="flex flex-col gap-4">
+                    <li><a href="#" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">CGU</a></li>
+                    <li><a href="#" class="text-white/70 text-label-md hover:text-secondary-fixed transition-colors">Confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-white/5 py-8 text-center">
+            <p class="text-white/50 text-label-md">&copy; 2026 Setup.ma — Premium Tech Marketplace</p>
         </div>
     </footer>
 
@@ -196,61 +280,56 @@
 
     <!-- Floating AI Chat Widget -->
     <div id="ai-chat-widget" class="fixed bottom-6 right-6 z-50">
-        <!-- Chat window -->
-        <div id="ai-chat-window" class="hidden mb-4 w-[360px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col" style="height: 500px; max-height: calc(100vh - 8rem);">
-            <!-- Header -->
-            <div class="flex items-center justify-between px-4 py-3 bg-slate-900 rounded-t-2xl">
+        <div id="ai-chat-window" class="hidden mb-4 w-[360px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-outline-variant flex flex-col" style="height: 500px; max-height: calc(100vh - 8rem);">
+            <div class="flex items-center justify-between px-4 py-3 bg-inverse-surface rounded-t-2xl">
                 <div class="flex items-center gap-2">
-                    <span class="text-emerald-400 text-lg">🤖</span>
+                    <span class="material-symbols-outlined text-secondary-fixed">smart_toy</span>
                     <span class="text-white text-sm font-semibold">Assistant Setup.ma</span>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button onclick="aiChatWidget.reset()" title="Nouvelle conversation" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <button onclick="aiChatWidget.reset()" title="Nouvelle conversation" class="p-1.5 text-white/50 hover:text-white rounded-lg hover:bg-white/10 transition">
+                        <span class="material-symbols-outlined text-[18px]">refresh</span>
                     </button>
-                    <button onclick="aiChatWidget.close()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <button onclick="aiChatWidget.close()" class="p-1.5 text-white/50 hover:text-white rounded-lg hover:bg-white/10 transition">
+                        <span class="material-symbols-outlined text-[18px]">close</span>
                     </button>
                 </div>
             </div>
-            <!-- Messages -->
             <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-hide">
                 <div class="flex gap-2">
-                    <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div>
-                    <div class="bg-slate-100 rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]">
-                        <p class="text-sm text-slate-800">Salut ! Décrivez ce que vous cherchez, je vous aide à trouver le bon produit.</p>
+                    <div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-secondary text-[14px]">smart_toy</span>
+                    </div>
+                    <div class="bg-surface-container rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]">
+                        <p class="text-sm text-on-surface">Salut ! Décrivez ce que vous cherchez, je vous aide à trouver le bon produit.</p>
                     </div>
                 </div>
             </div>
-            <!-- Results -->
-            <div id="ai-chat-results" class="hidden border-t overflow-y-auto max-h-[200px] p-3">
+            <div id="ai-chat-results" class="hidden border-t border-outline-variant overflow-y-auto max-h-[200px] p-3">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold text-slate-700"><span id="ai-results-count">0</span> résultats</span>
-                    <a id="ai-results-link" href="#" class="text-xs text-indigo-600 hover:underline">Voir tout</a>
+                    <span class="text-xs font-semibold text-on-surface"><span id="ai-results-count">0</span> résultats</span>
+                    <a id="ai-results-link" href="#" class="text-xs text-primary hover:underline">Voir tout</a>
                 </div>
                 <div id="ai-results-grid" class="space-y-2"></div>
             </div>
-            <!-- Input -->
-            <div class="border-t p-3">
+            <div class="border-t border-outline-variant p-3">
                 <form id="ai-chat-form" class="flex gap-2">
-                    <input type="text" id="ai-chat-input" placeholder="Décrivez votre besoin..." class="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" autocomplete="off">
-                    <button type="submit" id="ai-chat-send" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors disabled:opacity-50">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    <input type="text" id="ai-chat-input" placeholder="Décrivez votre besoin..." class="flex-1 px-3 py-2 border border-outline-variant rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-surface" autocomplete="off">
+                    <button type="submit" id="ai-chat-send" class="px-3 py-2 bg-primary hover:brightness-110 text-white rounded-xl transition-all disabled:opacity-50">
+                        <span class="material-symbols-outlined text-[18px]">send</span>
                     </button>
                 </form>
             </div>
         </div>
-        <!-- Floating button -->
-        <button id="ai-chat-toggle" onclick="aiChatWidget.toggle()" class="w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-lg shadow-indigo-500/30 flex items-center justify-center transition-all hover:scale-105 active:scale-95">
-            <span id="ai-chat-icon-open" class="text-2xl">🤖</span>
-            <svg id="ai-chat-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button id="ai-chat-toggle" onclick="aiChatWidget.toggle()" class="w-14 h-14 bg-primary hover:brightness-110 text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-all hover:scale-105 active:scale-95">
+            <span id="ai-chat-icon-open" class="material-symbols-outlined text-2xl">smart_toy</span>
+            <span id="ai-chat-icon-close" class="material-symbols-outlined text-2xl hidden">close</span>
         </button>
     </div>
 
     <script>
     var aiChatWidget = (function() {
         var win = document.getElementById('ai-chat-window');
-        var toggle = document.getElementById('ai-chat-toggle');
         var iconOpen = document.getElementById('ai-chat-icon-open');
         var iconClose = document.getElementById('ai-chat-icon-close');
         var messagesEl = document.getElementById('ai-chat-messages');
@@ -288,9 +367,9 @@
             var wrapper = document.createElement('div');
             wrapper.className = 'flex gap-2' + (isUser ? ' justify-end' : '');
             if (isUser) {
-                wrapper.innerHTML = '<div class="bg-indigo-600 text-white rounded-2xl rounded-tr-md px-3 py-2 max-w-[85%]"><p class="text-sm">' + escapeHtml(content) + '</p></div>'
+                wrapper.innerHTML = '<div class="bg-primary text-white rounded-2xl rounded-tr-md px-3 py-2 max-w-[85%]"><p class="text-sm">' + escapeHtml(content) + '</p></div>';
             } else {
-                wrapper.innerHTML = '<div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div><div class="bg-slate-100 rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]"><p class="text-sm text-slate-800">' + escapeHtml(content) + '</p></div>';
+                wrapper.innerHTML = '<div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-secondary text-[14px]">smart_toy</span></div><div class="bg-surface-container rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]"><p class="text-sm text-on-surface">' + escapeHtml(content) + '</p></div>';
             }
             messagesEl.appendChild(wrapper);
             messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -300,63 +379,39 @@
             var el = document.createElement('div');
             el.id = 'ai-typing';
             el.className = 'flex gap-2';
-            el.innerHTML = '<div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div><div class="bg-slate-100 rounded-2xl rounded-tl-md px-3 py-2"><div class="flex gap-1"><span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay:0ms"></span><span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay:150ms"></span><span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style="animation-delay:300ms"></span></div></div>';
+            el.innerHTML = '<div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-secondary text-[14px]">smart_toy</span></div><div class="bg-surface-container rounded-2xl rounded-tl-md px-3 py-2"><div class="flex gap-1"><span class="w-1.5 h-1.5 bg-outline rounded-full animate-bounce" style="animation-delay:0ms"></span><span class="w-1.5 h-1.5 bg-outline rounded-full animate-bounce" style="animation-delay:150ms"></span><span class="w-1.5 h-1.5 bg-outline rounded-full animate-bounce" style="animation-delay:300ms"></span></div></div>';
             messagesEl.appendChild(el);
             messagesEl.scrollTop = messagesEl.scrollHeight;
         }
 
-        function removeTyping() {
-            var el = document.getElementById('ai-typing');
-            if (el) el.remove();
-        }
+        function removeTyping() { var el = document.getElementById('ai-typing'); if (el) el.remove(); }
 
         function showResults(products, total) {
             resultsCount.textContent = total;
             resultsGrid.innerHTML = '';
-
-            // Update "Voir tout" link with search on product list
             var resultsLink = document.getElementById('ai-results-link');
-            if (resultsLink) {
-                resultsLink.href = '/annonces/';
-                resultsLink.target = '_blank';
-            }
-
+            if (resultsLink) { resultsLink.href = '/annonces/'; resultsLink.target = '_blank'; }
             if (products.length === 0) {
-                resultsGrid.innerHTML = '<p class="text-xs text-gray-500">Aucun produit trouvé.</p>';
+                resultsGrid.innerHTML = '<p class="text-xs text-outline">Aucun produit trouvé.</p>';
             } else {
                 products.slice(0, 5).forEach(function(p) {
                     var card = document.createElement('a');
                     card.href = '/annonces/p/' + p.id + '/';
-                    card.className = 'flex gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors';
-                    card.innerHTML = '<img src="' + (p.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Crect fill=%22%23f3f4f6%22 width=%2240%22 height=%2240%22/%3E%3C/svg%3E') + '" class="w-10 h-10 rounded object-cover flex-shrink-0"><div class="min-w-0"><p class="text-xs font-medium text-slate-900 truncate">' + escapeHtml(p.title) + '</p><p class="text-xs font-bold text-emerald-600">' + Number(p.price).toLocaleString('fr-MA') + ' DH</p></div>';
+                    card.className = 'flex gap-2 p-2 rounded-xl hover:bg-surface-container transition-colors';
+                    card.innerHTML = '<img src="' + (p.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Crect fill=%22%23f3f4f6%22 width=%2240%22 height=%2240%22/%3E%3C/svg%3E') + '" class="w-10 h-10 rounded-lg object-cover flex-shrink-0"><div class="min-w-0"><p class="text-xs font-medium text-on-surface truncate">' + escapeHtml(p.title) + '</p><p class="text-xs font-bold text-secondary">' + Number(p.price).toLocaleString('fr-MA') + ' DH</p></div>';
                     resultsGrid.appendChild(card);
                 });
             }
             resultsEl.classList.remove('hidden');
         }
 
-        function open() {
-            win.classList.remove('hidden');
-            iconOpen.classList.add('hidden');
-            iconClose.classList.remove('hidden');
-            isOpen = true;
-            input.focus();
-        }
-
-        function close() {
-            win.classList.add('hidden');
-            iconOpen.classList.remove('hidden');
-            iconClose.classList.add('hidden');
-            isOpen = false;
-        }
-
-        function toggleFn() {
-            if (isOpen) close(); else open();
-        }
+        function open() { win.classList.remove('hidden'); iconOpen.classList.add('hidden'); iconClose.classList.remove('hidden'); isOpen = true; input.focus(); }
+        function close() { win.classList.add('hidden'); iconOpen.classList.remove('hidden'); iconClose.classList.add('hidden'); isOpen = false; }
+        function toggleFn() { if (isOpen) close(); else open(); }
 
         function reset() {
             fetch(API_URL, { method: 'DELETE', headers: { 'X-CSRFToken': getCookie('csrftoken') } });
-            messagesEl.innerHTML = '<div class="flex gap-2"><div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-xs">🤖</div><div class="bg-slate-100 rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]"><p class="text-sm text-slate-800">Salut ! Décrivez ce que vous cherchez, je vous aide à trouver le bon produit.</p></div></div>';
+            messagesEl.innerHTML = '<div class="flex gap-2"><div class="w-7 h-7 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-secondary text-[14px]">smart_toy</span></div><div class="bg-surface-container rounded-2xl rounded-tl-md px-3 py-2 max-w-[85%]"><p class="text-sm text-on-surface">Salut ! Décrivez ce que vous cherchez, je vous aide à trouver le bon produit.</p></div></div>';
             resultsEl.classList.add('hidden');
             resultsGrid.innerHTML = '';
         }
@@ -369,7 +424,6 @@
             input.value = '';
             sendBtn.disabled = true;
             addTyping();
-
             fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
@@ -383,20 +437,26 @@
                     addMessage(cleanMsg || 'Voici ce que j\'ai trouvé :', false);
                     showResults(data.products, data.total_results);
                 } else {
-                    // Hide results panel when AI asks a new question after a search
                     resultsEl.classList.add('hidden');
                     addMessage(data.message, false);
                 }
             })
-            .catch(function() {
-                removeTyping();
-                addMessage('Désolé, une erreur est survenue. Réessayez.', false);
-            })
+            .catch(function() { removeTyping(); addMessage('Désolé, une erreur est survenue. Réessayez.', false); })
             .finally(function() { sendBtn.disabled = false; input.focus(); });
         });
 
         return { toggle: toggleFn, open: open, close: close, reset: reset };
     })();
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var header = document.querySelector('header');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 20) { header.classList.add('shadow-xl'); }
+            else { header.classList.remove('shadow-xl'); }
+        });
+    });
     </script>
 </body>
 </html>

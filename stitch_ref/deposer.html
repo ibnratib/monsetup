@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Déposer une annonce | Setup.ma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#e2dfff",
+                    "surface-container": "#eaedff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#dae2fd",
+                    "on-secondary-container": "#00714e",
+                    "surface-container-high": "#e2e7ff",
+                    "on-secondary-fixed-variant": "#005137",
+                    "primary-container": "#4f46e5",
+                    "on-secondary": "#ffffff",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#006e4b",
+                    "tertiary": "#005338",
+                    "on-surface": "#131b2e",
+                    "outline-variant": "#c7c4d8",
+                    "inverse-surface": "#283044",
+                    "inverse-primary": "#c3c0ff",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "background": "#faf8ff",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f2f3ff",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4d44e3",
+                    "on-primary-fixed": "#00106b",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "inverse-on-surface": "#eef0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-tertiary-container": "#67f4b7",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary-container": "#82f5c1",
+                    "on-secondary-fixed": "#002114",
+                    "surface-dim": "#d2d9f4",
+                    "secondary-fixed": "#85f8c4",
+                    "primary": "#3525cd",
+                    "surface-container-highest": "#dae2fd",
+                    "outline": "#777587",
+                    "surface-bright": "#faf8ff",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-background": "#131b2e",
+                    "secondary": "#006c4a",
+                    "on-surface-variant": "#464555",
+                    "on-primary-container": "#dad7ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "12px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "stack-md": "16px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "price-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "price-lg": ["20px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        background-color: #faf8ff;
+        font-family: 'Inter', sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+      }
+      .drop-zone-active {
+        border-color: #3525cd;
+        background-color: #f2f3ff;
+      }
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.8);
+      }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20 bg-inverse-surface border-t-2 border-primary shadow-md">
+<div class="flex items-center gap-stack-md">
+<span class="font-display-lg text-display-lg text-white font-black after:content-['.ma'] after:text-secondary">Setup</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Annonces</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Connexion</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">S'inscrire</a>
+<button class="bg-secondary text-white px-6 py-2 rounded-xl font-label-md text-label-md hover:scale-105 active:scale-95 transition-all">+ Déposer</button>
+</nav>
+<button class="md:hidden text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="min-h-screen py-stack-lg px-margin-mobile md:px-0">
+<div class="max-w-[672px] mx-auto space-y-stack-md">
+<!-- Page Header -->
+<div class="mb-stack-lg">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-2">Vendre un équipement</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Publiez votre configuration ou vos composants en quelques secondes sur le premier marketplace tech au Maroc.</p>
+</div>
+<!-- Section 1: Catégorie -->
+<section class="bg-white rounded-xl p-stack-md shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/30">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary">category</span>
+<h2 class="font-headline-md text-headline-md">Catégorie</h2>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-stack-sm">
+<button class="flex flex-col items-center justify-center p-stack-md rounded-xl border-2 border-primary bg-primary-fixed/30 text-primary transition-all">
+<span class="material-symbols-outlined mb-1">desktop_windows</span>
+<span class="font-label-md text-label-md">PC Bureau</span>
+</button>
+<button class="flex flex-col items-center justify-center p-stack-md rounded-xl border border-outline-variant hover:border-primary hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined mb-1">laptop_mac</span>
+<span class="font-label-md text-label-md">Laptop</span>
+</button>
+<button class="flex flex-col items-center justify-center p-stack-md rounded-xl border border-outline-variant hover:border-primary hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined mb-1">memory</span>
+<span class="font-label-md text-label-md">Composants</span>
+</button>
+</div>
+</section>
+<!-- Section 2: Informations -->
+<section class="bg-white rounded-xl p-stack-md shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/30">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary">info</span>
+<h2 class="font-headline-md text-headline-md">Informations générales</h2>
+</div>
+<div class="space-y-stack-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Titre de l'annonce</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="Ex: PC Gaming RTX 3080, i9 12th Gen..." type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Prix (DH)</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-price-lg text-price-lg" placeholder="0.00" type="number"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 font-label-md text-on-surface-variant">DH</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Ville</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md appearance-none">
+<option>Casablanca</option>
+<option>Rabat</option>
+<option>Marrakech</option>
+<option>Tanger</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Adresse (Optionnel)</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="Quartier, Rue..." type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Description</label>
+<textarea class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all font-body-md text-body-md" placeholder="Détaillez l'état de l'objet, les garanties, l'usage..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- Section 3: Attributs techniques -->
+<section class="bg-white rounded-xl p-stack-md shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/30">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary">settings_input_component</span>
+<h2 class="font-headline-md text-headline-md">Attributs techniques</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="bg-surface-container-low p-stack-sm rounded-lg border border-outline-variant/50">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Processeur (CPU)</label>
+<input class="w-full bg-transparent border-none p-1 focus:ring-0 font-body-md text-body-md" placeholder="Ex: Intel Core i7-12700K" type="text"/>
+</div>
+<div class="bg-surface-container-low p-stack-sm rounded-lg border border-outline-variant/50">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">Carte Graphique (GPU)</label>
+<input class="w-full bg-transparent border-none p-1 focus:ring-0 font-body-md text-body-md" placeholder="Ex: NVIDIA RTX 3070 Ti" type="text"/>
+</div>
+<div class="bg-surface-container-low p-stack-sm rounded-lg border border-outline-variant/50">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">RAM (Go)</label>
+<select class="w-full bg-transparent border-none p-1 focus:ring-0 font-body-md text-body-md">
+<option>8 Go</option>
+<option selected="">16 Go</option>
+<option>32 Go</option>
+<option>64 Go+</option>
+</select>
+</div>
+<div class="bg-surface-container-low p-stack-sm rounded-lg border border-outline-variant/50">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1">État</label>
+<div class="flex gap-2 p-1">
+<button class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold">Neuf</button>
+<button class="bg-outline-variant/30 text-on-surface-variant px-3 py-1 rounded-full text-xs font-bold">Occasion</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Photos -->
+<section class="bg-white rounded-xl p-stack-md shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant/30">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary">add_a_photo</span>
+<h2 class="font-headline-md text-headline-md">Photos</h2>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-stack-lg text-center hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer" id="drop-zone">
+<span class="material-symbols-outlined text-outline text-5xl mb-stack-sm">cloud_upload</span>
+<p class="font-label-md text-label-md text-on-surface mb-1">Glissez vos photos ici ou cliquez pour parcourir</p>
+<p class="text-xs text-on-surface-variant">Formats supportés: JPG, PNG (Max. 5 Mo par image)</p>
+</div>
+<div class="grid grid-cols-3 md:grid-cols-4 gap-stack-sm mt-stack-md">
+<div class="aspect-square rounded-lg bg-surface-container overflow-hidden relative border border-outline-variant">
+<div class="w-full h-full bg-cover bg-center" data-alt="A high-end studio product photograph of a modern white gaming desktop PC with tempered glass side panel and glowing neon blue internal components. The lighting is crisp and professional, set against a neutral gray background for a clean e-commerce look." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBDgSwXqlto93I7fTkE0mVsUffRyrElXB45weeXmCe9pO7SOz1jAW6IBxiLvG68lQaSeg3m7eipO4hLi05BPtCWoWT_0pPUEDV8QNaXP4rbAkJsewVCHM6OPXuPbpMwO4Mb2ZcQ1v7N0fyDid8zUEZHeEf4Yh8oxSMjSeGefJ1CXP2gdzpAqywhvPBtjVM9oI1hsZEYqTmyr2wdoHakIq8CgqBNeagDvJDmcEZx0AhbZ03gZ7XMLTt_FezNPVUjltFaFQDDQwgU3Et')"></div>
+<button class="absolute top-1 right-1 bg-white/80 rounded-full p-1 shadow-sm"><span class="material-symbols-outlined text-error text-sm">close</span></button>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container overflow-hidden relative border border-outline-variant">
+<div class="w-full h-full bg-cover bg-center" data-alt="Close up photography of high performance computer parts, specifically showing the internal RGB lighting of a RAM stick and liquid cooling pipes. The style is modern tech-focused with shallow depth of field and vibrant blue and green accent colors." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBjZHZs7RmZQoQ2RJrfa6Yke-1ZC4Jtv7UQyFT5OVkGQHTyDisywOxcyzb-_Y2EtVi-o0_01Vg6FWCU31rw4ebDatEesD_C4p11wbFBVyc_L-omDWmyWAJHblhNQB0a1nJUvXT7Us4yzkZM7vrSLTulc0RlZ7sfciSdXk5Dq0IES2p99U4y9-A2L6Q7YsefqUxFmjmM0Azdg_grvsRCb-iYNE3tIEFWQZSh03lvEjtXffES-QfvjqwF2q8RE-2vdymfGJuNOYcEQIqY')"></div>
+<button class="absolute top-1 right-1 bg-white/80 rounded-full p-1 shadow-sm"><span class="material-symbols-outlined text-error text-sm">close</span></button>
+</div>
+<div class="aspect-square rounded-lg border-2 border-dashed border-outline-variant flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined">add</span>
+</div>
+</div>
+</section>
+<!-- Submit Button -->
+<div class="pt-stack-md pb-stack-lg">
+<button class="w-full bg-primary text-white py-4 rounded-xl font-headline-md text-headline-md shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">rocket_launch</span>
+                    Publier l'annonce
+                </button>
+<p class="text-center text-xs text-on-surface-variant mt-stack-sm">
+                    En publiant, vous acceptez nos <a class="text-primary underline" href="#">Conditions Générales d'Utilisation</a>.
+                </p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-inverse-surface mt-stack-lg">
+<div class="w-full py-stack-lg px-gutter max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-md text-headline-md text-white font-bold mb-stack-md block">Setup.ma</span>
+<p class="text-white/70 font-body-md text-body-md">La destination premium pour le matériel informatique au Maroc.</p>
+</div>
+<div>
+<h3 class="text-white font-bold mb-4">Navigation</h3>
+<ul class="space-y-2">
+<li><a class="text-white/70 font-label-md text-label-md hover:text-secondary transition-colors" href="#">Annonces</a></li>
+<li><a class="text-white/70 font-label-md text-label-md hover:text-secondary transition-colors" href="#">Dashboard</a></li>
+<li><a class="text-white/70 font-label-md text-label-md hover:text-secondary transition-colors" href="#">Compte</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-bold mb-4">Support</h3>
+<ul class="space-y-2">
+<li><a class="text-white/70 font-label-md text-label-md hover:text-secondary transition-colors" href="#">Aide</a></li>
+<li><a class="text-white/70 font-label-md text-label-md hover:text-secondary transition-colors" href="#">Contact</a></li>
+<li><a class="text-white/70 font-label-md text-label-md hover:text-secondary transition-colors" href="#">Légal</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-white font-bold mb-4">Newsletter</h3>
+<div class="flex gap-2">
+<input class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-1 focus:ring-secondary w-full" placeholder="Votre email" type="email"/>
+<button class="bg-secondary text-white px-4 py-2 rounded-lg font-bold text-sm">Ok</button>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-gutter py-stack-md border-t border-white/10 text-center">
+<p class="text-white/50 text-xs">© 2024 Setup.ma - Premium Tech Marketplace</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for drag & drop zone
+        const dropZone = document.getElementById('drop-zone');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('drop-zone-active'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName</script></body></html>

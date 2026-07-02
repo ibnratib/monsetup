@@ -10,156 +10,152 @@
 {% block twitter_description %}Boutique tech{% if boutique.statut_verification == 'VERIFIE' %} vérifiée{% endif %} à {{ boutique.ville.name }} sur Setup.ma.{% endblock %}
 
 {% block content %}
-<!-- Boutique Header -->
-<section class="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-8">
-    <div class="flex flex-col sm:flex-row gap-6">
-        <!-- Logo -->
-        <div class="flex-shrink-0">
-            {% if boutique.logo %}
-            <img src="{{ boutique.logo.url }}" alt="{{ boutique.nom_boutique }}"
-                class="w-24 h-24 rounded-xl object-cover border border-slate-200">
-            {% else %}
-            <div class="w-24 h-24 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-3xl font-bold border border-slate-200">
-                {{ boutique.nom_boutique|first }}
-            </div>
-            {% endif %}
-        </div>
+<div class="max-w-6xl mx-auto px-gutter py-8">
 
-        <!-- Info -->
-        <div class="flex-1">
-            <div class="flex items-center gap-3 flex-wrap">
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-900">{{ boutique.nom_boutique }}</h1>
-                {% if boutique.statut_verification == 'VERIFIE' %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">✓ Vérifié</span>
-                {% endif %}
-            </div>
-
-            <div class="mt-2 flex items-center gap-2 text-sm text-slate-500">
-                <span>📍 {{ boutique.ville }}{% if boutique.adresse %} · {{ boutique.adresse }}{% endif %}</span>
-            </div>
-
-            {% if avg_rating %}
-            <div class="mt-2 flex items-center gap-2 text-sm">
-                <span class="text-amber-500">
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= avg_rating %}★{% else %}☆{% endif %}
-                    {% endfor %}
-                </span>
-                <span class="text-slate-700 font-medium">{{ avg_rating|floatformat:1 }}/5</span>
-                <span class="text-slate-500">({{ review_count }} avis)</span>
-            </div>
-            {% endif %}
-
-            {% if boutique.user.phone_whatsapp %}
-            <div class="mt-4">
-                <a href="https://wa.me/{{ boutique.user.phone_whatsapp }}"
-                    target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-xl transition-colors gap-2">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.682-1.228A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.325 0-4.47-.744-6.236-2.008l-.436-.312-2.786.731.762-2.684-.343-.462A9.963 9.963 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-                    Contacter via WhatsApp
-                </a>
-            </div>
-            {% endif %}
-
-            {% if boutique.description %}
-            <p class="mt-4 text-sm text-slate-600">{{ boutique.description }}</p>
-            {% endif %}
-        </div>
-    </div>
-</section>
-
-<!-- Annonces de la boutique -->
-<section class="mb-10">
-    <h2 class="text-xl font-semibold text-slate-900 mb-4">Annonces de la boutique ({{ page_obj.paginator.count }})</h2>
-
-    {% if page_obj.object_list %}
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {% for product in page_obj %}
-        <a href="{{ product.get_absolute_url }}" class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow block">
-            <div class="aspect-[4/3] bg-slate-100 overflow-hidden relative">
-                {% if product.images.all.0 %}
-                <img class="w-full h-full object-cover" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }} — {{ product.category.name }} d'occasion à {{ product.ville.name }}" loading="lazy">
+    <!-- Boutique Header -->
+    <section class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] p-6 md:p-8 mb-8">
+        <div class="flex flex-col sm:flex-row gap-6">
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                {% if boutique.logo %}
+                <img src="{{ boutique.logo.url }}" alt="{{ boutique.nom_boutique }}"
+                    class="w-24 h-24 rounded-2xl object-cover border-2 border-outline-variant/30">
                 {% else %}
-                <div class="w-full h-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <div class="w-24 h-24 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary text-3xl font-bold">
+                    {{ boutique.nom_boutique|first }}
                 </div>
                 {% endif %}
-                {% if product.is_boosted %}
-                <span class="absolute top-2 left-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">⚡ Boosté</span>
-                {% endif %}
             </div>
-            <div class="p-4">
-                <h3 class="text-sm font-medium text-slate-900 line-clamp-2">{{ product.title }}</h3>
-                <p class="mt-1 text-lg font-bold text-slate-900">{{ product.price|format_price }}</p>
-                <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
-                    <span>{{ product.ville }}</span>
-                    <span>·</span>
-                    <span>{{ product.created_at|time_since_fr }}</span>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
 
-    <!-- Pagination -->
-    {% if page_obj.has_other_pages %}
-    <nav class="mt-8 flex justify-center gap-2">
-        {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}"
-            class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition-colors">
-            ← Précédent
-        </a>
-        {% endif %}
-        <span class="px-4 py-2 text-sm text-slate-500">
-            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
-        </span>
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}"
-            class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition-colors">
-            Suivant →
-        </a>
-        {% endif %}
-    </nav>
-    {% endif %}
-
-    {% else %}
-    <div class="text-center py-12 text-slate-500">
-        <p class="text-lg">Aucune annonce disponible pour le moment.</p>
-    </div>
-    {% endif %}
-</section>
-
-<!-- Avis -->
-{% if reviews %}
-<section class="mb-10">
-    <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-slate-900">Avis sur la boutique</h2>
-        <a href="{% url 'seller-reviews-page' boutique.user.pk %}" class="text-indigo-600 hover:text-indigo-500 hover:underline text-sm font-medium">
-            Voir tous les avis →
-        </a>
-    </div>
-    <div class="space-y-4">
-        {% for review in reviews %}
-        <div class="bg-white rounded-xl shadow-sm p-5">
-            <div class="flex items-center justify-between mb-2">
-                <div class="flex items-center gap-3">
-                    <span class="text-sm font-medium text-slate-900">{{ review.reviewer.get_full_name }}</span>
-                    <span class="text-amber-500 text-sm">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
-                        {% endfor %}
+            <!-- Info -->
+            <div class="flex-1">
+                <div class="flex items-center gap-3 flex-wrap">
+                    <h1 class="text-headline-md text-on-surface">{{ boutique.nom_boutique }}</h1>
+                    {% if boutique.statut_verification == 'VERIFIE' %}
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-secondary-container/30 text-secondary">
+                        <span class="material-symbols-outlined text-[14px]">verified</span>
+                        Vérifié
                     </span>
+                    {% endif %}
                 </div>
-                <span class="text-xs text-slate-500">{{ review.created_at|time_since_fr }}</span>
+
+                <div class="mt-2 flex items-center gap-2 text-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-[16px]">location_on</span>
+                    <span>{{ boutique.ville }}{% if boutique.adresse %} · {{ boutique.adresse }}{% endif %}</span>
+                </div>
+
+                {% if avg_rating %}
+                <div class="mt-2 flex items-center gap-2 text-sm">
+                    <div class="flex text-amber-400">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= avg_rating %}
+                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">star</span>
+                            {% else %}
+                            <span class="material-symbols-outlined text-[18px] text-outline-variant">star</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="font-semibold text-on-surface">{{ avg_rating|floatformat:1 }}/5</span>
+                    <span class="text-on-surface-variant">({{ review_count }} avis)</span>
+                </div>
+                {% endif %}
+
+                {% if boutique.user.phone_whatsapp %}
+                <div class="mt-4">
+                    <a href="https://wa.me/{{ boutique.user.phone_whatsapp }}"
+                        target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#25D366] hover:brightness-110 text-white text-sm font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.682-1.228A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.325 0-4.47-.744-6.236-2.008l-.436-.312-2.786.731.762-2.684-.343-.462A9.963 9.963 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                        Contacter via WhatsApp
+                    </a>
+                </div>
+                {% endif %}
+
+                {% if boutique.description %}
+                <p class="mt-4 text-sm text-on-surface-variant">{{ boutique.description }}</p>
+                {% endif %}
             </div>
-            {% if review.comment %}
-            <p class="text-sm text-slate-600">{{ review.comment }}</p>
-            {% endif %}
         </div>
-        {% endfor %}
-    </div>
-</section>
-{% endif %}
+    </section>
+
+    <!-- Annonces de la boutique -->
+    <section class="mb-10">
+        <h2 class="text-lg font-semibold text-on-surface mb-4">Annonces de la boutique ({{ page_obj.paginator.count }})</h2>
+
+        {% if page_obj.object_list %}
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for product in page_obj %}
+            {% include "partials/product_card.html" with product=product %}
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-8 flex justify-center gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+                class="px-4 py-2 bg-white border border-outline-variant rounded-xl text-sm hover:bg-surface-variant/30 transition-colors">
+                ← Précédent
+            </a>
+            {% endif %}
+            <span class="px-4 py-2 text-sm text-on-surface-variant">
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+                class="px-4 py-2 bg-white border border-outline-variant rounded-xl text-sm hover:bg-surface-variant/30 transition-colors">
+                Suivant →
+            </a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-12 text-on-surface-variant">
+            <span class="material-symbols-outlined text-5xl text-outline mb-3 block">inventory_2</span>
+            <p class="text-lg">Aucune annonce disponible pour le moment.</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Avis -->
+    {% if reviews %}
+    <section class="mb-10">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-on-surface">Avis sur la boutique</h2>
+            <a href="{% url 'seller-reviews-page' boutique.user.pk %}" class="text-primary font-medium hover:underline text-sm inline-flex items-center gap-1">
+                Voir tous les avis
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
+        </div>
+        <div class="space-y-4">
+            {% for review in reviews %}
+            <div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-medium text-on-surface">{{ review.reviewer.get_full_name }}</span>
+                        <div class="flex text-amber-400">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">star</span>
+                                {% else %}
+                                <span class="material-symbols-outlined text-[16px] text-outline-variant">star</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <span class="text-xs text-on-surface-variant">{{ review.created_at|time_since_fr }}</span>
+                </div>
+                {% if review.comment %}
+                <p class="text-sm text-on-surface-variant">{{ review.comment }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</div>
 
 <!-- JSON-LD Structured Data (Schema.org Store) -->
 <script type="application/ld+json">

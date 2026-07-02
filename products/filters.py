@@ -11,6 +11,7 @@ class ProductFilter(django_filters.FilterSet):
     price_min = django_filters.NumberFilter(field_name='price', lookup_expr='gte')
     price_max = django_filters.NumberFilter(field_name='price', lookup_expr='lte')
     seller_type = django_filters.CharFilter(field_name='seller__user_type', lookup_expr='exact')
+    condition = django_filters.CharFilter(field_name='condition', lookup_expr='exact')
     is_boosted = django_filters.BooleanFilter(field_name='is_boosted')
 
     class Meta:

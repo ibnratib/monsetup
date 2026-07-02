@@ -18,6 +18,9 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load .env file in local development
+load_dotenv(BASE_DIR / '.env')
+
 # Load .env file
 load_dotenv(BASE_DIR.parent / '.env')
 
@@ -31,7 +34,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-key-change
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['monsetup-hyevhud2hhcya0gh.spaincentral-01.azurewebsites.net', 'localhost']
+ALLOWED_HOSTS = ['monsetup-hyevhud2hhcya0gh.spaincentral-01.azurewebsites.net', 'localhost', '127.0.0.1']
 
 
 # Application definition

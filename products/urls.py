@@ -6,6 +6,7 @@ from products.views import (
     ProductCreateView,
     ProductDetailAPIView,
     ProductDetailView,
+    ProductEditView,
     ProductListCreateAPIView,
     ProductListView,
     ProductReportAPIView,
@@ -31,6 +32,7 @@ favorites_api_urlpatterns = [
 ssr_urlpatterns = [
     path('', ProductListView.as_view(), name='product-list'),
     path('deposer/', ProductCreateView.as_view(), name='product-create'),
+    path('p/<int:pk>/modifier/', ProductEditView.as_view(), name='product-edit'),
     path('p/<int:pk>-<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
     path('p/<int:pk>/', ProductDetailView.as_view(), name='product-detail-short'),
     path('<slug:city_slug>/', ProductListView.as_view(), name='product-list-by-city'),

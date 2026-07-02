@@ -35,9 +35,9 @@ def remove_boost(modeladmin, request, queryset):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'seller', 'category', 'ville', 'status', 'price',
+    list_display = ('title', 'seller', 'category', 'ville', 'status', 'condition', 'price',
                     'is_boosted', 'created_at')
-    list_filter = ('status', 'category', 'ville', 'is_boosted')
+    list_filter = ('status', 'condition', 'category', 'ville', 'is_boosted')
     search_fields = ('title', 'seller__email')
     inlines = [ProductImageInline, ProductAttributeValueInline]
     actions = [boost_7_days, boost_30_days, remove_boost]

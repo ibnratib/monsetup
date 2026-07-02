@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e2dfff",
+                        "surface-container": "#eaedff",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#dae2fd",
+                        "on-secondary-container": "#00714e",
+                        "surface-container-high": "#e2e7ff",
+                        "on-secondary-fixed-variant": "#005137",
+                        "primary-container": "#4f46e5",
+                        "on-secondary": "#ffffff",
+                        "surface": "#faf8ff",
+                        "tertiary-container": "#006e4b",
+                        "tertiary": "#005338",
+                        "on-surface": "#131b2e",
+                        "outline-variant": "#c7c4d8",
+                        "inverse-surface": "#283044",
+                        "inverse-primary": "#c3c0ff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "background": "#faf8ff",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f2f3ff",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#4d44e3",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "inverse-on-surface": "#eef0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-tertiary-container": "#67f4b7",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "secondary-fixed-dim": "#68dba9",
+                        "secondary-container": "#82f5c1",
+                        "on-secondary-fixed": "#002114",
+                        "surface-dim": "#d2d9f4",
+                        "secondary-fixed": "#85f8c4",
+                        "primary": "#3525cd",
+                        "surface-container-highest": "#dae2fd",
+                        "outline": "#777587",
+                        "surface-bright": "#faf8ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-background": "#131b2e",
+                        "secondary": "#006c4a",
+                        "on-surface-variant": "#464555",
+                        "on-primary-container": "#dad7ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "stack-md": "16px",
+                        "base": "4px",
+                        "margin-desktop": "40px",
+                        "stack-sm": "8px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "price-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "price-lg": ["20px", {"lineHeight": "1", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(15, 23, 42, 0.05);
+        }
+        .product-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
+        }
+        .product-shadow:hover {
+            box-shadow: 0px 10px 30px rgba(15, 23, 42, 0.12);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-inverse-surface sticky top-0 z-50 shadow-md">
+<div class="max-w-container-max mx-auto px-gutter h-20 flex justify-between items-center">
+<div class="flex items-center gap-10">
+<a class="font-display-lg text-display-lg text-white font-black after:content-['.ma'] after:text-secondary" href="#">Setup</a>
+<nav class="hidden md:flex gap-gutter">
+<a class="font-label-md text-label-md text-white border-b-2 border-primary pb-1 transition-transform" href="#">Annonces</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Connexion</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">S'inscrire</a>
+</nav>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="bg-gradient-to-br from-primary to-secondary text-white font-label-md text-label-md px-6 py-2.5 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg">
+                    + Déposer
+                </button>
+</div>
+</div>
+<div class="h-0.5 w-full bg-gradient-to-r from-primary to-secondary"></div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow max-w-container-max mx-auto w-full px-gutter py-stack-lg flex flex-col md:flex-row gap-gutter">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 flex-shrink-0">
+<div class="bg-white rounded-xl product-shadow p-stack-md sticky top-24">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md">Filtres</h2>
+<div class="space-y-stack-lg">
+<!-- Search -->
+<div>
+<label class="font-label-md text-label-md text-on-surface-variant block mb-2">Recherche</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-3 py-2 text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="RTX 4090, MacBook..." type="text"/>
+</div>
+</div>
+<!-- Category -->
+<div>
+<label class="font-label-md text-label-md text-on-surface-variant block mb-2">Catégorie</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none">
+<option>Toutes les catégories</option>
+<option>Composants PC</option>
+<option>Laptops &amp; MacBook</option>
+<option>Périphériques</option>
+<option>Consoles &amp; Gaming</option>
+</select>
+</div>
+<!-- City -->
+<div>
+<label class="font-label-md text-label-md text-on-surface-variant block mb-2">Ville</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none">
+<option>Tout le Maroc</option>
+<option>Casablanca</option>
+<option>Rabat</option>
+<option>Marrakech</option>
+<option>Tangier</option>
+</select>
+</div>
+<!-- Price Range -->
+<div>
+<label class="font-label-md text-label-md text-on-surface-variant block mb-2">Prix (DH)</label>
+<div class="flex gap-2 items-center">
+<input class="w-1/2 bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="Min" type="number"/>
+<span class="text-outline">-</span>
+<input class="w-1/2 bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-body-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="Max" type="number"/>
+</div>
+</div>
+<!-- Technical Specs (RAM) -->
+<div>
+<label class="font-label-md text-label-md text-on-surface-variant block mb-2">RAM</label>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">8 Go</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">16 Go</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">32 Go</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-body-md">64 Go+</span>
+</label>
+</div>
+</div>
+<button class="w-full bg-primary text-white font-label-md text-label-md py-3 rounded-xl hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all shadow-md mt-4">
+                        Appliquer
+                    </button>
+</div>
+</div>
+</aside>
+<!-- Product Grid Area -->
+<section class="flex-grow">
+<!-- Header Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-stack-lg gap-stack-md">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Résultats de recherche</h1>
+<p class="text-body-md text-on-surface-variant">1,245 annonces trouvées</p>
+</div>
+<div class="flex items-center gap-stack-md">
+<span class="text-body-md text-on-surface-variant hidden md:block">Trier par:</span>
+<select class="bg-white border border-outline-variant rounded-lg px-4 py-2 text-body-md focus:ring-2 focus:ring-primary/20 outline-none product-shadow">
+<option>Plus récent</option>
+<option>Prix croissant</option>
+<option>Prix décroissant</option>
+</select>
+</div>
+</div>
+<!-- Active Chips -->
+<div class="flex flex-wrap gap-2 mb-stack-lg">
+<div class="flex items-center gap-2 bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-label-md border border-primary/10">
+                    Laptops &amp; MacBook
+                    <button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+<div class="flex items-center gap-2 bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-label-md border border-primary/10">
+                    Casablanca
+                    <button class="material-symbols-outlined text-[16px] hover:text-error transition-colors">close</button>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline ml-2">Effacer tout</button>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter mb-stack-lg">
+<!-- Product Card 1 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+<span class="bg-secondary text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span> ✓ Vérifié
+                            </span>
+<span class="bg-on-tertiary-fixed text-tertiary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full">Neuf</span>
+</div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A professional studio shot of a high-end gaming laptop with RGB keyboard lighting. The laptop is sleek and metallic, presented on a dark grey surface with soft indigo ambient lighting in the background. High-fidelity textures and professional product photography style with a focus on tech precision and premium build quality." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUKQmlTdRqddoA8dSik8T5gpapexoLNd3Tra98dVvZbi5Q-8IQCv9wcz2qACLVp1IY2qKZTD01z6MJ82xtD68hqFDMhGex4nOm_UzOUJxqM8EpZrwC8v7vHTsAXhZPrFkYMGlDWhqDgXgBcinmwsB7fMBombhYFwpyQDeKp0IgFp_NE6d05d06QMrZ3_EbMeec63-wkHosCs--c_kPAQsHzrBU3u5ke3PEKt-O72bEqxt0vkOq0EUrQauHyidO-Vg2i-OV3yBS1xxL')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">CASABLANCA • IL Y A 2H</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">Laptop MSI Raider GE78 HX - i9 13th Gen - RTX 4080</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">32 500 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+<span class="bg-on-surface-variant text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Occasion</span>
+</div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A macro shot of a powerful NVIDIA GeForce RTX graphics card with triple fan cooling system. The card is displayed with crisp details, metallic finishes, and subtle reflections. The lighting is cold and professional, emphasizing the high-performance hardware components and industrial design aesthetic typical of high-end PC parts." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDF465jVqBl827dW2kRd0Qmli6-JewR1ixGmJBGYtWE4iUZARPVtwwW8uuT-66FCJ3z3EmM6zAeYkHUvhTwkCwYEIUYotn1e032suQLimMGExyZn6y_OEzADmuU3itbyVfpcjcZrLp0DzP8_VkG3OSUayi718a5mZ7PPo9-jDMugiQ8Cd037gagQoeQQcgyWdrdxyVyeIDSn-Sk_oRxjMxwHJ48GLPqAo3DgFUCUoD_GHUM2vZHWpNw-AmzD3C4EL4pHHJVYjuUk17z')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">RABAT • IL Y A 5H</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">NVIDIA RTX 3080 Ti ASUS ROG Strix - 12GB GDDR6X</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">8 200 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+<span class="bg-secondary text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span> ✓ Vérifié
+                            </span>
+<span class="bg-on-tertiary-fixed text-tertiary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full">Neuf</span>
+</div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A lifestyle product shot of a silver MacBook Pro M3 on a clean white minimalist desk. Next to it is a small green plant and a cup of coffee. The lighting is bright and airy, representing a professional and modern light-mode workspace. The focus is on the sleek aluminium finish and the Retina display with vibrant colors." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCE-OAk0gsfy8WxafjlNkicmLxFmx2IAXMqn1cp8WzLmbVE7tvceMipj4QVB_gnlgMBaMjjbRClO9aoCcfNLRZDRaoOwiypDOhEL7NFgz69hLgTIVGYiDXk5ZpMc3BpnajjFdDG7ix9_yeaeQQt2yCexsfewB_ckx9ifuOxF36Tif8Z3drMbUY_JOMbK38yEUXx9O2_OTL-SwZhdbi3zvMwTmHTSywyj1G_p5P2zWAwYs3B3nEu6hXkfoIe4iqQFCqfSrXh53dgPEOI')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">MARRAKECH • HIER</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">MacBook Pro 14" M3 Max - 36GB RAM - 1TB SSD</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">42 000 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="Close-up of a high-refresh rate curved gaming monitor displaying a vibrant e-sports game scene. The monitor has ultra-thin bezels and a futuristic stand. The environment is slightly dimmed to make the screen's bright and saturated colors pop, showcasing the technological advancement of the display hardware and its cinematic quality." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVd1Hxw60o90sN0Sc-1Ep60MBzOWfrRcWGybRqwrj1jO7l-w9daQ2JbjKG7x8qgcf_r6RYi3ScvwwHBNtGYSd3q6fHJdBYvbMIbssFGHB5IF3Tw6BZ9yQ442USbWp3-cG_fF6Ljmi6vpzRNGHsm5K1gRmvp3NY_avH2zvWdJmMqvUxMchTiKo_RqSTboDDGo2Zj3C34um8jgJ_ImNPPOjqXkrOWDzv6bickt6nT2kZqEdJTtwUsjWvAjfGIE3Dl9kIYpQ0Jkr2MpDG')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">CASABLANCA • IL Y A 1H</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">Ecran Samsung Odyssey G7 27" Curved 240Hz</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">5 800 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Repeated cards for grid simulation -->
+<!-- Product Card 5 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A clean, isometric view of a high-end mechanical gaming keyboard with customizable RGB backlighting under each key. The frame is brushed aluminum, and the keycaps have a premium matte finish. The image is captured in a high-tech studio environment with precise spotlighting that highlights the texture and engineering detail of the hardware." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxrP1srGkikJVixgi4htYbfnEAncHrY7lvXliFc5AylF_Xt79E1W2fDNkgHuz1UMeC0WfzuH2GIpXe-rAEO4IcS0q-ZizcgvZKKCj-nUMZ1jIh--yO-eImzu8_MGfAzQGYAs3htvAql5wJUE40huTVH0gSSdy_bnsbANeH_-usk1Cx-KdUrIOcDqPl0KasfococQ4rNwqUQp1Jz1naHMDo9tJmysP7WtTsrc9HONWI3XpEYyw_iKfV7vNiVpV2-bq-2iREU15VzLed')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">TANGER • IL Y A 4H</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">Corsair K100 RGB Mechanical Keyboard - Cherry MX</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">2 100 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+<span class="bg-on-surface-variant text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Occasion</span>
+</div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A high-end PC gaming case with tempered glass panels revealing a complex liquid cooling system with glowing coolant. The interior is meticulously organized with premium cable management. The overall aesthetic is one of extreme performance and high-tech craftsmanship, featuring a palette of deep slate and vibrant emerald lighting accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBg5JAFRtSrdp0At8LryfNq47tlfdpru16tw-a4HUIMf40NFhjOO_IyqnOoGQEXLnaHUBsYk0OrR7kjgT_qNo6isHpjpFAd5z7fDIjKFcRBXpmbnDH32KW3l4dHCWmhoKwKmjCpvquZGwhHzyDfQYA3xIFQ47bHT3fmAsxC4UyVpONAjaqZQlpqcZj__9PdcGrsyA3mM6Nc0kvI5iNy19t4VcrumkXJqEwIxdT4qSeG2OMrhbl8c1kouDSxDfS3rqrPh-QX3tb0KTmU')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">FÈS • 2 JOURS</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">Setup Gaming Complet - RTX 4070 - Watercooling</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">19 500 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Product Card 7 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="A pair of high-fidelity wireless audiophile headphones displayed on a wooden stand. The headphones feature premium leather earcups and a polished metal headband. The lighting is warm and sophisticated, creating a feeling of luxury and superior sound engineering. The background is a blurred office with tech equipment, suggesting a professional use case." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUvSsGZEq9bnxUsyqK6a-UqLuqhCkz0BMcJHx1DoMWl2ejpn5w-hixaEr19mvIkH7k-zkMxJ64NmHAlPG0BOq0_SXIHZ71-A3pFcUPc_uf_9s8y1z9lrB6l9qsonI0cgJi_cGjTwT70ebJSvkJN6HJ5JAedgIy36rV-geEpDJYowQ5h11x14eZ3kDfCy221dU04aanAEFo8eGuN0dnHQyKM-A8pCbc5S6W3obODj_b2-Yyh1UiBOB9_D-R3cS9M4dQXB0d791tJmVa')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">CASABLANCA • 3H</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">Sony WH-1000XM5 Noise Cancelling Headphones</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">3 400 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+<!-- Product Card 8 -->
+<div class="bg-white rounded-xl product-shadow overflow-hidden group cursor-pointer transition-all duration-300">
+<div class="relative aspect-[4/3] bg-surface-container-low overflow-hidden">
+<div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+<span class="bg-secondary text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">verified</span> ✓ Vérifié
+                            </span>
+</div>
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-500" data-alt="An ergonomic high-end mesh office chair designed for long gaming or coding sessions. The chair has a futuristic aesthetic with adjustable armrests and a sleek black frame. The image is captured in a well-lit, modern home office setting, focusing on the comfort and advanced ergonomic features of the product." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIzp-XO5cd3qzKC0sQGCtkvBMjfZxHYRgyGZ-oqFq17gVDvJgP51qSvxEPMoON3O499p4YGQqwSpRHLJi4K_y8DRc95lNVYZqUcbeXuFp8SGipUiSHzbjIBjSfrI-5h447BxzfMIZVT4y-m-H5cW0nNUX1KpVeLVbUBKx3uqm9jFWU1uIjf0ExW-TPmRliak2wiqsEhaZEIKRecNNsf52yN2KKypB-AbnCzKsfTyBcdmIrQwb6VvCzxEPp0yXeT9xA1hPWUSFF3EFF')"></div>
+</div>
+<div class="p-stack-md flex flex-col h-40 justify-between">
+<div>
+<p class="text-on-surface-variant text-[12px] font-label-md mb-1">RABAT • HIER</p>
+<h3 class="text-on-surface font-headline-md text-label-md line-clamp-2 group-hover:text-primary transition-colors">Chaise Ergonomique Herman Miller Aeron - Taille B</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<p class="font-price-lg text-price-lg text-secondary">12 000 DH</p>
+<button class="text-primary material-symbols-outlined hover:bg-primary-fixed p-1 rounded-full transition-colors">favorite</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center items-center gap-2 mt-stack-lg">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-label-md">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors font-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors font-label-md">3</button>
+<span class="text-outline">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors font-label-md">12</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-inverse-surface mt-stack-lg">
+<div class="max-w-container-max mx-auto py-stack-lg px-gutter grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="col-span-1 md:col-span-1">
+<a class="font-headline-md text-headline-md text-white font-bold block mb-stack-md" href="#">Setup.ma</a>
+<p class="text-white/70 text-body-md mb-stack-md">La première destination premium pour l'achat et la vente de matériel informatique au Maroc.</p>
+<div class="flex gap-4">
+<a class="text-white/70 hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-white/70 hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-label-md text-label-md mb-4">Navigation</h4>
+<ul class="space-y-2">
+<li><a class="text-white/70 hover:text-secondary transition-colors font-label-md" href="#">Annonces</a></li>
+<li><a class="text-white/70 hover:text-secondary transition-colors font-label-md" href="#">Dashboard</a></li>
+<li><a class="text-white/70 hover:text-secondary transition-colors font-label-md" href="#">Compte</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-label-md text-label-md mb-4">Informations</h4>
+<ul class="space-y-2">
+<li><a class="text-white/70 hover:text-secondary transition-colors font-label-md" href="#">Légal</a></li>
+<li><a class="text-white/70 hover:text-secondary transition-colors font-label-md" href="#">Contact</a></li>
+<li><a class="text-white/70 hover:text-secondary transition-colors font-label-md" href="#">Aide</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-label-md text-label-md mb-4">Newsletter</h4>
+<p class="text-white/70 text-label-md mb-4">Recevez les meilleures offres tech.</p>
+<div class="flex">
+<input class="bg-white/10 border-none rounded-l-lg px-3 py-2 text-white outline-none w-full" placeholder="Email" type="email"/>
+<button class="bg-primary px-4 py-2 rounded-r-lg text-white material-symbols-outlined">send</button>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-gutter py-stack-md border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-white/70 font-label-md text-label-md">© 2024 Setup.ma - Premium Tech Marketplace</p>
+<div class="flex gap-stack-md">
+<span class="text-white/30 text-label-md">Maroc • Français</span>
+</div>
+</div>
+</footer>
+<script>
+        // Simple interaction for favorite buttons
+        document.querySelectorAll('.material-symbols-outlined').forEach(icon => {
+            if (icon.innerText === 'favorite') {
+                icon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isFilled = icon.style.fontVariationSettings === "'FILL' 1";
+                    icon.style.fontVariationSettings = isFilled ? "'FILL' 0" : "'FILL' 1";
+                    icon.style.color = isFilled ? '' : '#4d44e3';
+                });
+            }
+        });
+
+        // Hover effects for cards
+        document.querySelectorAll('.product-shadow').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

@@ -4,142 +4,242 @@
 {% block title %}Mes annonces — Setup.ma{% endblock %}
 
 {% block content %}
-<div class="flex flex-col lg:flex-row gap-6">
-    <!-- Sidebar -->
-    <aside class="w-full lg:w-56 flex-shrink-0">
-        <nav class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50">
-                Vue d'ensemble
-            </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm font-medium text-white bg-indigo-600 border-t border-slate-100">
-                Mes annonces
-            </a>
-            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
-                Mes favoris
-            </a>
-            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                <span>Notifications</span>
-                {% if unread_count %}
-                    <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-600 rounded-full">{{ unread_count }}</span>
-                {% endif %}
-            </a>
-        </nav>
-    </aside>
+<div class="max-w-7xl mx-auto px-gutter py-8">
+    <div class="flex flex-col lg:flex-row gap-gutter">
+        {% include "dashboard/_sidebar.html" with active="products" %}
 
-    <!-- Main content -->
-    <div class="flex-1 min-w-0">
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-slate-900 lg:text-3xl">Mes annonces</h1>
-            <a href="{% url 'product-create' %}" class="inline-flex items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-xl transition-colors">
-                + Déposer
-            </a>
-        </div>
+        <!-- Main content -->
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-headline-md text-on-surface">Mes annonces</h1>
+                <a href="{% url 'product-create' %}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary hover:brightness-110 text-white text-sm font-semibold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
+                    <span class="material-symbols-outlined text-[18px]">add</span>
+                    Déposer
+                </a>
+            </div>
 
-        <!-- Status tabs -->
-        <div class="flex gap-2 mb-6 overflow-x-auto">
-            <a href="{% url 'dashboard-my-products-ssr' %}"
-               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if not current_status %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
-                Toutes
-            </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}?status=DISPONIBLE"
-               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if current_status == 'DISPONIBLE' %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
-                Disponibles
-            </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}?status=VENDU"
-               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if current_status == 'VENDU' %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
-                Vendues
-            </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}?status=ARCHIVE"
-               class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors {% if current_status == 'ARCHIVE' %}bg-indigo-600 text-white{% else %}bg-white border border-slate-200 text-slate-700 hover:bg-slate-50{% endif %}">
-                Archivées
-            </a>
-        </div>
+            <!-- Status tabs -->
+            <div class="flex gap-2 mb-6 overflow-x-auto pb-1">
+                <a href="{% url 'dashboard-my-products-ssr' %}"
+                   class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-all {% if not current_status %}bg-primary text-white{% else %}bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+                    Toutes
+                </a>
+                <a href="{% url 'dashboard-my-products-ssr' %}?status=DISPONIBLE"
+                   class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-all {% if current_status == 'DISPONIBLE' %}bg-primary text-white{% else %}bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+                    Disponibles
+                </a>
+                <a href="{% url 'dashboard-my-products-ssr' %}?status=VENDU"
+                   class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-all {% if current_status == 'VENDU' %}bg-primary text-white{% else %}bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+                    Vendues
+                </a>
+                <a href="{% url 'dashboard-my-products-ssr' %}?status=ARCHIVE"
+                   class="px-4 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-all {% if current_status == 'ARCHIVE' %}bg-primary text-white{% else %}bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+                    Archivées
+                </a>
+            </div>
 
-        <!-- Products table -->
-        {% if products %}
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-slate-50 text-left">
-                            <tr>
-                                <th class="px-4 py-3 font-medium text-slate-500">Annonce</th>
-                                <th class="px-4 py-3 font-medium text-slate-500">Prix</th>
-                                <th class="px-4 py-3 font-medium text-slate-500">Statut</th>
-                                <th class="px-4 py-3 font-medium text-slate-500">Vues</th>
-                                <th class="px-4 py-3 font-medium text-slate-500">Clics WA</th>
-                                <th class="px-4 py-3 font-medium text-slate-500">Date</th>
-                                <th class="px-4 py-3 font-medium text-slate-500">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            {% for product in products %}
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center gap-3">
-                                        {% if product.images.all.0 %}
-                                            <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
-                                        {% else %}
-                                            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs flex-shrink-0">—</div>
-                                        {% endif %}
-                                        <div class="min-w-0">
-                                            <a href="{{ product.get_absolute_url }}" class="text-slate-900 hover:text-indigo-600 font-medium line-clamp-1">{{ product.title }}</a>
-                                            <p class="text-xs text-slate-500">{{ product.category.name }} · {{ product.ville.name }}</p>
+            <!-- Products table -->
+            {% if products %}
+                <div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-surface text-left">
+                                <tr>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Annonce</th>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Prix</th>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Statut</th>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Vues</th>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Clics WA</th>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Date</th>
+                                    <th class="px-4 py-3 font-medium text-on-surface-variant">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-outline-variant/30">
+                                {% for product in products %}
+                                <tr class="hover:bg-surface-variant/20 transition-colors">
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-3">
+                                            {% if product.images.all.0 %}
+                                                <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
+                                            {% else %}
+                                                <div class="w-10 h-10 rounded-xl bg-surface-variant/30 flex items-center justify-center flex-shrink-0">
+                                                    <span class="material-symbols-outlined text-outline text-[18px]">image</span>
+                                                </div>
+                                            {% endif %}
+                                            <div class="min-w-0">
+                                                <a href="{{ product.get_absolute_url }}" class="text-on-surface hover:text-primary font-medium line-clamp-1">{{ product.title }}</a>
+                                                <p class="text-xs text-on-surface-variant">{{ product.category.name }} · {{ product.ville.name }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">{{ product.price|format_price }}</td>
-                                <td class="px-4 py-3">
-                                    {% if product.status == 'DISPONIBLE' %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disponible</span>
-                                    {% elif product.status == 'VENDU' %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Vendu</span>
-                                    {% else %}
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Archivé</span>
-                                    {% endif %}
-                                </td>
-                                <td class="px-4 py-3 text-slate-500">{{ product.views_count }}</td>
-                                <td class="px-4 py-3 text-slate-500">{{ product.whatsapp_clicks_count }}</td>
-                                <td class="px-4 py-3 text-xs text-slate-500 whitespace-nowrap">{{ product.created_at|time_since_fr }}</td>
-                                <td class="px-4 py-3">
-                                    <form method="post" class="inline-flex items-center gap-1">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="product_id" value="{{ product.pk }}">
-                                        <select name="status" class="text-xs border border-slate-200 rounded-xl px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                            <option value="DISPONIBLE" {% if product.status == 'DISPONIBLE' %}selected{% endif %}>Disponible</option>
-                                            <option value="VENDU" {% if product.status == 'VENDU' %}selected{% endif %}>Vendu</option>
-                                            <option value="ARCHIVE" {% if product.status == 'ARCHIVE' %}selected{% endif %}>Archivé</option>
-                                        </select>
-                                        <button type="submit" class="inline-flex items-center px-2 py-1 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-xl transition-colors">
-                                            OK
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td class="px-4 py-3 font-semibold text-on-surface whitespace-nowrap">{{ product.price|format_price }}</td>
+                                    <td class="px-4 py-3">
+                                        {% if product.status == 'DISPONIBLE' %}
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-container/30 text-secondary">Disponible</span>
+                                        {% elif product.status == 'VENDU' %}
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-container text-error">Vendu</span>
+                                        {% else %}
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-variant/50 text-on-surface-variant">Archivé</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-3 text-on-surface-variant">{{ product.views_count }}</td>
+                                    <td class="px-4 py-3 text-on-surface-variant">{{ product.whatsapp_clicks_count }}</td>
+                                    <td class="px-4 py-3 text-xs text-on-surface-variant whitespace-nowrap">{{ product.created_at|time_since_fr }}</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex flex-col gap-2">
+                                            <!-- Status change -->
+                                            <form method="post" class="inline-flex items-center gap-1" data-status-form data-product-id="{{ product.pk }}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product_id" value="{{ product.pk }}">
+                                                <select name="status" class="text-xs border border-outline-variant rounded-xl px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-primary"
+                                                        onchange="this.closest('form').querySelector('button[type=submit]').classList.remove('hidden')">
+                                                    <option value="DISPONIBLE" {% if product.status == 'DISPONIBLE' %}selected{% endif %}>Disponible</option>
+                                                    <option value="VENDU" {% if product.status == 'VENDU' %}selected{% endif %}>Vendu</option>
+                                                    <option value="ARCHIVE" {% if product.status == 'ARCHIVE' %}selected{% endif %}>Archivé</option>
+                                                </select>
+                                                <button type="submit" class="hidden inline-flex items-center px-2 py-1 bg-primary text-white text-xs font-medium rounded-xl transition-colors hover:brightness-110">
+                                                    OK
+                                                </button>
+                                            </form>
+                                            <!-- Edit / Delete buttons -->
+                                            <div class="flex items-center gap-1">
+                                                <a href="{% url 'product-edit' pk=product.pk %}"
+                                                   class="inline-flex items-center gap-1 px-2.5 py-1 bg-white border border-outline-variant hover:bg-surface-variant/30 text-on-surface-variant text-xs font-medium rounded-xl transition-colors"
+                                                   title="Modifier">
+                                                    <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                    Modifier
+                                                </a>
+                                                <button type="button"
+                                                        onclick="confirmDelete({{ product.pk }}, '{{ product.title|escapejs }}')"
+                                                        class="inline-flex items-center gap-1 px-2.5 py-1 bg-white border border-error/30 hover:bg-error-container text-error text-xs font-medium rounded-xl transition-colors"
+                                                        title="Supprimer">
+                                                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                                                    Supprimer
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Pagination -->
-            {% if is_paginated %}
-            <div class="mt-6 flex justify-center">
-                <nav class="inline-flex gap-1">
-                    {% if page_obj.has_previous %}
-                        <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700">← Précédent</a>
-                    {% endif %}
-                    <span class="px-3 py-2 text-sm text-slate-500">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-                    {% if page_obj.has_next %}
-                        <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700">Suivant →</a>
-                    {% endif %}
-                </nav>
-            </div>
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <div class="mt-6 flex justify-center">
+                    <nav class="inline-flex gap-1">
+                        {% if page_obj.has_previous %}
+                            <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm bg-white border border-outline-variant rounded-xl hover:bg-surface-variant/30 text-on-surface-variant transition-colors">← Précédent</a>
+                        {% endif %}
+                        <span class="px-3 py-2 text-sm text-on-surface-variant">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                        {% if page_obj.has_next %}
+                            <a href="?{% if current_status %}status={{ current_status }}&{% endif %}page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm bg-white border border-outline-variant rounded-xl hover:bg-surface-variant/30 text-on-surface-variant transition-colors">Suivant →</a>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] p-8 text-center text-on-surface-variant">
+                    <span class="material-symbols-outlined text-5xl text-outline mb-3 block">inventory_2</span>
+                    Aucune annonce{% if current_status %} avec ce statut{% endif %}.
+                    <a href="{% url 'product-create' %}" class="text-primary font-medium hover:underline">Déposer une annonce</a>
+                </div>
             {% endif %}
-        {% else %}
-            <div class="bg-white rounded-xl shadow-sm p-8 text-center text-slate-500">
-                Aucune annonce{% if current_status %} avec ce statut{% endif %}. <a href="{% url 'product-create' %}" class="text-indigo-600 hover:underline">Déposer une annonce</a>
-            </div>
-        {% endif %}
+        </div>
     </div>
 </div>
+
+<!-- Delete confirmation modal -->
+<div id="delete-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="material-symbols-outlined text-error text-3xl">warning</span>
+            <h3 class="text-lg font-semibold text-on-surface">Supprimer l'annonce</h3>
+        </div>
+        <p class="text-sm text-on-surface-variant mb-1">Êtes-vous sûr de vouloir supprimer :</p>
+        <p class="text-sm font-medium text-on-surface mb-6" id="delete-product-title"></p>
+        <div class="flex gap-3 justify-end">
+            <button onclick="closeDeleteModal()" class="px-4 py-2 text-sm font-medium text-on-surface-variant bg-surface-variant/30 rounded-xl hover:bg-surface-variant/50 transition-colors">
+                Annuler
+            </button>
+            <button id="delete-confirm-btn" class="px-4 py-2 text-sm font-medium text-white bg-error rounded-xl hover:brightness-110 transition-all">
+                Supprimer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── Status change via AJAX ───────────────────────────────────────────────────
+document.querySelectorAll('[data-status-form]').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        const newStatus = this.querySelector('select[name="status"]').value;
+        const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        try {
+            const resp = await fetch(`/api/v1/products/${productId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+            if (resp.ok) {
+                window.location.reload();
+            } else {
+                alert('Erreur lors du changement de statut.');
+            }
+        } catch (err) {
+            alert('Erreur de connexion.');
+        }
+    });
+});
+
+// ── Delete product ───────────────────────────────────────────────────────────
+let deleteProductId = null;
+
+function confirmDelete(productId, title) {
+    deleteProductId = productId;
+    document.getElementById('delete-product-title').textContent = `« ${title} »`;
+    document.getElementById('delete-modal').classList.remove('hidden');
+    document.getElementById('delete-modal').classList.add('flex');
+}
+
+function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.add('hidden');
+    document.getElementById('delete-modal').classList.remove('flex');
+    deleteProductId = null;
+}
+
+document.getElementById('delete-confirm-btn').addEventListener('click', async function() {
+    if (!deleteProductId) return;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    try {
+        const resp = await fetch(`/api/v1/products/${deleteProductId}/`, {
+            method: 'DELETE',
+            headers: { 'X-CSRFToken': csrfToken },
+        });
+        if (resp.ok || resp.status === 204) {
+            window.location.reload();
+        } else {
+            alert('Erreur lors de la suppression.');
+            closeDeleteModal();
+        }
+    } catch (err) {
+        alert('Erreur de connexion.');
+        closeDeleteModal();
+    }
+});
+
+// Close modal on backdrop click
+document.getElementById('delete-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+});
+</script>
 {% endblock %}

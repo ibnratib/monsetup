@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#e2dfff",
+                    "surface-container": "#eaedff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#dae2fd",
+                    "on-secondary-container": "#00714e",
+                    "surface-container-high": "#e2e7ff",
+                    "on-secondary-fixed-variant": "#005137",
+                    "primary-container": "#4f46e5",
+                    "on-secondary": "#ffffff",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#006e4b",
+                    "tertiary": "#005338",
+                    "on-surface": "#131b2e",
+                    "outline-variant": "#c7c4d8",
+                    "inverse-surface": "#283044",
+                    "inverse-primary": "#c3c0ff",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "background": "#faf8ff",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f2f3ff",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4d44e3",
+                    "on-primary-fixed": "#000000",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "inverse-on-surface": "#eef0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-tertiary-container": "#67f4b7",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary-container": "#82f5c1",
+                    "on-secondary-fixed": "#002114",
+                    "surface-dim": "#d2d9f4",
+                    "secondary-fixed": "#85f8c4",
+                    "primary": "#3525cd",
+                    "surface-container-highest": "#dae2fd",
+                    "outline": "#777587",
+                    "surface-bright": "#faf8ff",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-background": "#131b2e",
+                    "secondary": "#006c4a",
+                    "on-surface-variant": "#464555",
+                    "on-primary-container": "#dad7ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "8px",
+                    "xl": "12px",
+                    "2xl": "16px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "stack-md": "16px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "price-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "price-lg": ["24px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 bg-inverse-surface shadow-md h-20">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-full border-t-2 border-primary-container">
+<div class="flex items-center gap-8">
+<a class="font-display-lg text-display-lg text-white font-black after:content-['.ma'] after:text-secondary" href="#">Setup</a>
+<nav class="hidden md:flex gap-6">
+<a class="font-label-md text-label-md text-white border-b-2 border-primary pb-1" href="#">Annonces</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">Connexion</a>
+<a class="font-label-md text-label-md text-white/80 hover:text-white hover:scale-105 transition-transform" href="#">S'inscrire</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-secondary text-white px-6 py-2 rounded-xl font-label-md hover:scale-105 active:scale-95 transition-all duration-150 shadow-lg">
+                    + Déposer
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-gutter py-stack-lg">
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-2 mb-stack-md text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary transition-colors" href="#">Accueil</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Annonces</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">PC Gamer</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-on-surface font-bold">RTX 4090 Ultimate Build</span>
+</nav>
+<!-- Main Product Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-10 gap-gutter items-start">
+<!-- Left: Gallery (60%) -->
+<div class="lg:col-span-6 space-y-gutter">
+<div class="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-white group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A professional high-angle studio photograph of a premium custom gaming PC with tempered glass panels showcasing high-end components. The setup features vibrant emerald and indigo RGB lighting reflecting off a polished slate surface. The aesthetic is clean, high-tech, and luxurious, captured with a shallow depth of field against a minimalist white studio background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDDmI8ubEcxu1rYnS1zTFpxOnQqRpnC5_48WvvIMSXTVTqJD5Edo0vroufOODmP_pr6KKHHXmNhudGtWpIiy0Xx2VKezs5POEe7gbid7VM7QJroqnySpr3q6FOvUw_4zpWovl_AxXcsQskQDL4ImYghPAwXhtXQWqx81fM55XDECM4R9Vj2ANXwDKhYk2GbH7n25fLQlZOM16faGfnUVHR3a6iEtIhpAkTfbaRMCO_BhXj6iVAFirduenVjzxNZUdNZKBvgTfyEqp3O')">
+</div>
+<!-- Navigation Arrows -->
+<button class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/90 text-primary shadow-xl hover:bg-white transition-all opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/90 text-primary shadow-xl hover:bg-white transition-all opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined">arrow_forward_ios</span>
+</button>
+<!-- Dot Indicators -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-white shadow-sm"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-white/40 shadow-sm hover:bg-white/60 cursor-pointer"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-white/40 shadow-sm hover:bg-white/60 cursor-pointer"></span>
+</div>
+</div>
+<!-- Thumbnails (Desktop Only) -->
+<div class="hidden md:grid grid-cols-4 gap-4">
+<div class="aspect-square rounded-xl border-2 border-primary overflow-hidden cursor-pointer bg-white">
+<div class="w-full h-full bg-cover bg-center" data-alt="A detailed close-up shot of an NVIDIA RTX 4090 graphics card installed inside a high-end PC case. The lighting is dominated by a cool indigo glow with sharp emerald highlights on the fan edges. The photo is crisp, professional, and emphasizes the industrial design of the premium hardware." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdASeYEn9vvqYvKXPeT5pz9R8cS2-uOEM02gzjgCSj34doxdsgTCeuixi7LCVnFKty5peRf-wZXUdOYdX3V72XZl5BVKb0voCZkyJ7W2wJqv56X_o8ZqZVQ7U53ClVTiFRkYpxkS-T5Dudamcf7QI7haoKbToC64cjBvsJqk0QXzBNLQXnjiUjh93kbCwdvGg20wtNTXKkqrGHSliPSP8g_KUgFiC4eyv8RnZg5e91vX6zOzN6AmwU_uK7fcko1DXc6TV2eF97FWCd')"></div>
+</div>
+<div class="aspect-square rounded-xl border-2 border-transparent hover:border-surface-variant overflow-hidden cursor-pointer bg-white">
+<div class="w-full h-full bg-cover bg-center" data-alt="A close-up view of premium high-speed RGB RAM modules installed on a high-end motherboard. The lighting effect shows a smooth gradient of teal and deep violet. The image is clean, sharp, and focused on the technological details of the gaming setup." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAg-smGprpZMslkc6Lqq4e_uS3rYEH3mn8eP4b70NRLyXmifB7kEY7Km_KAilW8xZHCkWFM-Cw0c9EU8_XrSCsxy03v2Qao5ElV5kQfHQy2Ng_ALzQASuZs6HUFxcX9dnhKo5MF_uS2aKw-d3oVmK4QbKsoYembLAeSmFrZ5L2tXN-i8Sz-eChu-eR7Ixm3aMW7w9dzsP7b26NmgJtFLJg1pAG1hH_C0EBk6OrcyjNZti_HI1qdfD2ugSIYeb7vzuSFSFcNzvkprLhH')"></div>
+</div>
+<div class="aspect-square rounded-xl border-2 border-transparent hover:border-surface-variant overflow-hidden cursor-pointer bg-white">
+<div class="w-full h-full bg-cover bg-center" data-alt="A sleek, minimalist rear view of a high-performance gaming PC showing meticulously organized cable management and premium gold-plated connection ports. The environment is a clean, bright, light-mode studio setup with soft diffused shadows and a professional tech aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAitv-OIemPlDyNxxKvOXhGDGawb0hCo1oIQ-xTjeG43UO3RcfMDDY7-I5zKvcjOQhwp5OahVdyPBNpV4EHYIakJDlVrcH0-4Rw710A60mLkSGvRHCfHujCKyeW-BD7nts9P7XXfBb7RahYhR5kNrHnJY6SS1Lz6-o5cfk9Feu1bHo9EUZSKCCvOtedPYzbe5sLITevJUoz1MoHgTtEcq0lKgZdoF9rGLvz-pI1gbuh9g8s1WAwAdrVEo_DaYHQ736gkNmD8raK7VQ7')"></div>
+</div>
+<div class="aspect-square rounded-xl border-2 border-transparent hover:border-surface-variant overflow-hidden cursor-pointer bg-white">
+<div class="w-full h-full bg-cover bg-center" data-alt="An atmospheric shot of a high-end gaming keyboard and mouse setup next to the PC, glowing with coordinated emerald lighting. The scene is set on a dark slate desk, with soft light reflecting off the metallic surfaces of the peripherals. High-end lifestyle tech photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDRn0SzMXLnZxjLULZG4pkxRLtYRGIW7ZBZHDSD2RoQM0m3T8rxAFT8qgKqY7C2kIKc78xaIXk6W6r7jLSGHtQDufvq74t18pnN61ys6jiiy6SjJ2wr8nCBAhVOvSYHsLTAlToVQx_LNQMMhJ_xd-BkkWY5FHknlNiJ5Bp5CIod3eengi6Hy6gvDGVqMxbX0Jvpk1B3o0MXVAnDHN1udVqTCKKVCR_YsOSQ-KNQBnkpht3hb7f5Qc0L8d-gpXoqD2raQSQBGS52qZKk')"></div>
+</div>
+</div>
+</div>
+<!-- Right: Info Card & Seller (40%) -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Main Info Card -->
+<div class="bg-white p-gutter rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-md text-label-md">Neuf</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface transition-colors text-outline">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2">RTX 4090 Ultimate Gaming Build - i9 14900K, 64GB DDR5, 2TB Gen5 NVMe</h1>
+<p class="text-on-surface-variant mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary fill-icon">check_circle</span>
+                        Disponible
+                    </p>
+<div class="font-price-lg text-price-lg text-secondary mb-stack-lg">34 900 DH</div>
+<div class="space-y-4">
+<button class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-4 rounded-xl flex items-center justify-center gap-3 font-label-md transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md">
+<svg class="w-6 h-6 fill-current" viewbox="0 0 24 24"><path d="M12.031 6.172c-2.32 0-4.591.905-6.23 2.544-1.638 1.638-2.544 3.909-2.544 6.229 0 1.936.634 3.754 1.812 5.23L4 22l1.916-1.114c1.476 1.178 3.294 1.812 5.23 1.812h.001c2.32 0 4.591-.905 6.23-2.544 1.638-1.638 2.544-3.909 2.544-6.229 0-2.32-.906-4.591-2.544-6.23-1.639-1.638-3.91-2.544-6.23-2.544zm0 1.761c1.848 0 3.659.721 4.966 2.028s2.028 3.118 2.028 4.966c0 1.848-.721 3.659-2.028 4.966s-3.118 2.028-4.966 2.028h-.001c-1.603 0-3.111-.531-4.321-1.442l-.31-.233-2.348 1.365 1.402-2.302-.254-.338c-.911-1.21-1.442-2.718-1.442-4.321 0-1.848.721-3.659 2.028-4.966s3.118-2.028 4.966-2.028zM9.48 10.375c-.247 0-.48.098-.655.273-.174.174-.273.408-.273.655 0 .247.098.48.273.655.174.174.408.273.655.273s.48-.098.655-.273c.174-.174.273-.408.273-.655 0-.247-.098-.48-.273-.655-.174-.174-.408-.273-.655-.273zm5.04 0c-.247 0-.48.098-.655.273-.174.174-.273.408-.273.655 0 .247.098.48.273.655.174.174.408.273.655.273s.48-.098.655-.273c.174-.174.273-.408.273-.655 0-.247-.098-.48-.273-.655-.174-.174-.408-.273-.655-.273z"></path></svg>
+                            Contacter via WhatsApp
+                        </button>
+<button class="w-full bg-white border-[1.5px] border-primary text-primary py-4 rounded-xl font-label-md hover:bg-surface-container transition-colors">
+                            Appeler le vendeur
+                        </button>
+</div>
+</div>
+<!-- Seller Block -->
+<div class="bg-white p-gutter rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border-2 border-surface">
+<span class="material-symbols-outlined text-primary text-3xl">store</span>
+</div>
+<div>
+<h3 class="font-headline-md text-body-lg font-bold">Ultra PC Morocco</h3>
+<div class="flex items-center gap-1 text-on-tertiary-container">
+<span class="material-symbols-outlined text-sm fill-icon">star</span>
+<span class="material-symbols-outlined text-sm fill-icon">star</span>
+<span class="material-symbols-outlined text-sm fill-icon">star</span>
+<span class="material-symbols-outlined text-sm fill-icon">star</span>
+<span class="material-symbols-outlined text-sm">star</span>
+<span class="text-label-md font-label-md ml-1 text-on-surface-variant">(48 avis)</span>
+</div>
+<span class="text-label-md font-label-md text-primary uppercase tracking-wider">Boutique Vérifiée</span>
+</div>
+</div>
+<a class="flex items-center justify-center w-full py-2 text-primary font-label-md hover:underline" href="#">
+                        Voir le profil complet
+                        <span class="material-symbols-outlined ml-1">chevron_right</span>
+</a>
+</div>
+<!-- Ad Details Summary -->
+<div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl overflow-hidden relative">
+<div class="relative z-10">
+<p class="text-white/60 font-label-md text-xs uppercase mb-1">Localisation</p>
+<p class="font-bold flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">location_on</span>
+                            Casablanca, Maarif
+                        </p>
+<p class="text-white/60 font-label-md text-xs uppercase mb-1">Publié le</p>
+<p class="font-bold mb-0">Hier à 14:30</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">precision_manufacturing</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Technical Specs Section -->
+<div class="mt-stack-lg">
+<h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">settings_input_component</span>
+                Spécifications Techniques
+            </h2>
+<div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 overflow-hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+<!-- Spec Grid Items -->
+<div class="p-6 border-b md:border-r border-slate-50 hover:bg-surface transition-colors">
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Processeur (CPU)</p>
+<p class="font-bold text-on-surface">Intel Core i9-14900K (6.0 GHz Turbo)</p>
+</div>
+<div class="p-6 border-b lg:border-r border-slate-50 hover:bg-surface transition-colors">
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Carte Graphique (GPU)</p>
+<p class="font-bold text-on-surface">ASUS ROG Strix RTX 4090 24GB GDDR6X</p>
+</div>
+<div class="p-6 border-b md:border-r lg:border-r-0 border-slate-50 hover:bg-surface transition-colors">
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Mémoire RAM</p>
+<p class="font-bold text-on-surface">64GB Corsair Dominator Titanium DDR5 7200MHz</p>
+</div>
+<div class="p-6 border-b lg:border-b-0 lg:border-r border-slate-50 hover:bg-surface transition-colors">
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Stockage</p>
+<p class="font-bold text-on-surface">2TB Samsung 990 Pro Gen5 NVMe M.2</p>
+</div>
+<div class="p-6 border-b md:border-b-0 md:border-r border-slate-50 hover:bg-surface transition-colors">
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Refroidissement</p>
+<p class="font-bold text-on-surface">Lian Li Galahad II LCD 360mm AIO</p>
+</div>
+<div class="p-6 hover:bg-surface transition-colors">
+<p class="text-on-surface-variant font-label-md text-label-md mb-1">Alimentation</p>
+<p class="font-bold text-on-surface">Seasonic Prime 1300W 80+ Platinum</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Similar Products -->
+<div class="mt-stack-lg">
+<div class="flex justify-between items-end mb-stack-md">
+<h2 class="font-headline-md text-headline-md">Annonces Similaires</h2>
+<a class="text-primary font-label-md hover:underline flex items-center" href="#">
+                    Voir tout
+                    <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<!-- Product Card 1 -->
+<div class="bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 group hover:shadow-lg transition-all">
+<div class="aspect-square bg-slate-50 relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A sleek minimalist product shot of a high-performance gaming laptop on a dark slate surface. The lighting is cool-toned with indigo and emerald accents. Professional marketing photography style, high-key lighting, corporate tech aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAEr24g_SUuvoYgLBHq9pafJ5jo_HwkKw1z67BhdDm-PWVO_tLYIlqO2G1_G_kAQ_Nichtbdh4yyezVMf-_l2M4E7uhezpaOjTB2QnDWcl6IYmKDDqAsSHSzHX3OO-fTWCYsEegMQPFb3PWCH0dEEt9g87exHBpkIX9iob5qyP463kv5wcE5SkziR1pHT5wIUuBJngmP1mGvuxL-2UzEWkEfb2GCko28o9aaqL5K784gREXihZt8eW8Axj0tmbr8bBKrbSrSuECPc-e')"></div>
+<div class="absolute top-2 left-2 bg-secondary text-white px-2 py-0.5 rounded-lg font-label-md text-[10px]">OCCASION</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-body-md line-clamp-2 mb-2 group-hover:text-primary transition-colors">Razer Blade 16 RTX 4080</h4>
+<div class="flex justify-between items-center mt-4">
+<span class="text-on-surface-variant text-xs">Casablanca</span>
+<span class="text-secondary font-bold">24 500 DH</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 group hover:shadow-lg transition-all">
+<div class="aspect-square bg-slate-50 relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A professional studio photo of a curved ultra-wide gaming monitor displaying vibrant neon abstract wallpaper. The monitor frame is matte black and sits on a clean white desk. Corporate tech marketing style with soft diffused indigo backlighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEQ-ooofdEpZXpkk2EUPf8QhxsGGDnwVTfb-qdQ7fxzu6E3B2O_d605rdY7Na5dJQZwHN8HL_S7PQgyfovnrAnCDzd81wOG66Og9Zgd_ntfggEkZUmTMOcLSQtdFRbzJ8TQqVvIcxYkmQZ_Wxf4JtHQd2cMyPybQ45GcaQyn2NC19hFfgUKvVr97Nu6p8JMlG_4WfOT4DiE-8Wt9Fg7xP6MgjOdzdgmPVsXIQ5-vgeIvjpqNpRrR0GHJxuuUoCCPjsJMGTSPjOgSXB')"></div>
+<div class="absolute top-2 left-2 bg-primary text-white px-2 py-0.5 rounded-lg font-label-md text-[10px]">NEUF</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-body-md line-clamp-2 mb-2 group-hover:text-primary transition-colors">Samsung Odyssey G9 OLED</h4>
+<div class="flex justify-between items-center mt-4">
+<span class="text-on-surface-variant text-xs">Marrakech</span>
+<span class="text-secondary font-bold">12 900 DH</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 group hover:shadow-lg transition-all">
+<div class="aspect-square bg-slate-50 relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A close-up high-resolution photo of a mechanical gaming keyboard with semi-transparent keycaps and vivid RGB lighting. The aesthetic is clean, professional, and high-performance. Light mode studio environment with subtle indigo shadows." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDA5Ag0Mn-07REDK2FW-ZDhPGU68XaANIfpyHiMHXhWtz-8qisGm-Dd_rresynS5JrPXep_5mIOjgzwM5wU6pNjokOd18twzGT6GJ7d4WeZA5ZgMjo4LT2JfROb45XKB9QcbiRkvz3UjJhUDowxlutL7hR-YEdyU7LHHMiavh_HTW_ASa55VnKf1NcB5tbwJTkEsQqt-ZTKnBIV5el6iZf8Ux9klpYwtFst0rPdj5gH6G4UPRQkV6wmvjjM2JCIemsnRMCYedTDseNJ')"></div>
+<div class="absolute top-2 left-2 bg-primary text-white px-2 py-0.5 rounded-lg font-label-md text-[10px]">NEUF</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-body-md line-clamp-2 mb-2 group-hover:text-primary transition-colors">Custom Keyboard - GMMK Pro</h4>
+<div class="flex justify-between items-center mt-4">
+<span class="text-on-surface-variant text-xs">Rabat</span>
+<span class="text-secondary font-bold">3 200 DH</span>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 group hover:shadow-lg transition-all">
+<div class="aspect-square bg-slate-50 relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="A clean, professional product photograph of high-end wireless noise-canceling headphones in white and silver. The image is bright and minimalist, following a high-key light mode aesthetic with soft shadows on a light slate background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBsE065vP0qbxxazp-5onCBKyfH9ksAYYFlVzgQ3pFgSjRr48YzYehFL9jkoyqRGTNGLB1RJI6XDNLFO8soG9Lh8pRsTpDS5de1QEr2NqVhIocmSJxzb1jwwr6Q4C-NFtPJyssO75M_AMl_2mq4JjLnz-tvawFwJwm84wZSNmOISg6ZuKJ2Np2vc1OgpubLmfiDYSubAvFIjB96qF73Fr_Xu4mFuFDvA2aB-SswuRGQo7iaN9ZdUEbs50CSkUwNiuTjdFykcBOK4ub1')"></div>
+<div class="absolute top-2 left-2 bg-secondary text-white px-2 py-0.5 rounded-lg font-label-md text-[10px]">OCCASION</div>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-body-md line-clamp-2 mb-2 group-hover:text-primary transition-colors">Sony WH-1000XM5 Silver</h4>
+<div class="flex justify-between items-center mt-4">
+<span class="text-on-surface-variant text-xs">Tanger</span>
+<span class="text-secondary font-bold">2 800 DH</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-inverse-surface mt-stack-lg">
+<div class="w-full py-stack-lg px-gutter max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="space-y-4">
+<span class="font-headline-md text-headline-md text-white font-bold">Setup.ma</span>
+<p class="text-white/70 text-body-md">La destination premium pour le hardware et le gaming au Maroc. Achetez et vendez en toute confiance.</p>
+</div>
+<div>
+<h4 class="text-white font-bold mb-4">Navigation</h4>
+<div class="flex flex-col gap-2">
+<a class="font-label-md text-label-md text-white/70 hover:text-secondary transition-colors" href="#">Annonces</a>
+<a class="font-label-md text-label-md text-white/70 hover:text-secondary transition-colors" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-white/70 hover:text-secondary transition-colors" href="#">Compte</a>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-4">Informations</h4>
+<div class="flex flex-col gap-2">
+<a class="font-label-md text-label-md text-white/70 hover:text-secondary transition-colors" href="#">Légal</a>
+<a class="font-label-md text-label-md text-white/70 hover:text-secondary transition-colors" href="#">Contact</a>
+<a class="font-label-md text-label-md text-white/70 hover:text-secondary transition-colors" href="#">Aide</a>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="text-white font-bold">Newsletter</h4>
+<div class="flex gap-2">
+<input class="bg-white/10 border-white/20 text-white rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="Email" type="email"/>
+<button class="bg-primary text-white p-2 rounded-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<div class="text-white/50 text-label-md">© 2024 Setup.ma - Premium Tech Marketplace</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Micro-interaction for Favorite Toggle
+        document.querySelectorAll('.material-symbols-outlined').forEach(icon => {
+            if (icon.textContent === 'favorite') {
+                icon.parentElement.addEventListener('click', () => {
+                    icon.classList.toggle('fill-icon');
+                    icon.classList.toggle('text-error');
+                });
+            }
+        });
+
+        // Gallery active dot simple logic
+        const dots = document.querySelectorAll('.rounded-full.bg-white\\/40');
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                // This would trigger a slide change in a full implementation
+                dots.forEach(d => d.classList.replace('bg-white', 'bg-white/40'));
+                dot.classList.replace('bg-white/40', 'bg-white');
+            });
+        });
+    </script>
+</body></html>

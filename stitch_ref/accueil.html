@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Setup.ma | Le marketplace tech de confiance au Maroc</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#e2dfff",
+                    "surface-container": "#eaedff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#dae2fd",
+                    "on-secondary-container": "#00714e",
+                    "surface-container-high": "#e2e7ff",
+                    "on-secondary-fixed-variant": "#005137",
+                    "primary-container": "#4f46e5",
+                    "on-secondary": "#ffffff",
+                    "surface": "#faf8ff",
+                    "tertiary-container": "#006e4b",
+                    "tertiary": "#005338",
+                    "on-surface": "#131b2e",
+                    "outline-variant": "#c7c4d8",
+                    "inverse-surface": "#283044",
+                    "inverse-primary": "#c3c0ff",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "background": "#faf8ff",
+                    "on-tertiary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f2f3ff",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#4d44e3",
+                    "on-primary-fixed": "#0f0069",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "inverse-on-surface": "#eef0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-tertiary-container": "#67f4b7",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "secondary-fixed-dim": "#68dba9",
+                    "secondary-container": "#82f5c1",
+                    "on-secondary-fixed": "#002114",
+                    "surface-dim": "#d2d9f4",
+                    "secondary-fixed": "#85f8c4",
+                    "primary": "#3525cd",
+                    "surface-container-highest": "#dae2fd",
+                    "outline": "#777587",
+                    "surface-bright": "#faf8ff",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-background": "#131b2e",
+                    "secondary": "#006c4a",
+                    "on-surface-variant": "#464555",
+                    "on-primary-container": "#dad7ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "stack-md": "16px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "stack-sm": "8px",
+                    "container-max": "1280px"
+            },
+            "fontFamily": {
+                    "price-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "price-lg": ["20px", {"lineHeight": "1", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #faf8ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .hero-gradient { background: radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.1) 0%, transparent 50%); }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopNavBar Shell -->
+<header class="bg-inverse-surface sticky top-0 z-50 shadow-md">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+<div class="flex items-center gap-8">
+<a class="font-display-lg text-display-lg text-white font-black after:content-['.ma'] after:text-secondary" href="/">Setup</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-white border-b-2 border-primary pb-1 font-label-md text-label-md hover:text-white hover:scale-105 transition-transform" href="#">Annonces</a>
+<a class="text-white/80 font-label-md text-label-md hover:text-white hover:scale-105 transition-transform" href="#">Dashboard</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-4 mr-4">
+<a class="text-white/80 font-label-md text-label-md hover:text-white" href="#">Connexion</a>
+<a class="text-white/80 font-label-md text-label-md hover:text-white" href="#">S'inscrire</a>
+</div>
+<button class="bg-secondary text-white font-label-md text-label-md px-6 py-3 rounded-xl flex items-center gap-2 hover:scale-105 transition-all duration-150 active:scale-95">
+<span class="material-symbols-outlined">add_circle</span>
+                    + Déposer
+                </button>
+</div>
+</div>
+<div class="h-[2px] w-full bg-gradient-to-r from-primary to-secondary"></div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative bg-inverse-surface py-24 md:py-32 overflow-hidden">
+<!-- Animated Background Layers -->
+<div class="absolute inset-0 hero-gradient opacity-50"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary opacity-20 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary opacity-10 blur-[120px] rounded-full"></div>
+<div class="relative z-10 max-w-container-max mx-auto px-gutter text-center">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-8 max-w-3xl mx-auto">
+                    Le marketplace tech de <span class="text-secondary">confiance</span> au Maroc
+                </h1>
+<div class="max-w-2xl mx-auto flex flex-col md:flex-row gap-4 mb-10">
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all" placeholder="Rechercher un setup, un composant..." type="text"/>
+</div>
+<button class="bg-secondary text-white px-8 py-4 rounded-xl font-headline-md text-[18px] flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg">
+                        Rechercher
+                    </button>
+</div>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="text-white/70 border border-white/20 hover:border-white/40 hover:text-white px-6 py-3 rounded-xl transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">campaign</span>
+                        Déposer une annonce
+                    </button>
+<div class="flex -space-x-3 overflow-hidden items-center ml-4">
+<div class="w-10 h-10 rounded-full border-2 border-inverse-surface" data-alt="A professional close-up portrait of a tech enthusiast with a friendly smile, clean studio lighting with soft indigo and emerald highlights on the skin, high-end photography style consistent with a premium marketplace aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBh1YWP1EjSvCSeatqNKMpIM0P_M6ZkNyCc2RkRfyFUHNKmqSR4StztLD2e04BPLmQRl6ynXJDfzLIsvKYkWVrazxKelNY-ni3GJ3qCRDQg81fQLHcezW5kVJR4iwu5srF5fLMoFlNjVeDBJyKOUihv7y24hITrCeDG5A0vDpSXOOBoSdAGyrCp5p-IpaiW_EQ6Yw2qZdDR_uQF5W29irBXxUQxjPXqQfl9FwiDino2gRe1UpFXkSDH8-epxX1KzaTNjxnmDMHvvmQW')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-inverse-surface" data-alt="A candid profile shot of a young software engineer looking focused, natural lighting from a nearby monitor glow, professional tech-centric atmosphere, part of a diverse user base representation for a marketplace." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA1AccWTesqylPNLDyNgKhfZSUrCkeOy3wwbTyBM4UQ7G-yLNK_ly3ykeCrmmHr0Hu1XQLdlB0uPHVqt4zAUL3nGk9FZiLhcgM8Iph9gMeRIug6pljM95vysL79Mm1W2VBwVfhxPNUxZhhx36dohEYBZPon-iLS-DJYoaEJG2kDjctA4-poAPyVV3T9GhypVkeHWHXZk9VCKr9crDHVHN2temVfUQeWBErQiHBNKEjwpPDhzx8gzN8UKQv89EWdrrEldl5p3fY-E21n')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-inverse-surface" data-alt="Close-up of a digital artist's face illuminated by the subtle blue light of their workstation, showcasing high-resolution detail and a professional corporate yet modern aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdMNwQ8UnBi-hRrrDz6M4T7D7oTgXyPFXay88qdwWVMCACTiCiAyOIIqOaQueQsva2v0rIT8fXffnoQ0FqtPC_oI98v3efQyIVGRzit4-wVSJK2cvLm-pSsM1o4WnWmdUB-fSy6JnifWDvUWDnCL3jbjUFMKjzniqiTozg4CQFe3qAxxptiVc4VhixU8xNkaw8UrFaLRZIKG-SVdvV8yiWqCt0mHYeCnvRXXJAjN3bL_RTwOs-MRD7GMie-0PMKSF5K7MQsgX4O2oX')"></div>
+<div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-inverse-surface bg-surface-variant text-primary font-label-md text-[12px]">+2k</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Categories Grid -->
+<section class="py-16 max-w-container-max mx-auto px-gutter">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
+<a class="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all border border-transparent hover:border-primary/20" href="#">
+<span class="text-4xl mb-4 group-hover:scale-110 transition-transform">💻</span>
+<span class="font-label-md text-label-md text-on-surface text-center">PC Portables</span>
+</a>
+<a class="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all border border-transparent hover:border-primary/20" href="#">
+<span class="text-4xl mb-4 group-hover:scale-110 transition-transform">🖥️</span>
+<span class="font-label-md text-label-md text-on-surface text-center">PC de Bureau</span>
+</a>
+<a class="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all border border-transparent hover:border-primary/20" href="#">
+<span class="text-4xl mb-4 group-hover:scale-110 transition-transform">⚙️</span>
+<span class="font-label-md text-label-md text-on-surface text-center">Composants</span>
+</a>
+<a class="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all border border-transparent hover:border-primary/20" href="#">
+<span class="text-4xl mb-4 group-hover:scale-110 transition-transform">🎮</span>
+<span class="font-label-md text-label-md text-on-surface text-center">Consoles &amp; Jeux</span>
+</a>
+<a class="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all border border-transparent hover:border-primary/20" href="#">
+<span class="text-4xl mb-4 group-hover:scale-110 transition-transform">🎧</span>
+<span class="font-label-md text-label-md text-on-surface text-center">Périphériques</span>
+</a>
+<a class="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all border border-transparent hover:border-primary/20" href="#">
+<span class="text-4xl mb-4 group-hover:scale-110 transition-transform">📱</span>
+<span class="font-label-md text-label-md text-on-surface text-center">Smartphones</span>
+</a>
+</div>
+</section>
+<!-- Annonces mises en avant -->
+<section class="py-16 bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="font-display-lg text-headline-md text-on-surface mb-2">Annonces mises en avant</h2>
+<div class="h-1 w-20 bg-secondary rounded-full"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Product Card 1 -->
+<div class="group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all">
+<div class="relative h-48 bg-slate-50 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A sleek, high-end professional gaming laptop displayed on a minimalist white pedestal. Studio lighting creates soft shadows, emphasizing the aluminum chassis and RGB keyboard glow. High-performance, luxury tech marketplace aesthetic with indigo and emerald subtle lens flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_mQzI99EVrcK2eplPN6JSm-UJP84lX9-qUy9W9yJcLMC7pB8x3iFPsCBbFdpFD5ezwJUghLW2I6_ZhmBDQxQMZs_PiQUBnkFR2tawp8ysPLbg4e7Je2qx-BrxVNL20lRfHIqfT4kqFhx1v5yPp7jeI-NZ3gc33J-3oeOAkTq92vgZ_Rog_rJN2tRQ4FChvT6bmqGi2GaxOZuEcgQPJb94o7fUHS3Kwy6FfUbT6Imzf6ATX6in6-rSHY_QYB7oy8uSVv_gBi5svp7N"/>
+<span class="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span> Boosté
+                            </span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-body-md text-on-surface line-clamp-1">ASUS ROG Zephyrus G14</h3>
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded">NEUF</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-[14px] mb-4">Ryzen 9, RTX 4070, 32GB RAM...</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-price-lg text-price-lg text-secondary">18,500 DH</span>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all">
+<div class="relative h-48 bg-slate-50 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A powerful custom-built PC components display, focusing on a high-end NVIDIA RTX graphics card with illuminated fans. Cinematic lighting, deep shadows, and professional product photography style showing premium build quality in a modern Moroccan tech market context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA777tD_g54U_F96wPShUSDAb5l5tjg2SN20QO8TPgjPNh5LpZtaqtTEMQqE2mmAhMmQgOts6PxQqPDrxjBExou1ZsisfZdXCC1gH3SWR8EBcuhKMoGG2qIvySFG9m8F6K6YQQ3hXA5RojtLx8PCHpHzp3VuTZ-N7WvTGrdpp0MPUFIFuq4a7n53Sfgo43lbjs3YxC77RmVXNMxni7o741214CSHg1kCON0x2Y3nONXjHlL3l61aXPKbfUQtuRpY00ff8HHXt5piwdR"/>
+<span class="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span> Boosté
+                            </span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-body-md text-on-surface line-clamp-1">NVIDIA RTX 4080 Founders</h3>
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded">NEUF</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-[14px] mb-4">16GB GDDR6X, Scellé dans sa boîte</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-price-lg text-price-lg text-secondary">12,900 DH</span>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Repeat for 4x2 total - simplified for code output -->
+<!-- More cards would follow same pattern -->
+<div class="group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all">
+<div class="relative h-48 bg-slate-50 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A sleek white PlayStation 5 console with two DualSense controllers positioned artistically. Minimalist aesthetic, bright studio lighting, soft gray shadows, emphasizing the clean lines and modern design of the console. Professional marketplace presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzSQgmJ_yIDNLouMjrLlGbElxY1NRwRWRPaIdGWudDEnxhxLxre9nr4VWzMWx1EwLVScpDOflkbWiQ30rYDSe9QeFdKGJzhjKgnI0M8d60erYHEjHkgFtjneumVdzad2tWJJD-yBNM9U8gpZOLdSMDKcgnNYBvlebLUbFjBAFib5-FAyZXQMjr9jSsQcRtTQAZGTIYkzbscIRpjIxZbuZ9foOD4JxLwy7rcZ3V76d4dt8Ipjz4_77EIr9Yivsm2IvXzL35l7AOI1lp"/>
+<span class="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span> Boosté
+                            </span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-body-md text-on-surface line-clamp-1">PlayStation 5 Slim 1To</h3>
+<span class="bg-on-surface-variant/10 text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded">OCCASION</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-[14px] mb-4">Comme neuf, avec 2 manettes + FIFA</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-price-lg text-price-lg text-secondary">4,800 DH</span>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<div class="group bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all">
+<div class="relative h-48 bg-slate-50 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A professional 27-inch 4K monitor displaying a vibrant digital art piece. The monitor is thin-bezelled and stands on a sleek metallic arm. The lighting is clean and professional, showcasing the screen's color accuracy and premium build." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBa_9ebs5EbtmkiO2xCIZI8hgj7OyCmJ-8jhPy65hXtspbI-RQXCUvy3_U2xhHUzvN36ntG558oDs2K7akKpzPKDwAi208hyJaCle4txXopJGwD9naJm7Q0bfGfJ4B-FcDNh3d-ePQVeycpoNlRFwdlrGVeGFTsNuTyyjZ4SEtUzzL5dS0h0tiN_eibXUynQH-cuwX3yHvWhLJ8XmYqmkrA9or3K-3waIkEcX1XM45-G32PF_Yza-wsUWi_Vu2BRTxJzSYZ8dEM4qno"/>
+<span class="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span> Boosté
+                            </span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-body-md text-on-surface line-clamp-1">Samsung Odyssey G7 28"</h3>
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded">NEUF</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-[14px] mb-4">4K 144Hz, IPS 1ms, HDR400</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-price-lg text-price-lg text-secondary">6,200 DH</span>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Annonces Récentes Section -->
+<section class="py-16 max-w-container-max mx-auto px-gutter">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+<div>
+<h2 class="font-display-lg text-headline-md text-on-surface mb-2">Annonces récentes</h2>
+<p class="text-on-surface-variant font-body-md">Découvrez les dernières opportunités publiées</p>
+</div>
+<a class="group text-primary font-label-md flex items-center gap-2 hover:translate-x-1 transition-transform" href="#">
+                    Voir toutes les annonces 
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Generic Recent Card (Iteration) -->
+<script>
+                    const recentProducts = [
+                        { name: "iPhone 15 Pro Max 256GB", price: "12,500 DH", state: "NEUF", icon: "📱", img: "placeholder", alt: "A sleek iPhone 15 Pro in Titanium color, placed on a dark marble surface with soft atmospheric lighting. The design is elegant, modern, and high-end, representing professional smartphone sales in a tech marketplace." },
+                        { name: "Mechanical Keyboard Custom", price: "1,200 DH", state: "OCCASION", icon: "⌨️", img: "placeholder", alt: "A macro shot of a custom mechanical keyboard with colorful keycaps and subtle RGB underglow. High-detail photography showing texture and build quality in a clean office setting." },
+                        { name: "AMD Ryzen 7 7800X3D", price: "4,600 DH", state: "NEUF", icon: "💾", img: "placeholder", alt: "A sharp close-up of a high-performance computer processor in its original professional packaging. Clean studio lighting on reflective surfaces, conveying trust and quality." },
+                        { name: "Logitech G Pro X Wireless", price: "1,850 DH", state: "NEUF", icon: "🎧", img: "placeholder", alt: "A pair of professional gaming headphones displayed on a wooden desk with a minimalist setup in the background. Soft depth of field, natural lighting." },
+                        { name: "Secretlab Titan Evo 2024", price: "5,400 DH", state: "OCCASION", icon: "💺", img: "placeholder", alt: "A high-end ergonomic gaming chair in black leatherette, set in a modern home office environment. Professional photography showing comfort and luxury." },
+                        { name: "MacBook Air M2 13\"", price: "10,800 DH", state: "NEUF", icon: "💻", img: "placeholder", alt: "A midnight blue MacBook Air shown thin-profile on a glass table. Reflections and lighting emphasize the slim professional design and premium tech feel." },
+                        { name: "Sony WH-1000XM5", price: "3,100 DH", state: "OCCASION", icon: "🎧", img: "placeholder", alt: "Premium noise-canceling headphones in their carrying case, photographed in a high-key bright setting with soft shadows, highlighting their sleek design." },
+                        { name: "Curved Gaming Monitor 34\"", price: "7,500 DH", state: "NEUF", icon: "🖥️", img: "placeholder", alt: "A wide curved gaming monitor displaying a stunning landscape image. The setting is a dark tech den with subtle purple accent lighting behind the screen." }
+                    ];
+
+                    document.write(recentProducts.map(p => `
+                        <div class="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:shadow-lg transition-all duration-300">
+                            <div class="relative h-40 bg-slate-50 overflow-hidden">
+                                <img src="${p.img}" data-alt="${p.alt}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-[10px] font-bold text-outline-variant tracking-wider uppercase">Casablanca</span>
+                                    <span class="text-[10px] font-bold text-on-surface-variant bg-slate-100 px-2 py-0.5 rounded">${p.state}</span>
+                                </div>
+                                <h3 class="font-headline-md text-[16px] text-on-surface mb-3 line-clamp-1">${p.name}</h3>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-price-lg text-[18px] text-on-surface">${p.price}</span>
+                                    <span class="text-[12px] text-outline">Il y a 2h</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join(''));
+                </script>
+</div>
+</section>
+<!-- Trust / Value Prop Section -->
+<section class="py-20 bg-inverse-surface text-white">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<div class="flex flex-col items-center text-center p-6">
+<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-3">Vendeurs Vérifiés</h4>
+<p class="text-white/70 font-body-md">Chaque membre est validé par notre système de réputation pour garantir des transactions sereines.</p>
+</div>
+<div class="flex flex-col items-center text-center p-6">
+<div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">payments</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-3">Zéro Commission</h4>
+<p class="text-white/70 font-body-md">Déposez vos annonces gratuitement et gardez 100% de votre vente. Setup.ma reste accessible à tous.</p>
+</div>
+<div class="flex flex-col items-center text-center p-6">
+<div class="w-16 h-16 bg-tertiary-container/20 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-tertiary-fixed text-3xl">support_agent</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-3">Support Expert</h4>
+<p class="text-white/70 font-body-md">Besoin d'aide pour estimer un prix ou vérifier un composant ? Notre équipe tech est à votre écoute.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-inverse-surface border-t border-white/10">
+<div class="w-full py-stack-lg px-gutter max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="flex flex-col gap-4">
+<span class="font-headline-md text-headline-md text-white font-bold">Setup.ma</span>
+<p class="text-white/70 font-body-md">Premium Tech Marketplace pour les passionnés d'informatique au Maroc. Achetez, vendez, upgradez.</p>
+<div class="flex gap-4 mt-2">
+<a class="text-white/50 hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-white/50 hover:text-secondary transition-colors" href="#"><span class="material-symbols-outlined">chat</span></a>
+</div>
+</div>
+<div>
+<h5 class="text-white font-label-md mb-6 uppercase tracking-wider">Marketplace</h5>
+<ul class="flex flex-col gap-4">
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Annonces</a></li>
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Boosts</a></li>
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Vérification</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-label-md mb-6 uppercase tracking-wider">Communauté</h5>
+<ul class="flex flex-col gap-4">
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Dashboard</a></li>
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Aide</a></li>
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-label-md mb-6 uppercase tracking-wider">Légal</h5>
+<ul class="flex flex-col gap-4">
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">CGU</a></li>
+<li><a class="text-white/70 font-label-md hover:text-secondary transition-colors" href="#">Confidentialité</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-white/5 py-8 text-center">
+<p class="text-white/50 font-label-md">© 2024 Setup.ma - Premium Tech Marketplace</p>
+</div>
+</footer>
+<script>
+        // Micro-interactions and effects
+        document.addEventListener('DOMContentLoaded', () => {
+            // Header scroll effect
+            const header = document.querySelector('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    header.classList.add('shadow-xl');
+                    header.classList.add('bg-opacity-95');
+                } else {
+                    header.classList.remove('shadow-xl');
+                    header.classList.remove('bg-opacity-95');
+                }
+            });
+        });
+    </script>
+</body></html>

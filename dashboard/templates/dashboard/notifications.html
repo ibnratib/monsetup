@@ -4,93 +4,81 @@
 {% block title %}Notifications — Setup.ma{% endblock %}
 
 {% block content %}
-<div class="flex flex-col lg:flex-row gap-6">
-    <!-- Sidebar -->
-    <aside class="w-full lg:w-56 flex-shrink-0">
-        <nav class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50">
-                Vue d'ensemble
-            </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
-                Mes annonces
-            </a>
-            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
-                Mes favoris
-            </a>
-            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm font-medium text-white bg-indigo-600 border-t border-slate-100 flex items-center justify-between">
-                <span>Notifications</span>
-                {% if unread_count %}
-                    <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-600 rounded-full">{{ unread_count }}</span>
-                {% endif %}
-            </a>
-        </nav>
-    </aside>
+<div class="max-w-7xl mx-auto px-gutter py-8">
+    <div class="flex flex-col lg:flex-row gap-gutter">
+        {% include "dashboard/_sidebar.html" with active="notifications" %}
 
-    <!-- Main content -->
-    <div class="flex-1 min-w-0">
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-slate-900 lg:text-3xl">Notifications</h1>
-            {% if unread_count %}
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="mark_all_read">
-                <button type="submit" class="inline-flex items-center px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors">
-                    Tout marquer comme lu
-                </button>
-            </form>
+        <!-- Main content -->
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="text-headline-md text-on-surface">Notifications</h1>
+                {% if unread_count %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="mark_all_read">
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-outline-variant hover:bg-surface-variant/30 text-on-surface-variant text-sm font-medium rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">done_all</span>
+                        Tout marquer comme lu
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            {% if notifications %}
+                <div class="space-y-3">
+                    {% for notif in notifications %}
+                    <div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border {% if notif.is_read %}border-outline-variant/30{% else %}border-primary/20{% endif %} p-4 flex items-start gap-3">
+                        {% if not notif.is_read %}
+                            <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-primary"></div>
+                        {% else %}
+                            <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-outline-variant"></div>
+                        {% endif %}
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm {% if notif.is_read %}text-on-surface-variant{% else %}text-on-surface{% endif %}">{{ notif.message }}</p>
+                            <div class="mt-1 flex items-center gap-3">
+                                <span class="text-xs text-on-surface-variant">{{ notif.created_at|time_since_fr }}</span>
+                                <span class="text-xs text-outline">{{ notif.get_type_display }}</span>
+                                {% if notif.product %}
+                                    <a href="{{ notif.product.get_absolute_url }}" class="text-xs text-primary hover:underline inline-flex items-center gap-0.5">
+                                        Voir l'annonce
+                                        <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if not notif.is_read %}
+                        <form method="post" class="flex-shrink-0">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="mark_read">
+                            <input type="hidden" name="notification_id" value="{{ notif.pk }}">
+                            <button type="submit" class="text-xs text-primary hover:underline font-medium">Marquer lu</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <div class="mt-6 flex justify-center">
+                    <nav class="inline-flex gap-1">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm bg-white border border-outline-variant rounded-xl hover:bg-surface-variant/30 text-on-surface-variant transition-colors">← Précédent</a>
+                        {% endif %}
+                        <span class="px-3 py-2 text-sm text-on-surface-variant">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm bg-white border border-outline-variant rounded-xl hover:bg-surface-variant/30 text-on-surface-variant transition-colors">Suivant →</a>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] p-8 text-center text-on-surface-variant text-sm">
+                    <span class="material-symbols-outlined text-5xl text-outline mb-3 block">notifications_none</span>
+                    Aucune notification.
+                </div>
             {% endif %}
         </div>
-
-        {% if notifications %}
-            <div class="space-y-3">
-                {% for notif in notifications %}
-                <div class="bg-white rounded-xl shadow-sm border {% if notif.is_read %}border-slate-200{% else %}border-indigo-200{% endif %} p-4 flex items-start gap-3">
-                    {% if not notif.is_read %}
-                        <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-indigo-600"></div>
-                    {% else %}
-                        <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-slate-300"></div>
-                    {% endif %}
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm {% if notif.is_read %}text-slate-500{% else %}text-slate-900{% endif %}">{{ notif.message }}</p>
-                        <div class="mt-1 flex items-center gap-3">
-                            <span class="text-xs text-slate-500">{{ notif.created_at|time_since_fr }}</span>
-                            <span class="text-xs text-slate-400">{{ notif.get_type_display }}</span>
-                            {% if notif.product %}
-                                <a href="{{ notif.product.get_absolute_url }}" class="text-xs text-indigo-600 hover:underline">Voir l'annonce</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% if not notif.is_read %}
-                    <form method="post" class="flex-shrink-0">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="mark_read">
-                        <input type="hidden" name="notification_id" value="{{ notif.pk }}">
-                        <button type="submit" class="text-xs text-indigo-600 hover:text-indigo-500 hover:underline">Marquer lu</button>
-                    </form>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-
-            <!-- Pagination -->
-            {% if is_paginated %}
-            <div class="mt-6 flex justify-center">
-                <nav class="inline-flex gap-1">
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700">← Précédent</a>
-                    {% endif %}
-                    <span class="px-3 py-2 text-sm text-slate-500">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 text-sm bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700">Suivant →</a>
-                    {% endif %}
-                </nav>
-            </div>
-            {% endif %}
-        {% else %}
-            <div class="bg-white rounded-xl shadow-sm p-8 text-center text-slate-500 text-sm">
-                Aucune notification.
-            </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,40 @@
+{% comment %}
+Dashboard sidebar partial.
+Usage: {% include "dashboard/_sidebar.html" with active="home" %}
+Active values: home, products, favorites, notifications
+{% endcomment %}
+<aside class="w-full lg:w-60 flex-shrink-0">
+    <nav class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] overflow-hidden">
+        <a href="{% url 'dashboard-home' %}"
+           class="flex items-center gap-3 px-5 py-3.5 text-sm transition-colors {% if active == 'home' %}font-semibold text-white bg-primary{% else %}text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            Vue d'ensemble
+        </a>
+        <a href="{% url 'dashboard-my-products-ssr' %}"
+           class="flex items-center gap-3 px-5 py-3.5 text-sm border-t border-outline-variant/30 transition-colors {% if active == 'products' %}font-semibold text-white bg-primary{% else %}text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+            <span class="material-symbols-outlined text-[20px]">inventory_2</span>
+            Mes annonces
+        </a>
+        <a href="{% url 'dashboard-favorites-ssr' %}"
+           class="flex items-center gap-3 px-5 py-3.5 text-sm border-t border-outline-variant/30 transition-colors {% if active == 'favorites' %}font-semibold text-white bg-primary{% else %}text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+            <span class="material-symbols-outlined text-[20px]">favorite</span>
+            Mes favoris
+        </a>
+        <a href="{% url 'dashboard-notifications-ssr' %}"
+           class="flex items-center gap-3 px-5 py-3.5 text-sm border-t border-outline-variant/30 transition-colors justify-between {% if active == 'notifications' %}font-semibold text-white bg-primary{% else %}text-on-surface-variant hover:bg-surface-variant/30{% endif %}">
+            <span class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-[20px]">notifications</span>
+                Notifications
+            </span>
+            {% if unread_count %}
+            <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-semibold rounded-full {% if active == 'notifications' %}text-primary bg-white{% else %}text-white bg-error{% endif %}">{{ unread_count }}</span>
+            {% endif %}
+        </a>
+        <div class="border-t border-outline-variant/30"></div>
+        <a href="{% url 'logout' %}"
+           class="flex items-center gap-3 px-5 py-3.5 text-sm text-error hover:bg-error-container/30 transition-colors">
+            <span class="material-symbols-outlined text-[20px]">logout</span>
+            Déconnexion
+        </a>
+    </nav>
+</aside>

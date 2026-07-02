@@ -11,226 +11,312 @@
 {% block twitter_description %}{{ seo_description }}{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto">
-    <!-- Breadcrumb (Schema.org BreadcrumbList) -->
-    <nav class="text-sm text-slate-500 mb-4" aria-label="Fil d'Ariane">
-        <ol class="flex flex-wrap items-center gap-1" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a href="{% url 'home' %}" itemprop="item" class="text-indigo-600 hover:text-indigo-500 transition-colors"><span itemprop="name">Accueil</span></a>
-                <meta itemprop="position" content="1">
-            </li>
-            <span class="mx-1">/</span>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a href="{% url 'product-list' %}" itemprop="item" class="text-indigo-600 hover:text-indigo-500 transition-colors"><span itemprop="name">Annonces</span></a>
-                <meta itemprop="position" content="2">
-            </li>
-            <span class="mx-1">/</span>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <a href="{% url 'product-list' %}?category={{ product.category.slug }}" itemprop="item" class="text-indigo-600 hover:text-indigo-500 transition-colors"><span itemprop="name">{{ product.category.name }}</span></a>
-                <meta itemprop="position" content="3">
-            </li>
-            <span class="mx-1">/</span>
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                <span itemprop="name" class="text-slate-900">{{ product.title }}</span>
-                <meta itemprop="position" content="4">
-            </li>
-        </ol>
+<main class="max-w-container-max mx-auto px-gutter py-stack-lg">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 mb-stack-md text-on-surface-variant font-label-md text-label-md flex-wrap" aria-label="Fil d'Ariane">
+        <a href="{% url 'home' %}" class="hover:text-primary transition-colors">Accueil</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <a href="{% url 'product-list' %}" class="hover:text-primary transition-colors">Annonces</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <a href="{% url 'product-list' %}?category={{ product.category.slug }}" class="hover:text-primary transition-colors">{{ product.category.name }}</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <span class="text-on-surface font-bold">{{ product.title|truncatechars:40 }}</span>
     </nav>
 
-    <!-- Desktop: 2 colonnes (images 60% | infos 40%) — Mobile: 1 colonne empilée -->
-    <div class="flex flex-col lg:flex-row gap-6">
+    <!-- Main Product Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-10 gap-gutter items-start">
 
-        <!-- Galerie images -->
-        <div class="lg:w-3/5">
-            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                {% if product.images.all %}
-                <div class="relative">
-                    <div id="carousel" class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide" style="scroll-behavior:smooth;">
-                        {% for img in product.images.all %}
-                        <div class="w-full flex-shrink-0 snap-center carousel-slide">
-                            <div class="aspect-[4/3] bg-gray-100 cursor-pointer" onclick="openLightbox({{ forloop.counter0 }})">
-                                <img src="{{ img.image.url }}" alt="{{ product.title }} — {{ product.category.name }} d'occasion à {{ product.ville.name }}"
-                                     class="w-full h-full object-contain">
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% if product.images.count > 1 %}
-                    <button id="carousel-prev"
-                            class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-md flex items-center justify-center text-gray-700 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <!-- Left: Gallery (60%) -->
+        <div class="lg:col-span-6 space-y-gutter">
+            <!-- Main Image -->
+            {% if product.images.all %}
+            <div class="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-white group cursor-pointer" onclick="openLightbox(currentSlide)">
+                <img id="main-image" src="{{ product.images.all.0.image.url }}" alt="{{ product.title }}"
+                     class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.02]">
+                {% if product.is_boosted %}
+                <span class="absolute top-3 left-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-white gap-1 shadow-md">
+                    <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span> Boosté
+                </span>
+                {% endif %}
+                <!-- Nav Arrows -->
+                {% if product.images.count > 1 %}
+                <button id="gallery-prev" onclick="event.stopPropagation(); galleryNav(-1)"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/90 text-primary shadow-xl hover:bg-white transition-all opacity-0 group-hover:opacity-100">
+                    <span class="material-symbols-outlined">arrow_back_ios_new</span>
+                </button>
+                <button id="gallery-next" onclick="event.stopPropagation(); galleryNav(1)"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/90 text-primary shadow-xl hover:bg-white transition-all opacity-0 group-hover:opacity-100">
+                    <span class="material-symbols-outlined">arrow_forward_ios</span>
+                </button>
+                <!-- Dots -->
+                <div id="gallery-dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                    {% for img in product.images.all %}
+                    <button onclick="event.stopPropagation(); selectImage({{ forloop.counter0 }})"
+                            class="gallery-dot w-2.5 h-2.5 rounded-full shadow-sm transition-all {% if forloop.first %}bg-white{% else %}bg-white/40 hover:bg-white/60{% endif %}"></button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="aspect-[4/3] rounded-2xl bg-slate-100 flex items-center justify-center shadow-md">
+                <span class="material-symbols-outlined text-6xl text-slate-300">image</span>
+            </div>
+            {% endif %}
+
+            <!-- Thumbnails -->
+            {% if product.images.count > 1 %}
+            <div class="hidden md:grid grid-cols-4 gap-4">
+                {% for img in product.images.all %}
+                <button onclick="selectImage({{ forloop.counter0 }})" data-index="{{ forloop.counter0 }}"
+                        class="thumbnail-btn aspect-square rounded-xl border-2 overflow-hidden cursor-pointer bg-white transition-all {% if forloop.first %}border-primary{% else %}border-transparent hover:border-surface-variant{% endif %}">
+                    <img src="{{ img.image.url }}" alt="Image {{ forloop.counter }}" class="w-full h-full object-cover">
+                </button>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right: Info Column (40%) -->
+        <div class="lg:col-span-4 space-y-gutter">
+
+            <!-- Main Info Card -->
+            <div class="bg-white p-gutter rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100">
+                <!-- Condition badge + Favorite -->
+                <div class="flex justify-between items-start mb-4">
+                    {% if product.condition %}
+                    <span class="{% if product.condition == 'NEUF' %}bg-secondary-container text-on-secondary-container{% else %}bg-primary-fixed text-on-primary-fixed{% endif %} px-3 py-1 rounded-full font-label-md text-label-md">
+                        {{ product.get_condition_display }}
+                    </span>
+                    {% else %}
+                    <span></span>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <button id="favorite-btn" data-product-id="{{ product.pk }}"
+                            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface transition-colors text-outline">
+                        {% if is_favorited %}
+                        <span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        {% else %}
+                        <span class="material-symbols-outlined">favorite</span>
+                        {% endif %}
                     </button>
-                    <button id="carousel-next"
-                            class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full shadow-md flex items-center justify-center text-gray-700 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </button>
-                    <!-- Dots -->
-                    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5" id="carousel-dots">
-                        {% for img in product.images.all %}
-                        <button class="w-2 h-2 rounded-full transition-colors {% if forloop.first %}bg-indigo-500{% else %}bg-white/60{% endif %}" data-index="{{ forloop.counter0 }}"></button>
-                        {% endfor %}
-                    </div>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={{ request.path }}"
+                       class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface transition-colors text-outline">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Title -->
+                <h1 class="font-headline-md text-headline-md text-on-surface mb-2">{{ product.title }}</h1>
+
+                <!-- Status -->
+                <p class="text-on-surface-variant mb-6 flex items-center gap-2">
+                    {% if product.status == 'DISPONIBLE' %}
+                    <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    Disponible
+                    {% elif product.status == 'VENDU' %}
+                    <span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">cancel</span>
+                    Vendu
+                    {% else %}
+                    <span class="material-symbols-outlined text-outline" style="font-variation-settings: 'FILL' 1;">archive</span>
+                    Archivé
+                    {% endif %}
+                </p>
+
+                <!-- Price -->
+                <div class="font-price-lg text-price-lg text-secondary mb-stack-sm">{{ product.price|format_price }}</div>
+
+                <!-- Livraison / Garantie badges -->
+                {% if product.livraison or product.garantie %}
+                <div class="flex flex-wrap gap-2 mb-stack-lg">
+                    {% if product.livraison %}
+                    <span class="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full">
+                        <span class="material-symbols-outlined text-[16px]">local_shipping</span>Livraison disponible
+                    </span>
+                    {% endif %}
+                    {% if product.garantie %}
+                    <span class="inline-flex items-center gap-1.5 text-sm font-medium text-secondary bg-secondary/10 px-3 py-1.5 rounded-full">
+                        <span class="material-symbols-outlined text-[16px]">verified_user</span>Garantie incluse
+                    </span>
                     {% endif %}
                 </div>
                 {% else %}
-                <div class="aspect-[4/3] bg-slate-100 flex items-center justify-center">
-                    <svg class="w-16 h-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Infos produit -->
-        <div class="lg:w-2/5 space-y-4">
-            <div class="bg-white rounded-2xl shadow-sm p-6">
-                <!-- Title -->
-                <h1 class="text-2xl font-bold text-slate-900">{{ product.title }}</h1>
-
-                <!-- Price -->
-                <p class="mt-2 text-2xl font-extrabold text-emerald-600">{{ product.price|format_price }}</p>
-
-                <!-- Status & Location -->
-                <div class="flex flex-wrap gap-2 mt-3">
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                        {% if product.status == 'DISPONIBLE' %}bg-green-100 text-green-800
-                        {% elif product.status == 'VENDU' %}bg-red-100 text-red-800
-                        {% else %}bg-gray-100 text-gray-800{% endif %}">
-                        {{ product.get_status_display }}
-                    </span>
-                    {% if product.is_boosted %}
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">⚡ Boosté</span>
-                    {% endif %}
-                </div>
-
-                <div class="mt-3 flex items-center gap-2 text-xs text-slate-500">
-                    <span>{{ product.ville.name }}</span>
-                    <span>&middot;</span>
-                    <span>{{ product.category.name }}</span>
-                    <span>&middot;</span>
-                    <span>{{ product.created_at|time_since_fr }}</span>
-                </div>
-
-                <!-- WhatsApp CTA -->
-                {% if whatsapp_url %}
-                <a href="{{ whatsapp_url }}" target="_blank" rel="noopener"
-                   id="whatsapp-btn" data-product-id="{{ product.pk }}"
-                   class="mt-5 inline-flex items-center justify-center w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-base font-medium rounded-xl transition-colors gap-2">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.353 0-4.528-.788-6.268-2.115l-.438-.337-2.651.889.889-2.651-.337-.438A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-                    </svg>
-                    Contacter via WhatsApp
-                </a>
+                <div class="mb-stack-lg"></div>
                 {% endif %}
 
-                <!-- Favorite + Report buttons -->
-                <div class="mt-4 flex gap-2">
-                    {% if user.is_authenticated %}
-                    <button id="favorite-btn" data-product-id="{{ product.pk }}"
-                            class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors gap-2">
-                        {% if is_favorited %}
-                        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
-                        <span>Retirer des favoris</span>
-                        {% else %}
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                        <span>Ajouter aux favoris</span>
-                        {% endif %}
-                    </button>
-                    {% if not has_reported and product.seller != user %}
-                    <button id="report-btn" data-product-id="{{ product.pk }}"
-                            class="inline-flex items-center justify-center px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors gap-2"
-                            onclick="document.getElementById('report-modal').classList.remove('hidden')">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
-                        Signaler
-                    </button>
+                <!-- CTAs -->
+                <div class="space-y-4">
+                    {% if whatsapp_url %}
+                    <a href="{{ whatsapp_url }}" target="_blank" rel="noopener"
+                       id="whatsapp-btn" data-product-id="{{ product.pk }}"
+                       class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-4 rounded-xl flex items-center justify-center gap-3 font-label-md transition-all hover:scale-[1.02] active:scale-[0.98] shadow-md">
+                        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-2.32 0-4.591.905-6.23 2.544-1.638 1.638-2.544 3.909-2.544 6.229 0 1.936.634 3.754 1.812 5.23L4 22l1.916-1.114c1.476 1.178 3.294 1.812 5.23 1.812h.001c2.32 0 4.591-.905 6.23-2.544 1.638-1.638 2.544-3.909 2.544-6.229 0-2.32-.906-4.591-2.544-6.23-1.639-1.638-3.91-2.544-6.23-2.544zm0 1.761c1.848 0 3.659.721 4.966 2.028s2.028 3.118 2.028 4.966c0 1.848-.721 3.659-2.028 4.966s-3.118 2.028-4.966 2.028h-.001c-1.603 0-3.111-.531-4.321-1.442l-.31-.233-2.348 1.365 1.402-2.302-.254-.338c-.911-1.21-1.442-2.718-1.442-4.321 0-1.848.721-3.659 2.028-4.966s3.118-2.028 4.966-2.028zM9.48 10.375c-.247 0-.48.098-.655.273-.174.174-.273.408-.273.655 0 .247.098.48.273.655.174.174.408.273.655.273s.48-.098.655-.273c.174-.174.273-.408.273-.655 0-.247-.098-.48-.273-.655-.174-.174-.408-.273-.655-.273zm5.04 0c-.247 0-.48.098-.655.273-.174.174-.273.408-.273.655 0 .247.098.48.273.655.174.174.408.273.655.273s.48-.098.655-.273c.174-.174.273-.408.273-.655 0-.247-.098-.48-.273-.655-.174-.174-.408-.273-.655-.273z"/></svg>
+                        Contacter via WhatsApp
+                    </a>
                     {% endif %}
-                    {% else %}
-                    <a href="{% url 'login' %}?next={{ request.path }}"
-                       class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                        <span>Ajouter aux favoris</span>
+                    {% if product.seller.phone_whatsapp %}
+                    <a href="tel:{{ product.seller.phone_whatsapp }}"
+                       class="w-full bg-white border-[1.5px] border-primary text-primary py-4 rounded-xl font-label-md hover:bg-surface-container transition-colors flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">call</span>
+                        Appeler le vendeur
                     </a>
                     {% endif %}
                 </div>
+            </div>
 
-                <!-- Seller info -->
-                <div class="mt-5 pt-4 border-t border-slate-100">
-                    <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Vendeur</h2>
-                    <a href="{% url 'seller-profile' pk=product.seller.pk %}" class="block hover:bg-slate-50 -mx-2 px-2 py-1 rounded-xl transition-colors">
-                        <p class="text-sm text-slate-900">
+            <!-- Seller Card -->
+            <div class="bg-white p-gutter rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100">
+                <a href="{% url 'seller-profile' pk=product.seller.pk %}" class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border-2 border-surface flex-shrink-0">
+                        <span class="material-symbols-outlined text-primary text-3xl">{% if product.seller.user_type == 'boutique' %}store{% else %}person{% endif %}</span>
+                    </div>
+                    <div>
+                        <h3 class="text-body-lg font-bold text-on-surface">
                             {% if product.seller.user_type == 'boutique' and product.seller.boutique %}
                                 {{ product.seller.boutique.nom_boutique }}
-                                {% if product.seller.boutique.statut_verification == 'VERIFIE' %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 ml-1">✓ Vérifié</span>
-                                {% endif %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 ml-1">Boutique</span>
                             {% else %}
                                 {{ product.seller.get_full_name|default:product.seller.email }}
-                                <span class="text-xs text-slate-500 ml-1">(Particulier)</span>
                             {% endif %}
-                        </p>
+                        </h3>
                         {% if seller_average_rating %}
-                        <div class="mt-1 flex items-center gap-1">
-                            <div class="flex text-amber-400">
-                                {% for i in "12345" %}
-                                    {% if forloop.counter <= seller_average_rating %}
-                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                    {% else %}
-                                    <svg class="w-3.5 h-3.5 text-slate-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            <span class="text-xs text-slate-600">{{ seller_average_rating }}/5 ({{ seller_reviews_count }} avis)</span>
-                        </div>
-                        {% endif %}
-                        {% if seller_top_tags %}
-                        <div class="mt-1 flex flex-wrap gap-1">
-                            {% for tag in seller_top_tags %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">🏷️ {{ tag.label }}</span>
+                        <div class="flex items-center gap-1 text-on-tertiary-container mt-0.5">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= seller_average_rating %}
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                {% else %}
+                                <span class="material-symbols-outlined text-sm text-outline-variant">star</span>
+                                {% endif %}
                             {% endfor %}
+                            <span class="text-label-md font-label-md ml-1 text-on-surface-variant">({{ seller_reviews_count }} avis)</span>
                         </div>
                         {% endif %}
-                    </a>
+                        {% if product.seller.user_type == 'boutique' and product.seller.boutique %}
+                            {% if product.seller.boutique.statut_verification == 'VERIFIE' %}
+                            <span class="text-label-md font-label-md text-primary uppercase tracking-wider">Boutique Vérifiée</span>
+                            {% else %}
+                            <span class="text-label-md font-label-md text-outline uppercase tracking-wider">Boutique</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="text-label-md font-label-md text-outline">Particulier</span>
+                        {% endif %}
+                    </div>
+                </a>
+                <a href="{% url 'seller-profile' pk=product.seller.pk %}"
+                   class="flex items-center justify-center w-full py-2 text-primary font-label-md hover:underline">
+                    Voir le profil complet
+                    <span class="material-symbols-outlined ml-1">chevron_right</span>
+                </a>
+            </div>
+
+            <!-- Location Card (dark) -->
+            <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl overflow-hidden relative">
+                <div class="relative z-10">
+                    <p class="text-white/60 font-label-md text-xs uppercase mb-1">Localisation</p>
+                    <p class="font-bold flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-secondary">location_on</span>
+                        {{ product.ville.name }}, Maroc
+                    </p>
+                    <p class="text-white/60 font-label-md text-xs uppercase mb-1">Publiée</p>
+                    <p class="font-bold">{{ product.created_at|time_since_fr }}</p>
+                    <div class="mt-4 flex items-center gap-3 text-white/50 text-xs">
+                        <span class="inline-flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">visibility</span>
+                            {{ product.views_count }} vue{{ product.views_count|pluralize }}
+                        </span>
+                        {% if not has_reported and product.seller != user and user.is_authenticated %}
+                        <span class="text-white/20">·</span>
+                        <button id="report-btn" data-product-id="{{ product.pk }}"
+                                onclick="document.getElementById('report-modal').classList.remove('hidden')"
+                                class="inline-flex items-center gap-1 hover:text-white/80 transition-colors">
+                            <span class="material-symbols-outlined text-[14px]">flag</span>
+                            Signaler
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="absolute -right-4 -bottom-4 opacity-10">
+                    <span class="material-symbols-outlined text-[120px]">precision_manufacturing</span>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- Attributs techniques -->
+    <!-- Spécifications Techniques -->
     {% if product.attribute_values.all %}
-    <div class="mt-6 bg-white rounded-2xl shadow-sm p-6">
-        <h2 class="text-lg font-bold text-slate-900 mb-4">Caractéristiques</h2>
-        <dl class="grid grid-cols-2 gap-3">
-            {% for av in product.attribute_values.all %}
-            <div class="bg-slate-50 px-4 py-3 rounded-xl">
-                <dt class="text-xs text-slate-500">{{ av.attribute.label_fr }}</dt>
-                <dd class="text-sm font-semibold text-slate-900 mt-0.5">
-                    {{ av.get_display_value }}
-                    {% if av.attribute.unit %} {{ av.attribute.unit }}{% endif %}
-                </dd>
+    <div class="mt-stack-lg">
+        <h2 class="font-headline-md text-headline-md mb-stack-md flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary">settings_input_component</span>
+            Spécifications Techniques
+        </h2>
+        <div class="bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {% for av in product.attribute_values.all %}
+                <div class="p-6 border-b border-slate-100 hover:bg-surface transition-colors {% if forloop.last %}border-b-0{% endif %}">
+                    <p class="text-on-surface-variant font-label-md text-label-md mb-1">{{ av.attribute.label_fr }}</p>
+                    <p class="font-bold text-on-surface">{{ av.get_display_value }}{% if av.attribute.unit %} {{ av.attribute.unit }}{% endif %}</p>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </dl>
+        </div>
     </div>
     {% endif %}
 
-    <!-- Description complémentaire -->
+    <!-- Description -->
     {% if product.description_complementaire %}
-    <div class="mt-6 bg-white rounded-2xl shadow-sm p-6">
-        <h2 class="text-lg font-bold text-slate-900 mb-2">Description</h2>
-        <p class="text-sm text-slate-700 leading-relaxed">{{ product.description_complementaire }}</p>
+    <div class="mt-stack-lg bg-white rounded-2xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 p-gutter">
+        <h2 class="font-headline-md text-headline-md mb-stack-md">Description</h2>
+        <p class="text-body-md text-on-surface-variant leading-relaxed">{{ product.description_complementaire }}</p>
     </div>
     {% endif %}
 
-    <!-- Meta -->
-    <div class="mt-4 text-xs text-slate-400">
-        Publiée le {{ product.created_at|date:"d/m/Y à H:i" }}
-        · {{ product.views_count }} vue{{ product.views_count|pluralize }}
+    <!-- Annonces Similaires -->
+    {% if similar_products %}
+    <div class="mt-stack-lg">
+        <div class="flex justify-between items-end mb-stack-md">
+            <h2 class="font-headline-md text-headline-md">Annonces Similaires</h2>
+            <a href="{% url 'product-list' %}?category={{ product.category.slug }}"
+               class="text-primary font-label-md hover:underline flex items-center">
+                Voir tout
+                <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+            {% for similar in similar_products %}
+            <a href="{{ similar.get_absolute_url }}"
+               class="bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 group hover:shadow-lg transition-all">
+                <div class="aspect-square bg-slate-50 relative overflow-hidden">
+                    {% if similar.images.all.0 %}
+                    <img src="{{ similar.images.all.0.image.url }}" alt="{{ similar.title }}"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center">
+                        <span class="material-symbols-outlined text-3xl text-slate-300">image</span>
+                    </div>
+                    {% endif %}
+                    {% if similar.condition %}
+                    <span class="absolute top-2 left-2 {% if similar.condition == 'NEUF' %}bg-primary{% else %}bg-secondary{% endif %} text-white px-2 py-0.5 rounded-lg font-label-md text-[10px]">
+                        {{ similar.get_condition_display|upper }}
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <h4 class="font-bold text-body-md line-clamp-2 mb-2 group-hover:text-primary transition-colors">{{ similar.title }}</h4>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-on-surface-variant text-xs">{{ similar.ville.name }}</span>
+                        <span class="text-secondary font-bold">{{ similar.price|format_price }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
     </div>
-</div>
+    {% endif %}
 
-<!-- JSON-LD Structured Data (Schema.org Product) -->
+</main>
+
+<!-- JSON-LD -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org/",
@@ -239,23 +325,17 @@
   {% if product.images.all %}"image": [{% for img in product.images.all %}"{{ request.scheme }}://{{ request.get_host }}{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],{% endif %}
   "description": "{{ product.description_complementaire|default:product.title|truncatechars:180|escapejs }}",
   "sku": "SETUP-{{ product.pk }}",
-  "category": "{{ product.category.name|escapejs }}",
   "offers": {
     "@type": "Offer",
     "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}",
     "priceCurrency": "MAD",
     "price": "{{ product.price }}",
-    "priceValidUntil": "{{ product.created_at|date:'Y' }}-12-31",
-    "itemCondition": "https://schema.org/UsedCondition",
-    "availability": "{% if product.status == 'DISPONIBLE' %}https://schema.org/InStock{% else %}https://schema.org/SoldOut{% endif %}",
+    "itemCondition": "{% if product.condition == 'NEUF' %}https://schema.org/NewCondition{% else %}https://schema.org/UsedCondition{% endif %}",
+    "availability": "{% if product.status == 'DISPONIBLE' %}https://schema.org/InStock{% elif product.status == 'VENDU' %}https://schema.org/SoldOut{% else %}https://schema.org/Discontinued{% endif %}",
     "seller": {
       "@type": "{% if product.seller.user_type == 'boutique' %}LocalBusiness{% else %}Person{% endif %}",
       "name": "{% if product.seller.user_type == 'boutique' and product.seller.boutique %}{{ product.seller.boutique.nom_boutique|escapejs }}{% else %}{{ product.seller.get_full_name|escapejs }}{% endif %}",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "{{ product.ville.name|escapejs }}",
-        "addressCountry": "MA"
-      }
+      "address": { "@type": "PostalAddress", "addressLocality": "{{ product.ville.name|escapejs }}", "addressCountry": "MA" }
     }
   }
 }
@@ -263,58 +343,34 @@
 
 <!-- Lightbox -->
 {% if product.images.all %}
-<div id="lightbox" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onclick="closeLightbox()">
+<div id="lightbox" class="hidden fixed inset-0 z-[70] bg-black/90 flex items-center justify-center" onclick="closeLightbox()">
     <button class="absolute top-4 right-4 text-white/80 hover:text-white" onclick="closeLightbox()">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <span class="material-symbols-outlined text-3xl">close</span>
+    </button>
+    <button class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white" onclick="event.stopPropagation(); lbNav(-1)">
+        <span class="material-symbols-outlined">chevron_left</span>
     </button>
     <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain" onclick="event.stopPropagation()">
+    <button class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white" onclick="event.stopPropagation(); lbNav(1)">
+        <span class="material-symbols-outlined">chevron_right</span>
+    </button>
 </div>
 {% endif %}
 
-<!-- JSON-LD Structured Data (Schema.org Product) -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": "{{ product.title|escapejs }}",
-  {% if product.images.all %}"image": [{% for img in product.images.all %}"{{ request.scheme }}://{{ request.get_host }}{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],{% endif %}
-  "description": "{{ product.description_complementaire|default:product.title|truncatechars:200|escapejs }}",
-  "sku": "SETUP-{{ product.pk }}",
-  "category": "{{ product.category.name|escapejs }}",
-  "offers": {
-    "@type": "Offer",
-    "url": "{{ request.scheme }}://{{ request.get_host }}{{ product.get_absolute_url }}",
-    "priceCurrency": "MAD",
-    "price": "{{ product.price }}",
-    "itemCondition": "https://schema.org/UsedCondition",
-    "availability": "{% if product.status == 'DISPONIBLE' %}https://schema.org/InStock{% elif product.status == 'VENDU' %}https://schema.org/SoldOut{% else %}https://schema.org/Discontinued{% endif %}",
-    "seller": {
-      "@type": "{% if product.seller.user_type == 'boutique' %}LocalBusiness{% else %}Person{% endif %}",
-      "name": "{% if product.seller.user_type == 'boutique' and product.seller.boutique %}{{ product.seller.boutique.nom_boutique|escapejs }}{% else %}{{ product.seller.get_full_name|escapejs }}{% endif %}",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "{{ product.ville.name|escapejs }}",
-        "addressCountry": "MA"
-      }
-    }
-  }
-}
-</script>
-
 <!-- Report Modal -->
 {% if user.is_authenticated and not has_reported and product.seller != user %}
-<div id="report-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl shadow-lg max-w-md w-full p-6">
+<div id="report-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[70] p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-slate-900">Signaler cette annonce</h3>
-            <button onclick="document.getElementById('report-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <h3 class="text-body-lg font-bold text-on-surface">Signaler cette annonce</h3>
+            <button onclick="document.getElementById('report-modal').classList.add('hidden')" class="text-outline hover:text-on-surface">
+                <span class="material-symbols-outlined">close</span>
             </button>
         </div>
         <form id="report-form">
             <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 mb-1">Raison</label>
-                <select name="reason" required class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <label class="block font-label-md text-label-md text-on-surface mb-2">Raison</label>
+                <select name="reason" required class="w-full px-3 py-2.5 border border-outline-variant rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                     <option value="">— Sélectionner —</option>
                     <option value="FRAUDULEUSE">Annonce frauduleuse</option>
                     <option value="PRIX_IRREALISTE">Prix irréaliste</option>
@@ -324,19 +380,19 @@
                 </select>
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 mb-1">Commentaire (optionnel)</label>
+                <label class="block font-label-md text-label-md text-on-surface mb-2">Commentaire (optionnel)</label>
                 <textarea name="comment" maxlength="500" rows="3"
-                          class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                          class="w-full px-3 py-2.5 border border-outline-variant rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
             </div>
             <div id="report-message" class="mb-4 hidden"></div>
             <div class="flex gap-3">
                 <button type="button" onclick="document.getElementById('report-modal').classList.add('hidden')"
-                        class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium rounded-xl transition-colors">
+                        class="flex-1 py-3 bg-white border border-outline-variant hover:bg-surface text-on-surface text-sm font-medium rounded-xl transition-colors">
                     Annuler
                 </button>
                 <button type="submit"
-                        class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-red-600 hover:bg-red-500 text-white text-sm font-semibold rounded-xl transition-colors">
-                    Envoyer le signalement
+                        class="flex-1 py-3 bg-error hover:brightness-110 text-white text-sm font-semibold rounded-xl transition-all">
+                    Envoyer
                 </button>
             </div>
         </form>
@@ -345,91 +401,61 @@
 {% endif %}
 
 <script>
-// Carousel
-(function() {
-    var carousel = document.getElementById('carousel');
-    var prevBtn = document.getElementById('carousel-prev');
-    var nextBtn = document.getElementById('carousel-next');
-    var dotsContainer = document.getElementById('carousel-dots');
-    var currentSlide = 0;
-    var slides = carousel ? carousel.querySelectorAll('.carousel-slide') : [];
-    var totalSlides = slides.length;
+var currentSlide = 0;
+var images = [];
+{% if product.images.all %}{% for img in product.images.all %}images.push("{{ img.image.url }}");{% endfor %}{% endif %}
 
-    function goToSlide(idx) {
-        if (!carousel || totalSlides === 0) return;
-        if (idx < 0) idx = totalSlides - 1;
-        if (idx >= totalSlides) idx = 0;
-        currentSlide = idx;
-        carousel.scrollTo({ left: idx * carousel.offsetWidth, behavior: 'smooth' });
-        updateDots();
-    }
-
-    function updateDots() {
-        if (!dotsContainer) return;
-        var dots = dotsContainer.querySelectorAll('button');
-        dots.forEach(function(dot, i) {
-            dot.className = 'w-2 h-2 rounded-full transition-colors ' + (i === currentSlide ? 'bg-indigo-500' : 'bg-white/60');
-        });
-    }
-
-    if (prevBtn) prevBtn.addEventListener('click', function() { goToSlide(currentSlide - 1); });
-    if (nextBtn) nextBtn.addEventListener('click', function() { goToSlide(currentSlide + 1); });
-    if (dotsContainer) {
-        dotsContainer.querySelectorAll('button').forEach(function(dot) {
-            dot.addEventListener('click', function() { goToSlide(parseInt(this.dataset.index)); });
-        });
-    }
-
-    // Update dots on scroll
-    if (carousel) {
-        var scrollTimeout;
-        carousel.addEventListener('scroll', function() {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(function() {
-                var idx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
-                currentSlide = idx;
-                updateDots();
-            }, 100);
-        });
-    }
-})();
+function selectImage(idx) {
+    if (idx < 0) idx = images.length - 1;
+    if (idx >= images.length) idx = 0;
+    currentSlide = idx;
+    var mainImg = document.getElementById('main-image');
+    if (mainImg && images[idx]) mainImg.src = images[idx];
+    // Update thumbnails
+    document.querySelectorAll('.thumbnail-btn').forEach(function(btn, i) {
+        btn.classList.toggle('border-primary', i === idx);
+        btn.classList.toggle('border-transparent', i !== idx);
+    });
+    // Update dots
+    document.querySelectorAll('.gallery-dot').forEach(function(dot, i) {
+        dot.className = 'gallery-dot w-2.5 h-2.5 rounded-full shadow-sm transition-all ' + (i === idx ? 'bg-white' : 'bg-white/40 hover:bg-white/60');
+    });
+}
+function galleryNav(dir) { selectImage(currentSlide + dir); }
 
 // Lightbox
-var lightboxImages = [];
-{% if product.images.all %}
-{% for img in product.images.all %}
-lightboxImages.push("{{ img.image.url }}");
-{% endfor %}
-{% endif %}
-
 function openLightbox(idx) {
-    var lb = document.getElementById('lightbox');
-    var img = document.getElementById('lightbox-img');
-    if (lb && img && lightboxImages[idx]) {
-        img.src = lightboxImages[idx];
-        lb.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
+    var lb = document.getElementById('lightbox'), img = document.getElementById('lightbox-img');
+    if (lb && img && images[idx]) { img.src = images[idx]; lb.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
 }
-function closeLightbox() {
+function closeLightbox() { var lb = document.getElementById('lightbox'); if (lb) { lb.classList.add('hidden'); document.body.style.overflow = ''; } }
+function lbNav(dir) { selectImage(currentSlide + dir); document.getElementById('lightbox-img').src = images[currentSlide]; }
+document.addEventListener('keydown', function(e) {
     var lb = document.getElementById('lightbox');
-    if (lb) { lb.classList.add('hidden'); document.body.style.overflow = ''; }
+    if (!lb || lb.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+});
+
+function getCookie(name) {
+    let v = null;
+    if (document.cookie) document.cookie.split(';').forEach(function(c) {
+        c = c.trim();
+        if (c.startsWith(name + '=')) v = decodeURIComponent(c.slice(name.length + 1));
+    });
+    return v;
 }
 
-// WhatsApp tracking
 document.addEventListener('DOMContentLoaded', function() {
+    // WhatsApp tracking
     const waBtn = document.getElementById('whatsapp-btn');
     if (waBtn) {
         waBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            const productId = this.dataset.productId;
-            const href = this.href;
-            fetch('/api/v1/products/' + productId + '/track-whatsapp/', {
-                method: 'POST',
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-            }).finally(function() {
-                window.open(href, '_blank');
-            });
+            const href = this.href, productId = this.dataset.productId;
+            fetch('/api/v1/products/' + productId + '/track-whatsapp/', { method: 'POST', headers: {'X-CSRFToken': getCookie('csrftoken')} })
+            .finally(function() { window.open(href, '_blank'); });
         });
     }
 
@@ -438,44 +464,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (favBtn) {
         favBtn.addEventListener('click', function() {
             const productId = this.dataset.productId;
-            const isFav = this.querySelector('svg').getAttribute('fill') === 'currentColor';
+            const icon = this.querySelector('.material-symbols-outlined');
+            const isFav = icon && icon.style.fontVariationSettings && icon.style.fontVariationSettings.includes('FILL\' 1');
             if (isFav) {
-                // Already favorited → we need the favorite ID to delete. Use a toggle approach.
-                // For simplicity, POST to add or find & delete
-                fetch('/api/v1/favorites/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: JSON.stringify({product: parseInt(productId)}),
-                }).then(function(r) {
-                    if (r.status === 201) {
-                        location.reload();
-                    } else {
-                        // Already favorited — try to find and delete
-                        return fetch('/api/v1/favorites/').then(function(r) { return r.json(); });
-                    }
-                }).then(function(data) {
-                    if (!data) return;
-                    const results = data.results || [];
-                    const fav = results.find(function(f) { return f.product.id === parseInt(productId); });
-                    if (fav) {
-                        fetch('/api/v1/favorites/' + fav.id + '/', {
-                            method: 'DELETE',
-                            headers: {'X-CSRFToken': getCookie('csrftoken')},
-                        }).then(function() { location.reload(); });
-                    }
+                fetch('/api/v1/favorites/').then(r => r.json()).then(data => {
+                    const fav = (data.results || []).find(f => f.product.id === parseInt(productId));
+                    if (fav) fetch('/api/v1/favorites/' + fav.id + '/', { method: 'DELETE', headers: {'X-CSRFToken': getCookie('csrftoken')} }).then(() => location.reload());
                 });
             } else {
-                fetch('/api/v1/favorites/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: JSON.stringify({product: parseInt(productId)}),
-                }).then(function() { location.reload(); });
+                fetch('/api/v1/favorites/', { method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken')}, body: JSON.stringify({product: parseInt(productId)}) })
+                .then(() => location.reload());
             }
         });
     }
@@ -485,49 +483,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if (reportForm) {
         reportForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const formData = new FormData(this);
+            const fd = new FormData(this);
             const productId = document.getElementById('report-btn').dataset.productId;
             fetch('/api/v1/products/' + productId + '/report/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'),
-                },
-                body: JSON.stringify({
-                    reason: formData.get('reason'),
-                    comment: formData.get('comment') || '',
-                }),
-            }).then(function(r) { return r.json().then(function(d) { return {ok: r.ok, data: d}; }); })
+                method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken')},
+                body: JSON.stringify({ reason: fd.get('reason'), comment: fd.get('comment') || '' }),
+            }).then(r => r.json().then(d => ({ok: r.ok, data: d})))
             .then(function(result) {
                 const msgEl = document.getElementById('report-message');
                 msgEl.classList.remove('hidden');
                 if (result.ok) {
-                    msgEl.className = 'mb-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm';
+                    msgEl.className = 'mb-4 p-4 rounded-xl bg-secondary-container text-on-secondary-container text-sm';
                     msgEl.textContent = 'Votre signalement a été envoyé.';
-                    setTimeout(function() { location.reload(); }, 1500);
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    msgEl.className = 'mb-4 p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm';
-                    const errors = result.data.errors || result.data;
-                    msgEl.textContent = typeof errors === 'string' ? errors : JSON.stringify(errors);
+                    msgEl.className = 'mb-4 p-4 rounded-xl bg-error-container text-on-error-container text-sm';
+                    msgEl.textContent = typeof result.data === 'string' ? result.data : JSON.stringify(result.data);
                 }
             });
         });
     }
 });
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
 </script>
 {% endblock %}

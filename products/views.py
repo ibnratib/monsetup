@@ -1,19 +1,21 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Case, F, IntegerField, Q, Value, When
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.text import slugify
 from django.views import View
 from django.views.generic import DetailView, ListView
 from rest_framework import permissions, status
-from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from catalog.models import AttributeDefinition, Category
+from catalog.models import AttributeChoice, AttributeDefinition, Category
 from core.models import City
 from products.filters import ProductFilter
-from products.models import Favorite, Product, ProductView as ProductViewModel, ProductWhatsAppClick
+from products.models import Favorite, Product, ProductImage, ProductView as ProductViewModel, ProductWhatsAppClick
 from products.permissions import IsProductOwner
 from products.serializers import (
     DynamicProductCreateSerializer,
@@ -29,6 +31,8 @@ def _apply_eav_filters(queryset, query_params):
     """Apply dynamic EAV attribute filters from query params like attr_<id>=<value>."""
     for key, value in query_params.items():
         if not key.startswith('attr_'):
+            continue
+        if not value or not value.strip():
             continue
         try:
             attr_id = int(key[5:])
@@ -48,9 +52,10 @@ def _apply_eav_filters(queryset, query_params):
             except (ValueError, TypeError):
                 continue
         elif attr_type == 'DECIMAL':
+            from decimal import Decimal, InvalidOperation
             try:
-                filter_kwargs['attribute_values__value_decimal'] = value
-            except (ValueError, TypeError):
+                filter_kwargs['attribute_values__value_decimal'] = Decimal(value)
+            except (InvalidOperation, ValueError, TypeError):
                 continue
         elif attr_type == 'BOOLEAN':
             bool_val = value.lower() in ('true', '1', 'yes')
@@ -135,8 +140,28 @@ class ProductListCreateAPIView(APIView):
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
+        # Build plain dict from FormData to handle attributes JSON string
+        data = {}
+        for key in request.data:
+            if key == 'images':
+                continue
+            data[key] = request.data.get(key)
+
+        # Parse attributes from JSON string
+        raw_attrs = data.get('attributes', '{}')
+        if isinstance(raw_attrs, str):
+            try:
+                data['attributes'] = json.loads(raw_attrs)
+            except (json.JSONDecodeError, TypeError):
+                data['attributes'] = {}
+
+        # Attach images
+        images = request.FILES.getlist('images')
+        if images:
+            data['images'] = images
+
         serializer = DynamicProductCreateSerializer(
-            data=request.data, context={'request': request},
+            data=data, context={'request': request},
         )
         serializer.is_valid(raise_exception=True)
         product = serializer.save()
@@ -145,6 +170,7 @@ class ProductListCreateAPIView(APIView):
 
 
 class ProductDetailAPIView(APIView):
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -179,8 +205,40 @@ class ProductDetailAPIView(APIView):
     def patch(self, request, pk):
         product = self.get_object(pk)
         self.check_object_permissions(request, product)
+
+        # Build plain dict from FormData to handle attributes JSON string
+        data = {}
+        for key in request.data:
+            if key in ('images', 'delete_images'):
+                continue
+            data[key] = request.data.get(key)
+
+        # Parse attributes from JSON string
+        raw_attrs = data.get('attributes')
+        if raw_attrs and isinstance(raw_attrs, str):
+            try:
+                data['attributes'] = json.loads(raw_attrs)
+            except (json.JSONDecodeError, TypeError):
+                data['attributes'] = {}
+
+        # Delete specified images
+        raw_delete = request.data.get('delete_images')
+        if raw_delete:
+            try:
+                ids_to_delete = json.loads(raw_delete) if isinstance(raw_delete, str) else raw_delete
+                ProductImage.objects.filter(
+                    pk__in=ids_to_delete, product=product,
+                ).delete()
+            except (json.JSONDecodeError, TypeError, ValueError):
+                pass
+
+        # Attach new images
+        images = request.FILES.getlist('images')
+        if images:
+            data['images'] = images
+
         serializer = DynamicProductCreateSerializer(
-            product, data=request.data, partial=True, context={'request': request},
+            product, data=data, partial=True, context={'request': request},
         )
         serializer.is_valid(raise_exception=True)
         product = serializer.save()
@@ -473,6 +531,59 @@ class ProductListView(ListView):
         context['active_filters'] = active_filters
         context['eav_filter_values'] = eav_filter_values
 
+        # Build human-readable labels for active filter tags
+        filter_labels = {}
+        CONDITION_MAP = dict(Product.CONDITION_CHOICES)
+        SELLER_MAP = {'particulier': 'Particulier', 'boutique': 'Boutique'}
+        ORDERING_MAP = {
+            '-created_at': 'Plus récent',
+            'price': 'Prix croissant',
+            '-price': 'Prix décroissant',
+        }
+        for key, val in active_filters.items():
+            if key == 'search':
+                filter_labels[key] = f'Recherche : « {val} »'
+            elif key == 'category_root':
+                try:
+                    filter_labels[key] = Category.objects.get(slug=val).name
+                except Category.DoesNotExist:
+                    filter_labels[key] = val
+            elif key == 'category':
+                try:
+                    filter_labels[key] = Category.objects.get(slug=val).name
+                except Category.DoesNotExist:
+                    filter_labels[key] = val
+            elif key == 'ville':
+                try:
+                    filter_labels[key] = City.objects.get(pk=int(val)).name
+                except (City.DoesNotExist, ValueError, TypeError):
+                    filter_labels[key] = val
+            elif key == 'price_min':
+                filter_labels[key] = f'Min : {val} DH'
+            elif key == 'price_max':
+                filter_labels[key] = f'Max : {val} DH'
+            elif key == 'seller_type':
+                filter_labels[key] = SELLER_MAP.get(val, val)
+            elif key == 'condition':
+                filter_labels[key] = CONDITION_MAP.get(val, val)
+            elif key == 'ordering':
+                filter_labels[key] = ORDERING_MAP.get(val, val)
+            elif key.startswith('attr_'):
+                try:
+                    attr_id = int(key[5:])
+                    attr_def = AttributeDefinition.objects.get(pk=attr_id)
+                    if attr_def.attribute_type in ('CHOICE', 'MULTI_CHOICE'):
+                        choice = AttributeChoice.objects.get(pk=int(val))
+                        filter_labels[key] = f'{attr_def.label_fr} : {choice.value}'
+                    else:
+                        unit = f' {attr_def.unit}' if attr_def.unit else ''
+                        filter_labels[key] = f'{attr_def.label_fr} : {val}{unit}'
+                except (AttributeDefinition.DoesNotExist, AttributeChoice.DoesNotExist, ValueError, TypeError):
+                    filter_labels[key] = f'{key} : {val}'
+            else:
+                filter_labels[key] = f'{key} : {val}'
+        context['filter_labels'] = filter_labels
+
         # Build query string without page for pagination links
         params = self.request.GET.copy()
         params.pop('page', None)
@@ -550,6 +661,15 @@ class ProductDetailView(DetailView):
         context['seller_reviews_count'] = seller_ctx['reviews_count']
         context['seller_top_tags'] = seller_ctx['top_tags']
 
+        # Similar products (same category, exclude current)
+        similar_products = Product.objects.filter(
+            category=product.category,
+            status='DISPONIBLE',
+        ).exclude(pk=product.pk).select_related(
+            'ville', 'category',
+        ).prefetch_related('images').order_by('-created_at')[:4]
+        context['similar_products'] = similar_products
+
         # SEO context
         cat_name = product.category.name
         city_name = product.ville.name
@@ -581,10 +701,16 @@ class ProductCreateView(LoginRequiredMixin, View):
 
         # Build attributes dict from form fields named attr_<id>
         attributes = {}
-        for key, value in request.POST.items():
-            if key.startswith('attr_') and value:
+        for key in request.POST:
+            if key.startswith('attr_'):
                 attr_id = key.replace('attr_', '')
-                attributes[attr_id] = value
+                values = request.POST.getlist(key)
+                # Filter out empty values
+                values = [v for v in values if v]
+                if not values:
+                    continue
+                # Single value → string, multiple values → list (MULTI_CHOICE)
+                attributes[attr_id] = values if len(values) > 1 else values[0]
 
         data = {
             'title': request.POST.get('title', ''),
@@ -593,6 +719,7 @@ class ProductCreateView(LoginRequiredMixin, View):
             'category': request.POST.get('category', ''),
             'ville': request.POST.get('ville', ''),
             'adresse': request.POST.get('adresse', ''),
+            'condition': request.POST.get('condition', 'BON'),
             'attributes': attributes,
         }
 
@@ -612,4 +739,59 @@ class ProductCreateView(LoginRequiredMixin, View):
             'cities': cities,
             'errors': serializer.errors,
             'form_data': request.POST,
+            'submitted_attrs_json': json.dumps(attributes),
+        })
+
+
+class ProductEditView(LoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        product = get_object_or_404(
+            Product.objects.select_related('ville', 'category', 'category__parent')
+            .prefetch_related(
+                'images',
+                'attribute_values__attribute',
+                'attribute_values__value_choice',
+                'attribute_values__value_multi_choice',
+            ),
+            pk=pk,
+            seller=request.user,
+        )
+
+        categories = Category.objects.filter(
+            parent__isnull=False,
+        ).select_related('parent').order_by('parent__name', 'name')
+        cities = City.objects.all()
+
+        # Build existing attributes dict for JS
+        existing_attrs = {}
+        for av in product.attribute_values.all():
+            attr = av.attribute
+            if attr.attribute_type == 'CHOICE' and av.value_choice_id:
+                existing_attrs[str(attr.pk)] = str(av.value_choice_id)
+            elif attr.attribute_type == 'MULTI_CHOICE':
+                existing_attrs[str(attr.pk)] = [
+                    str(c.pk) for c in av.value_multi_choice.all()
+                ]
+            elif attr.attribute_type == 'BOOLEAN' and av.value_boolean is not None:
+                existing_attrs[str(attr.pk)] = 'true' if av.value_boolean else 'false'
+            elif attr.attribute_type == 'INT' and av.value_int is not None:
+                existing_attrs[str(attr.pk)] = str(av.value_int)
+            elif attr.attribute_type == 'DECIMAL' and av.value_decimal is not None:
+                existing_attrs[str(attr.pk)] = str(av.value_decimal)
+            elif attr.attribute_type == 'TEXT_SHORT' and av.value_text:
+                existing_attrs[str(attr.pk)] = av.value_text
+
+        # Build existing images for JS
+        existing_images = [
+            {'id': img.pk, 'url': img.image.url}
+            for img in product.images.order_by('order')
+        ]
+
+        return render(request, 'products/product_edit.html', {
+            'product': product,
+            'categories': categories,
+            'cities': cities,
+            'existing_attrs_json': json.dumps(existing_attrs),
+            'existing_images_json': json.dumps(existing_images),
         })

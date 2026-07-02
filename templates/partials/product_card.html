@@ -1,0 +1,89 @@
+{% load setup_filters %}
+{% comment %}
+Widget réutilisable : Carte produit
+Usage: {% include "partials/product_card.html" with product=product %}
+Paramètres optionnels :
+  - hide_heart=True   : masque le bouton favori (ex: page favoris)
+{% endcomment %}
+<div class="group relative bg-white rounded-2xl overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-slate-100 hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-all duration-300">
+    <a href="{{ product.get_absolute_url }}" class="block">
+
+        {# ── Zone image ──────────────────────────────────────────────── #}
+        <div class="relative aspect-[4/3] bg-slate-50 overflow-hidden">
+            {% with first_image=product.images.first %}
+            {% if first_image %}
+            <img src="{{ first_image.image.url }}"
+                 alt="{{ product.title }}"
+                 loading="lazy"
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center bg-surface-container-low">
+                <span class="material-symbols-outlined text-5xl text-outline-variant">image</span>
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {# Badges haut-gauche : état + boost #}
+            <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                {% if product.condition == 'NEUF' %}
+                <span class="bg-secondary text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-sm">Neuf</span>
+                {% elif product.condition == 'COMME_NEUF' %}
+                <span class="bg-blue-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-sm">Comme neuf</span>
+                {% elif product.condition == 'TRES_BON' %}
+                <span class="bg-sky-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-sm">Très bon état</span>
+                {% elif product.condition == 'BON' %}
+                <span class="bg-amber-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-sm">Bon état</span>
+                {% elif product.condition == 'CORRECT' %}
+                <span class="bg-orange-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-sm">État correct</span>
+                {% endif %}
+
+                {% if product.is_boosted %}
+                <span class="bg-amber-400 text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 uppercase tracking-wide shadow-sm">
+                    <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span>Boosté
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        {# ── Zone contenu ─────────────────────────────────────────────── #}
+        <div class="p-4">
+            <h3 class="text-[15px] font-semibold text-on-surface line-clamp-2 leading-snug mb-1">{{ product.title }}</h3>
+            {% if product.description_complementaire %}
+            <p class="text-[13px] text-on-surface-variant line-clamp-1 mb-3">{{ product.description_complementaire }}</p>
+            {% else %}
+            <div class="mb-3"></div>
+            {% endif %}
+            <p class="text-[20px] font-bold text-secondary">{{ product.price|format_price }}</p>
+            {% if product.livraison or product.garantie %}
+            <div class="flex flex-wrap gap-1.5 mt-2">
+                {% if product.livraison %}
+                <span class="inline-flex items-center gap-0.5 text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    <span class="material-symbols-outlined text-[12px]">local_shipping</span>Livraison
+                </span>
+                {% endif %}
+                {% if product.garantie %}
+                <span class="inline-flex items-center gap-0.5 text-[10px] font-medium text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
+                    <span class="material-symbols-outlined text-[12px]">verified_user</span>Garantie
+                </span>
+                {% endif %}
+            </div>
+            {% endif %}
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 text-[12px] text-outline">
+                <span class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">location_on</span>
+                    {{ product.ville.name }}
+                </span>
+                <span>{{ product.created_at|time_since_fr }}</span>
+            </div>
+        </div>
+    </a>
+
+    {# Bouton favori (haut-droite, en dehors du <a> pour éviter la navigation) #}
+    {% if not hide_heart %}
+    <button type="button"
+            class="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-outline hover:text-error transition-colors shadow-sm"
+            aria-label="Ajouter aux favoris">
+        <span class="material-symbols-outlined text-[18px]">favorite</span>
+    </button>
+    {% endif %}
+</div>

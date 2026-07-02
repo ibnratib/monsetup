@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal, InvalidOperation
 
 from django.conf import settings
@@ -24,7 +25,7 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'title', 'price', 'status', 'ville', 'category',
+            'id', 'title', 'price', 'status', 'condition', 'ville', 'category',
             'thumbnail', 'seller_type', 'seller_name', 'is_boosted',
             'created_at',
         ]
@@ -87,7 +88,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'id', 'title', 'description_complementaire', 'price', 'status',
-            'ville', 'adresse', 'category', 'images', 'attribute_values',
+            'condition', 'livraison', 'garantie', 'ville', 'adresse', 'category',
+            'images', 'attribute_values',
             'seller', 'whatsapp_url', 'is_boosted', 'boost_expires_at',
             'views_count', 'whatsapp_clicks_count', 'created_at', 'updated_at',
         ]
@@ -112,6 +114,11 @@ class DynamicProductCreateSerializer(serializers.Serializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     ville = serializers.PrimaryKeyRelatedField(queryset=City.objects.all())
     adresse = serializers.CharField(required=False, default='')
+    condition = serializers.ChoiceField(
+        choices=Product.CONDITION_CHOICES, default='BON',
+    )
+    livraison = serializers.BooleanField(required=False, default=False)
+    garantie = serializers.BooleanField(required=False, default=False)
     status = serializers.ChoiceField(
         choices=Product.STATUS_CHOICES, required=False,
     )
@@ -119,6 +126,15 @@ class DynamicProductCreateSerializer(serializers.Serializer):
         child=serializers.ImageField(), required=False, default=[],
     )
     attributes = serializers.DictField(required=False, default={})
+
+    def validate_attributes(self, value):
+        # Handle JSON string from FormData/AJAX
+        if isinstance(value, str):
+            try:
+                value = json.loads(value)
+            except (json.JSONDecodeError, TypeError):
+                raise serializers.ValidationError("Format d'attributs invalide.")
+        return value if isinstance(value, dict) else {}
 
     def validate_price(self, value):
         if value <= 0:
@@ -265,13 +281,26 @@ class DynamicProductCreateSerializer(serializers.Serializer):
             return {'type': 'DECIMAL', 'value': dec_val}
 
         elif attr_type == 'BOOLEAN':
-            if not isinstance(value, bool):
+            if isinstance(value, bool):
+                bool_val = value
+            elif isinstance(value, str):
+                if value.lower() in ('true', '1', 'oui'):
+                    bool_val = True
+                elif value.lower() in ('false', '0', 'non'):
+                    bool_val = False
+                else:
+                    raise serializers.ValidationError({
+                        'attributes': [
+                            f"« {attr.label_fr} » doit être un booléen."
+                        ]
+                    })
+            else:
                 raise serializers.ValidationError({
                     'attributes': [
                         f"« {attr.label_fr} » doit être un booléen."
                     ]
                 })
-            return {'type': 'BOOLEAN', 'value': value}
+            return {'type': 'BOOLEAN', 'value': bool_val}
 
         elif attr_type == 'TEXT_SHORT':
             str_val = str(value)
@@ -350,11 +379,11 @@ class DynamicProductCreateSerializer(serializers.Serializer):
             setattr(instance, field, value)
         instance.save()
 
-        # Replace images if new ones provided
+        # Append new images (deletion handled separately in the view)
         if images is not None and len(images) > 0:
-            instance.images.all().delete()
+            last_order = instance.images.count()
             for i, image_file in enumerate(images):
-                ProductImage.objects.create(product=instance, image=image_file, order=i)
+                ProductImage.objects.create(product=instance, image=image_file, order=last_order + i)
 
         # Replace attribute values
         if validated_attrs:

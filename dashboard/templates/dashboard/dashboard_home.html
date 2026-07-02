@@ -4,133 +4,193 @@
 {% block title %}Dashboard — Setup.ma{% endblock %}
 
 {% block content %}
-<div class="flex flex-col lg:flex-row gap-6">
-    <!-- Sidebar -->
-    <aside class="w-full lg:w-56 flex-shrink-0">
-        <nav class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <a href="{% url 'dashboard-home' %}" class="block px-4 py-3 text-sm font-medium text-white bg-indigo-600">
-                Vue d'ensemble
-            </a>
-            <a href="{% url 'dashboard-my-products-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
-                Mes annonces
-            </a>
-            <a href="{% url 'dashboard-favorites-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100">
-                Mes favoris
-            </a>
-            <a href="{% url 'dashboard-notifications-ssr' %}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                <span>Notifications</span>
-                {% if unread_count %}
-                    <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-600 rounded-full">{{ unread_count }}</span>
-                {% endif %}
-            </a>
-        </nav>
-    </aside>
+<div class="max-w-container-max mx-auto px-gutter py-stack-lg flex flex-col md:flex-row gap-gutter">
 
-    <!-- Main content -->
-    <div class="flex-1 min-w-0">
-        <h1 class="text-2xl font-bold text-slate-900 lg:text-3xl">Tableau de bord</h1>
+    {% include "dashboard/_sidebar.html" with active="home" %}
 
-        <!-- Stats cards -->
-        <div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl shadow-sm p-5">
-                <p class="text-sm text-slate-500">Total vues</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.total_views }}</p>
+    <!-- Canvas -->
+    <section class="flex-grow space-y-stack-lg">
+
+        <!-- Header -->
+        <header class="flex justify-between items-end">
+            <div>
+                <h1 class="font-display-lg text-display-lg-mobile md:text-[36px] text-on-surface font-bold">Tableau de bord</h1>
+                <p class="font-body-md text-body-md text-on-surface-variant">Bienvenue, voici un aperçu de vos activités.</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-5">
-                <p class="text-sm text-slate-500">Clics WhatsApp</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.total_whatsapp_clicks }}</p>
+            <div class="hidden md:block">
+                <a href="{% url 'product-create' %}" class="bg-primary text-white px-6 py-2.5 rounded-xl font-label-md hover:shadow-lg transition-all active:scale-95 inline-flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">add</span>
+                    Déposer une annonce
+                </a>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-5">
-                <p class="text-sm text-slate-500">Annonces actives</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.products_disponible }}</p>
+        </header>
+
+        <!-- Stat Cards Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
+            <!-- Total vues -->
+            <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 bg-primary-fixed rounded-lg">
+                        <span class="material-symbols-outlined text-primary">visibility</span>
+                    </div>
+                </div>
+                <p class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total vues</p>
+                <h2 class="text-[32px] font-bold text-on-surface mt-1">{{ stats.total_views }}</h2>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-5">
-                <p class="text-sm text-slate-500">Total annonces</p>
-                <p class="mt-1 text-2xl font-bold text-slate-900">{{ stats.total_products }}</p>
+            <!-- Clics WhatsApp -->
+            <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 bg-secondary-container rounded-lg">
+                        <span class="material-symbols-outlined text-secondary">chat</span>
+                    </div>
+                </div>
+                <p class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Clics WhatsApp</p>
+                <h2 class="text-[32px] font-bold text-on-surface mt-1">{{ stats.total_whatsapp_clicks }}</h2>
+            </div>
+            <!-- Annonces actives -->
+            <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 bg-tertiary-fixed rounded-lg">
+                        <span class="material-symbols-outlined text-tertiary">check_circle</span>
+                    </div>
+                </div>
+                <p class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Annonces actives</p>
+                <h2 class="text-[32px] font-bold text-on-surface mt-1">{{ stats.products_disponible }}</h2>
+            </div>
+            <!-- Total annonces -->
+            <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-[0px_10px_30px_rgba(15,23,42,0.12)] transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 bg-surface-variant rounded-lg">
+                        <span class="material-symbols-outlined text-on-surface">inventory_2</span>
+                    </div>
+                </div>
+                <p class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total annonces</p>
+                <h2 class="text-[32px] font-bold text-on-surface mt-1">{{ stats.total_products }}</h2>
             </div>
         </div>
 
-        <!-- Recent products -->
-        <div class="mt-8">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold text-slate-900">Dernières annonces</h2>
-                <a href="{% url 'dashboard-my-products-ssr' %}" class="text-sm text-indigo-600 hover:text-indigo-500 hover:underline">Voir tout →</a>
+        <!-- Table Section -->
+        <div class="bg-white rounded-xl border border-slate-100 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] overflow-hidden">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Dernières annonces</h3>
+                <a href="{% url 'dashboard-my-products-ssr' %}" class="text-primary font-label-md hover:underline">Voir tout</a>
             </div>
+
             {% if recent_products %}
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead class="bg-slate-50 text-left">
-                                <tr>
-                                    <th class="px-4 py-3 font-medium text-slate-500">Annonce</th>
-                                    <th class="px-4 py-3 font-medium text-slate-500">Prix</th>
-                                    <th class="px-4 py-3 font-medium text-slate-500">Statut</th>
-                                    <th class="px-4 py-3 font-medium text-slate-500">Vues</th>
-                                    <th class="px-4 py-3 font-medium text-slate-500">Clics WA</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                {% for product in recent_products %}
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center gap-3">
-                                            {% if product.images.all.0 %}
-                                                <img src="{{ product.images.all.0.image.url }}" alt="" class="w-10 h-10 rounded-xl object-cover">
-                                            {% else %}
-                                                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs">—</div>
-                                            {% endif %}
-                                            <a href="{{ product.get_absolute_url }}" class="text-slate-900 hover:text-indigo-600 font-medium line-clamp-1">{{ product.title }}</a>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">{{ product.price|format_price }}</td>
-                                    <td class="px-4 py-3">
-                                        {% if product.status == 'DISPONIBLE' %}
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disponible</span>
-                                        {% elif product.status == 'VENDU' %}
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Vendu</span>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant text-[12px] uppercase">Produit</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant text-[12px] uppercase">Prix</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant text-[12px] uppercase">Statut</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant text-[12px] uppercase">Stats</th>
+                            <th class="px-6 py-4 font-label-md text-on-surface-variant text-[12px] uppercase text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        {% for product in recent_products %}
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-lg bg-slate-100 flex-shrink-0 overflow-hidden">
+                                        {% if product.images.all.0 %}
+                                            <img src="{{ product.images.all.0.image.url }}" alt="" class="w-full h-full object-cover">
                                         {% else %}
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Archivé</span>
+                                            <div class="w-full h-full flex items-center justify-center">
+                                                <span class="material-symbols-outlined text-outline text-[20px]">image</span>
+                                            </div>
                                         {% endif %}
-                                    </td>
-                                    <td class="px-4 py-3 text-slate-500">{{ product.views_count }}</td>
-                                    <td class="px-4 py-3 text-slate-500">{{ product.whatsapp_clicks_count }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <a href="{{ product.get_absolute_url }}" class="font-label-md text-on-surface hover:text-primary line-clamp-1">{{ product.title }}</a>
+                                        <span class="text-[12px] text-on-surface-variant">Publié le {{ product.created_at|date:"d M" }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="font-price-lg text-price-lg text-secondary">{{ product.price|format_price }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if product.status == 'DISPONIBLE' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary-container text-on-secondary-container">Disponible</span>
+                                {% elif product.status == 'VENDU' %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-container text-error">Vendu</span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-variant text-on-surface-variant">Archivé</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col gap-1">
+                                    <span class="flex items-center gap-1 text-[12px] text-on-surface-variant">
+                                        <span class="material-symbols-outlined text-[14px]">visibility</span> {{ product.views_count }}
+                                    </span>
+                                    <span class="flex items-center gap-1 text-[12px] text-on-surface-variant">
+                                        <span class="material-symbols-outlined text-[14px]">chat</span> {{ product.whatsapp_clicks_count }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ product.get_absolute_url }}" class="p-2 hover:bg-surface-variant rounded-lg transition-colors inline-block" title="Voir l'annonce">
+                                    <span class="material-symbols-outlined text-on-surface-variant">open_in_new</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
-                <div class="bg-white rounded-xl shadow-sm p-8 text-center text-slate-500">
-                    Aucune annonce pour le moment. <a href="{% url 'product-create' %}" class="text-indigo-600 hover:underline">Déposer une annonce</a>
-                </div>
+            <div class="p-12 text-center">
+                <span class="material-symbols-outlined text-[48px] text-outline mb-3 block">inventory_2</span>
+                <p class="text-on-surface-variant font-body-md mb-4">Aucune annonce pour le moment.</p>
+                <a href="{% url 'product-create' %}" class="bg-primary text-white px-6 py-2.5 rounded-xl font-label-md hover:shadow-lg transition-all">
+                    Déposer une annonce
+                </a>
+            </div>
             {% endif %}
         </div>
 
-        <!-- Unread notifications -->
-        <div class="mt-8">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold text-slate-900">Notifications non lues</h2>
-                <a href="{% url 'dashboard-notifications-ssr' %}" class="text-sm text-indigo-600 hover:text-indigo-500 hover:underline">Voir tout →</a>
+        <!-- Bottom tips + notifications -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+            <!-- Astuce vendeur -->
+            <div class="bg-surface-container-low p-6 rounded-xl border border-primary-fixed">
+                <h4 class="font-label-md text-primary mb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">lightbulb</span>
+                    Astuce Vendeur
+                </h4>
+                <p class="font-body-md text-body-md text-on-surface">Optimisez vos titres d'annonces avec les specs techniques (CPU/RAM) pour augmenter votre visibilité.</p>
             </div>
-            {% if unread_notifications %}
-                <div class="space-y-3">
-                    {% for notif in unread_notifications %}
-                    <div class="bg-white rounded-xl shadow-sm border border-indigo-200 p-4 flex items-start gap-3">
-                        <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-indigo-600"></div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm text-slate-900">{{ notif.message }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ notif.created_at|time_since_fr }} — {{ notif.get_type_display }}</p>
+
+            <!-- Notifications non lues -->
+            <div class="bg-white rounded-xl border border-slate-100 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] overflow-hidden">
+                <div class="p-4 border-b border-slate-50 flex justify-between items-center">
+                    <h4 class="font-label-md text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px] text-primary">notifications</span>
+                        Notifications
+                    </h4>
+                    <a href="{% url 'dashboard-notifications-ssr' %}" class="text-primary text-[12px] font-label-md hover:underline">Voir tout</a>
+                </div>
+                {% if unread_notifications %}
+                    <div class="divide-y divide-slate-50">
+                        {% for notif in unread_notifications %}
+                        <div class="p-4 flex items-start gap-3">
+                            <div class="flex-shrink-0 w-2 h-2 mt-1.5 rounded-full bg-primary"></div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-on-surface">{{ notif.message }}</p>
+                                <p class="mt-0.5 text-[11px] text-on-surface-variant">{{ notif.created_at|time_since_fr }}</p>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="bg-white rounded-xl shadow-sm p-6 text-center text-slate-500 text-sm">
-                    Aucune notification non lue.
-                </div>
-            {% endif %}
+                {% else %}
+                    <div class="p-6 text-center text-on-surface-variant text-sm">
+                        Aucune notification non lue.
+                    </div>
+                {% endif %}
+            </div>
         </div>
-    </div>
+
+    </section>
 </div>
 {% endblock %}

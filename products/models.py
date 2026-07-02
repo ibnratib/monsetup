@@ -14,6 +14,14 @@ class Product(TimeStampedModel):
         ('ARCHIVE', 'Archivé'),
     ]
 
+    CONDITION_CHOICES = [
+        ('NEUF', 'Neuf'),
+        ('COMME_NEUF', 'Comme neuf'),
+        ('TRES_BON', 'Très bon état'),
+        ('BON', 'Bon état'),
+        ('CORRECT', 'État correct'),
+    ]
+
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -50,6 +58,20 @@ class Product(TimeStampedModel):
         choices=STATUS_CHOICES,
         default='DISPONIBLE',
         verbose_name="Statut",
+    )
+    condition = models.CharField(
+        max_length=20,
+        choices=CONDITION_CHOICES,
+        default='BON',
+        verbose_name="État",
+    )
+    livraison = models.BooleanField(
+        default=False,
+        verbose_name="Livraison disponible",
+    )
+    garantie = models.BooleanField(
+        default=False,
+        verbose_name="Garantie incluse",
     )
     is_boosted = models.BooleanField(default=False, verbose_name="Boosté")
     boost_expires_at = models.DateTimeField(
